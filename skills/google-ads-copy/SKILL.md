@@ -6,4 +6,4 @@ argument-hint: "<ad group name, keyword theme, or 'write new ads'>"
 
 # Canonical NotFair workflow
 
-Read [`../../google-ads/copy/SKILL.md`](../../google-ads/copy/SKILL.md) completely, then follow it as the active workflow. Resolve every relative reference from that file against `../../google-ads/copy/`.
+Read [`../../google-ads/copy/SKILL.md`](../../google-ads/copy/SKILL.md) completely, then follow it as the active workflow. Normalize that path from the directory containing this wrapper: the canonical file is `<plugin-root>/google-ads/copy/SKILL.md`, not `<plugin-root>/skills/google-ads-copy/copy/SKILL.md`. Resolve every relative reference from the canonical file against `<plugin-root>/google-ads/copy/`. If the canonical file cannot be read, stop and report the packaging error; never substitute a similarly named skill from another plugin.

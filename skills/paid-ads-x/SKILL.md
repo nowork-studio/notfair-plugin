@@ -6,4 +6,4 @@ argument-hint: "<account, campaign, date range, or X Ads goal>"
 
 # Canonical NotFair workflow
 
-Read [`../../paid-ads/paid-ads-x/SKILL.md`](../../paid-ads/paid-ads-x/SKILL.md) completely, then follow it as the active workflow. Resolve every relative reference from that file against `../../paid-ads/paid-ads-x/`.
+Read [`../../paid-ads/paid-ads-x/SKILL.md`](../../paid-ads/paid-ads-x/SKILL.md) completely, then follow it as the active workflow. Normalize that path from the directory containing this wrapper: the canonical file is `<plugin-root>/paid-ads/paid-ads-x/SKILL.md`, not `<plugin-root>/skills/paid-ads-x/paid-ads-x/SKILL.md`. Resolve every relative reference from the canonical file against `<plugin-root>/paid-ads/paid-ads-x/`. If the canonical file cannot be read, stop and report the packaging error; never substitute a similarly named skill from another plugin.

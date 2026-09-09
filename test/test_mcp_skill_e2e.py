@@ -65,6 +65,29 @@ def test_universal_mcp_is_the_only_registered_server_and_skills_are_portable():
         assert f"./{skill}" in plugin["skills"]
 
 
+def test_ads_wrappers_resolve_from_the_plugin_root_without_fallback():
+    plugin = json.loads((ROOT / ".claude-plugin/plugin.json").read_text())
+    ads_skill_roots = ("./paid-ads/", "./google-ads/", "./meta-ads/")
+    canonical_paths = [
+        ROOT / skill.removeprefix("./") / "SKILL.md"
+        for skill in plugin["skills"]
+        if skill.startswith(ads_skill_roots)
+    ]
+
+    for canonical in canonical_paths:
+        canonical_text = canonical.read_text()
+        skill_name = re.search(r"^name:\s*(.+)$", canonical_text, re.MULTILINE)
+        assert skill_name, canonical
+        wrapper = ROOT / "skills" / skill_name.group(1).strip() / "SKILL.md"
+        wrapper_text = wrapper.read_text()
+        relative_target = re.search(r"\]\((\.\./\.\./[^)]+/SKILL\.md)\)", wrapper_text)
+
+        assert relative_target, skill_name
+        assert (wrapper.parent / relative_target.group(1)).resolve() == canonical.resolve()
+        assert "not `<plugin-root>/skills/" in wrapper_text
+        assert "never substitute a similarly named skill from another plugin" in wrapper_text
+
+
 def test_all_host_configs_and_registry_use_one_versioned_connection():
     expected = {UNIVERSAL_SERVER: {"type": "http", "url": UNIVERSAL_ENDPOINT}}
     version = (ROOT / "VERSION").read_text().strip()

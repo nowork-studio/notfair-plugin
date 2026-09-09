@@ -6,4 +6,4 @@ argument-hint: "<landing page URL or ad group name>"
 
 # Canonical NotFair workflow
 
-Read [`../../google-ads/landing/SKILL.md`](../../google-ads/landing/SKILL.md) completely, then follow it as the active workflow. Resolve every relative reference from that file against `../../google-ads/landing/`.
+Read [`../../google-ads/landing/SKILL.md`](../../google-ads/landing/SKILL.md) completely, then follow it as the active workflow. Normalize that path from the directory containing this wrapper: the canonical file is `<plugin-root>/google-ads/landing/SKILL.md`, not `<plugin-root>/skills/google-ads-landing/landing/SKILL.md`. Resolve every relative reference from the canonical file against `<plugin-root>/google-ads/landing/`. If the canonical file cannot be read, stop and report the packaging error; never substitute a similarly named skill from another plugin.

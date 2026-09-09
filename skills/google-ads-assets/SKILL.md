@@ -6,4 +6,4 @@ argument-hint: "<campaign, asset group, or 'build an asset brief'>"
 
 # Canonical NotFair workflow
 
-Read [`../../google-ads/assets/SKILL.md`](../../google-ads/assets/SKILL.md) completely, then follow it as the active workflow. Resolve every relative reference from that file against `../../google-ads/assets/`.
+Read [`../../google-ads/assets/SKILL.md`](../../google-ads/assets/SKILL.md) completely, then follow it as the active workflow. Normalize that path from the directory containing this wrapper: the canonical file is `<plugin-root>/google-ads/assets/SKILL.md`, not `<plugin-root>/skills/google-ads-assets/assets/SKILL.md`. Resolve every relative reference from the canonical file against `<plugin-root>/google-ads/assets/`. If the canonical file cannot be read, stop and report the packaging error; never substitute a similarly named skill from another plugin.

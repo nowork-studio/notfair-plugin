@@ -9,6 +9,12 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+## [0.27.6] — 2026-09-09
+
+### Fixed
+
+- Codex ads-skill wrappers now resolve canonical workflows explicitly from the installed plugin root and fail closed instead of falling back to a similarly named skill from another plugin.
+
 ## [0.27.5] — 2026-09-05
 
 ### Fixed

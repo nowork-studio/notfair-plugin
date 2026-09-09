@@ -6,4 +6,4 @@ argument-hint: "<account name or 'audit my ads'>"
 
 # Canonical NotFair workflow
 
-Read [`../../google-ads/audit/SKILL.md`](../../google-ads/audit/SKILL.md) completely, then follow it as the active workflow. Resolve every relative reference from that file against `../../google-ads/audit/`.
+Read [`../../google-ads/audit/SKILL.md`](../../google-ads/audit/SKILL.md) completely, then follow it as the active workflow. Normalize that path from the directory containing this wrapper: the canonical file is `<plugin-root>/google-ads/audit/SKILL.md`, not `<plugin-root>/skills/google-ads-audit/audit/SKILL.md`. Resolve every relative reference from the canonical file against `<plugin-root>/google-ads/audit/`. If the canonical file cannot be read, stop and report the packaging error; never substitute a similarly named skill from another plugin.

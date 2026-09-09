@@ -29,4 +29,4 @@ triggers:
 
 # Canonical NotFair workflow
 
-Read [`../../meta-ads/manage/SKILL.md`](../../meta-ads/manage/SKILL.md) completely, then follow it as the active workflow. Resolve every relative reference from that file against `../../meta-ads/manage/`.
+Read [`../../meta-ads/manage/SKILL.md`](../../meta-ads/manage/SKILL.md) completely, then follow it as the active workflow. Normalize that path from the directory containing this wrapper: the canonical file is `<plugin-root>/meta-ads/manage/SKILL.md`, not `<plugin-root>/skills/meta-ads/manage/SKILL.md`. Resolve every relative reference from the canonical file against `<plugin-root>/meta-ads/manage/`. If the canonical file cannot be read, stop and report the packaging error; never substitute a similarly named skill from another plugin.

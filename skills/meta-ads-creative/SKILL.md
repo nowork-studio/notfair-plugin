@@ -6,4 +6,4 @@ argument-hint: "<campaign, audience, or 'build a creative slate'>"
 
 # Canonical NotFair workflow
 
-Read [`../../meta-ads/creative/SKILL.md`](../../meta-ads/creative/SKILL.md) completely, then follow it as the active workflow. Resolve every relative reference from that file against `../../meta-ads/creative/`.
+Read [`../../meta-ads/creative/SKILL.md`](../../meta-ads/creative/SKILL.md) completely, then follow it as the active workflow. Normalize that path from the directory containing this wrapper: the canonical file is `<plugin-root>/meta-ads/creative/SKILL.md`, not `<plugin-root>/skills/meta-ads-creative/creative/SKILL.md`. Resolve every relative reference from the canonical file against `<plugin-root>/meta-ads/creative/`. If the canonical file cannot be read, stop and report the packaging error; never substitute a similarly named skill from another plugin.
