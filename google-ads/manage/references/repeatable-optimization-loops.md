@@ -31,7 +31,7 @@ Report in this order:
 
 ### Decision rules
 
-- Thin data: if the day has <3 clicks or expected conversions <1, do not overfit. Say what you are watching for.
+- Thin or immature data: do not overfit a recent day. Compare with a complete baseline, account for conversion lag, and say what evidence or business guardrail will trigger the next review.
 - Query quality problem: propose negatives only for clearly irrelevant terms or repeated expensive bad patterns.
 - Clean traffic but no conversions: check landing page / form / tracking before touching bids.
 - Rank-limited and far under budget: prioritize ad relevance, Quality Score, landing-page message match, and bid competitiveness; do not recommend more budget.

@@ -52,6 +52,9 @@ You decide tool sequencing, GAQL shape, and analytical depth — your judgment i
 What does have to be true on every turn:
 
 - Read enough live evidence to support the recommendation; choose tools and query shape from the current connection.
+- For any material recommendation, follow `references/decision-quality.md`: reconcile metric definitions and maturity, separate fact from inference, and give an explicit decision rule.
+- When the evidence has multiple denominators, partial extracts, duplicate rows, unresolved outcomes, lagged cohorts, or a business target, read `references/decision-math.md` and compute the decision-changing values before choosing an action.
+- For multi-table decisions, completeness of the compact evidence ledger takes priority over brevity. Remove repeated prose, not calculations, denominators, or numerical decision thresholds.
 - Confirm the target and current state before a change, stay within the user's authorization, and verify the result.
 - Consult the live schema when unfamiliar with a capability. Do not assume defaults, fixed limits, or rollback support.
 - Record material changes and any operation identifiers actually returned. Use `references/change-tracking.md` when a change merits a later impact review.
@@ -64,6 +67,8 @@ These live alongside this skill. Read on demand — not preemptively.
 | Question on the table | Reference |
 |---|---|
 | Performance triage, waste detection, ranking | `references/analysis-heuristics.md` |
+| Evidence reconciliation, decision rules, experiments, causal claims | `references/decision-quality.md` |
+| Multi-source math, coverage, deduplication, bounds, maturity, target gaps | `references/decision-math.md` + `../shared/ppc-math.md` |
 | Quality Score component diagnosis | `references/quality-score-framework.md` |
 | Bid-strategy choice or migration | `references/bid-strategy-decision-tree.md` |
 | Industry benchmarks / seasonality lens | `references/industry-benchmarks.md` |
@@ -110,7 +115,7 @@ After analysis, proactively offer the next skill when the data clearly points th
 - **CTR persistently below benchmark across 2+ ad groups** → `/google-ads-copy`
 - **High CTR, low CVR across multiple ad groups** → `/google-ads-landing` (the page is the bottleneck, not the ad)
 - **No business context, or context >90 days old** → `/google-ads-audit` first
-- **Converting search terms not yet keywords (3+ conversions)** → consider adding them through a currently supported capability
+- **Repeated, economically valuable search terms not yet keywords** → consider adding them through a currently supported capability after checking intent, coverage, and whether a dedicated keyword would improve control
 - **Impression-share decline tied to new competitor pressure** → pull `auction_insight_*` resources via GAQL
 - **Significant structural / bidding change considered** → consider a controlled experiment and verify what the live connection supports
 

@@ -28,8 +28,9 @@ These are the handoff to every other ads skill — write them even if the report
 ## Policy freshness check (run first)
 
 Read `../shared/policy-registry.json`. For each entry where `last_verified + stale_after_days < today`:
-- **High-volatility** → WebSearch the `area` for recent Google Ads changes; compare to `assumption`. If drift, banner the report and suggest registry update.
-- **Moderate-volatility** → one-line "may warrant a check" note.
+- Any entry without a direct current first-party Google source is a hypothesis, not an audit rule or benchmark. Do not use it for a finding or recommendation without verification.
+- **High-volatility** → search the official Google Ads Help, Ads & Commerce blog, or Google Ads developer documentation for the `category`; compare the source with the recorded `rule`. If it drifted, omit the stale rule and banner the limitation.
+- **Moderate-volatility** → verify it when it could affect a material finding; otherwise omit it rather than repeating a stale caveat.
 - **Stable** → skip silently.
 
 ## Phase 1 — Pull the audit dataset

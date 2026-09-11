@@ -31,14 +31,15 @@
     {
       "id": 3,
       "prompt": "I have these keywords and want to optimize bids:\n\n```json\n{\"account_avg_cpa\": 85,\n\"keywords\": [{\"keyword\": \"roof repair austin\", \"bid\": 8.50, \"cpa\": 35, \"conversions\": 22, \"qs\": 9, \"imp_share\": 45}, {\"keyword\": \"roofing contractor\", \"bid\": 12.00, \"cpa\": 140, \"conversions\": 5, \"qs\": 6, \"imp_share\": 30}, {\"keyword\": \"metal roof installation\", \"bid\": 6.00, \"cpa\": 70, \"conversions\": 8, \"qs\": 7, \"imp_share\": 55}, {\"keyword\": \"roof inspection free\", \"bid\": 4.00, \"cpa\": null, \"conversions\": 0, \"clicks\": 45, \"spend\": 180, \"qs\": 4, \"imp_share\": 70}]}\n```",
-      "expected_output": "Bid optimization recommendations grounded in heuristics: 'roof repair austin' is a star performer (CPA $35 vs $85 avg, QS 9) — increase bid by 15-25% to capture more impression share (currently 45%). 'roofing contractor' has CPA 65% above average — decrease bid or fix QS. 'metal roof installation' is healthy. 'roof inspection free' has $180 spend with 0 conversions and QS 4 — pause or significantly reduce bid.",
+      "expected_output": "A decision-ready diagnosis that identifies the apparent winners and risks but does not prescribe bid percentages from incomplete context. It asks for or checks the bidding strategy, target/business economics, conversion definition and lag, and whether impression share is lost to budget or rank. Quality Score is used diagnostically. 'roof inspection free' is a review candidate, but zero conversions alone is not treated as universal proof without maturity and an economic guardrail.",
       "files": [],
       "expectations": [
-        "Recommends increasing bid for 'roof repair austin' — references its CPA being well below account average",
-        "Recommends decreasing bid or pausing 'roofing contractor' — references its CPA being above account average",
-        "Identifies 'roof inspection free' as waste — $180 spend, 0 conversions, QS 4",
-        "Bid change recommendations stay within the 25% maximum guardrail",
-        "References impression share data in the analysis"
+        "Identifies 'roof repair austin' as a scale candidate but does not infer that 45% impression share is caused by bid or budget",
+        "Identifies 'roofing contractor' as an efficiency concern while distinguishing account average from a business target",
+        "Treats 'roof inspection free' as a review candidate and checks conversion maturity and intent before pausing",
+        "Does not invent a universal safe bid-change percentage",
+        "Requests or checks bidding strategy, conversion definition, target economics, conversion lag, and lost impression share by cause",
+        "Uses Quality Score as a diagnostic clue, not a success metric"
       ]
     },
     {
@@ -133,6 +134,53 @@
         "Calls out brand trust / unclear relationship risk for tool integrations",
         "Recommends search-term cleanup before scaling",
         "Does not recommend immediate budget increase"
+      ]
+    },
+    {
+      "id": 10,
+      "prompt": "Google Ads reports 41 conversions at a $58 CPA for the last 14 days, but the CRM shows 8 qualified leads and 2 closed customers. The prior period has 29 Google Ads conversions, but its final three days are missing from the CRM import. Google recommends doubling the budget. Should we do it?",
+      "expected_output": "A reconciled decision record that declines an immediate doubling. It distinguishes Google Ads primary conversions from CRM-qualified outcomes, flags incomplete prior-period coverage and conversion maturity, checks which actions drive bidding, and uses qualified economics as the decision source. It may propose fixing/importing deeper outcomes and a staged or experimental budget test with a predeclared metric and guardrail.",
+      "files": [
+        "google-ads/manage/references/decision-quality.md"
+      ],
+      "expectations": [
+        "Does not compare 41 platform conversions directly with 8 qualified leads as if they share a definition",
+        "Flags the incomplete CRM comparison period and conversion lag or import maturity",
+        "Checks primary and secondary conversion actions and the campaign goal used for bidding",
+        "Does not accept the Google recommendation or double budget automatically",
+        "States a primary qualified-business metric, denominator, guardrail, and review condition"
+      ]
+    },
+    {
+      "id": 11,
+      "prompt": "We changed a Search campaign from lead-form submissions to qualified leads yesterday and Target CPA rose from $90 to $125 today. Please lower the target and rewrite the ads at the same time so performance recovers.",
+      "expected_output": "The skill identifies immature post-change data, verifies the qualified-lead action and upload health, and avoids changing both bidding and ads at once. It normally waits for mature conversions over one to two conversion cycles unless a spend guardrail is breached, then proposes one isolated action or experiment with a clear evaluation rule.",
+      "files": [
+        "google-ads/manage/references/decision-quality.md"
+      ],
+      "expectations": [
+        "Recognizes that one day is too early to judge a conversion-goal change",
+        "Checks qualified-lead measurement and primary goal configuration",
+        "Does not change the target and ad creative simultaneously",
+        "Defines a conversion-cycle-based review point and an early safety guardrail",
+        "Separates observed CPA movement from causal explanation"
+      ]
+    },
+    {
+      "id": 12,
+      "prompt": "A local clinic targets Portland, but 18% of clicks are reported from outside Portland and Search lost impression share is 38%. Quality Score is 5. Should we switch to presence-only targeting, raise the budget 40%, and rewrite every ad?",
+      "expected_output": "The skill refuses the bundled prescription. It checks whether location reporting represents user location or location of interest, current advanced location settings, conversion quality by geography, and whether impression share is lost to budget or rank. It treats Quality Score as diagnostic and proposes one reversible change or experiment with a qualified-lead metric and guardrail.",
+      "files": [
+        "google-ads/manage/references/decision-quality.md",
+        "google-ads/manage/references/analysis-heuristics.md"
+      ],
+      "expectations": [
+        "Does not assume all outside-Portland clicks are targeting leakage",
+        "Checks presence versus presence-or-interest settings and location report semantics",
+        "Separates lost impression share due to budget from rank",
+        "Does not optimize directly toward Quality Score",
+        "Avoids changing geography, budget, and ads together",
+        "Defines the exact first action and how qualified performance will be evaluated"
       ]
     }
   ]

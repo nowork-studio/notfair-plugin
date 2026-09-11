@@ -1,6 +1,6 @@
 {
   "name": "notfair",
-  "version": "0.27.6",
+  "version": "0.27.7",
   "description": "Operate ads and analytics, and run open-source SEO, GEO, and content workflows with NotFair.",
   "contextFileName": "AGENTS.md",
   "mcpServers": {

@@ -23,8 +23,8 @@ Append to the `changes` array:
     "note": "Metrics for affected entities at time of change"
   },
   "changeIds": ["<changeId(s) returned by write tool>"],
-  "reviewAfter": "<ISO 8601 -- 7d for bid/keyword changes, 14d for structural>",
-  "reviewWindow": "<7d or 14d>",
+  "reviewAfter": "<ISO 8601 based on conversion maturity and the decision rule>",
+  "reviewWindow": "<date range or conversion-cycle rule>",
   "reviewed": false,
   "reviewResult": null
 }
@@ -33,8 +33,8 @@ Append to the `changes` array:
 ## Rules
 
 - **Capture before-metrics** from data already in context. If none available: `"beforeSnapshot": { "metrics": null, "note": "No pre-change metrics" }`.
-- **Review windows:** Bid/keyword/negative/budget changes: 7 days. Campaign creates/pauses/restructures/ad copy: 14 days.
-- **Tell the user:** "Change logged. Google Ads changes typically take **7 days minimum** to show reliable results (14 days for structural changes like new campaigns or ad copy). I'll check the impact after [reviewAfter date] — you can also ask 'check my changes' anytime."
+- **Review windows:** Choose a window from the conversion cycle, reporting lag, expected effect, experiment design, and spend risk. Keep 3/7/14-day checks as operational monitoring when useful, but do not call a winner until the primary outcome is mature.
+- **Tell the user:** "Change logged. I’ll review safety and delivery on [early date], then judge the primary outcome after [maturity rule/date]."
 - **Max 200 entries** (remove oldest reviewed first).
 - **Group related writes** in one session as a single entry.
 

@@ -1,7 +1,7 @@
 {
   "name": "notfair",
   "displayName": "NotFair",
-  "version": "0.27.6",
+  "version": "0.27.7",
   "description": "Operate Google, Meta, X and LinkedIn Ads, analyze GA4 and Search Console, and run SEO, GEO and content workflows with one NotFair OAuth MCP connection.",
   "author": {
     "name": "Notfair",

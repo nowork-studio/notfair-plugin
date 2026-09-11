@@ -15,10 +15,11 @@ Store or report enough detail for a future 3/7/14-day review:
   "change_type": "negative_keyword | keyword_add | keyword_pause | bid | budget | ad_copy | landing_page | conversion_tracking | schedule | experiment",
   "summary": "<human summary>",
   "hypothesis": "<what should improve and why>",
-  "success_metric": "<CPA, CVR, waste spend, lead quality, QS, etc.>",
+  "success_metric": "<one business outcome such as qualified CPA, profit, or conversion value per spend>",
   "guardrail_metric": "<what must not degrade>",
   "baseline_window": "<date range>",
   "review_after_days": [3, 7, 14],
+  "outcome_maturity_rule": "<conversion-cycle or reporting-completeness rule>",
   "approval_source": "<chat/manual/standing rule>",
   "change_ids": [],
   "verification": "<verified live state>",
@@ -34,7 +35,7 @@ If the environment lacks durable intervention storage, include the record in the
 
 ## Review protocol
 
-At review time:
+The 3/7/14-day points are monitoring defaults, not universal evidence thresholds. At review time:
 
 1. Pull before/after metrics for the same scope.
 2. Normalize to rates where volume changed: CPA, CVR, CTR, CPC, waste-spend share.

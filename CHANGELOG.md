@@ -9,6 +9,15 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+## [0.27.7] — 2026-09-10
+
+### Changed
+
+- Google Ads recommendations now reconcile conversion definitions, denominators, attribution maturity, and conflicting sources before acting; material decisions include an auditable metric, guardrail, review window, and keep/hold/rollback rule.
+- Replaced universal click, conversion, bid-change, and budget-scaling thresholds with account-specific evidence sufficiency and conversion-cycle guidance grounded in current first-party Google Ads documentation.
+- Corrected PPC profitability and ROAS formulas, made impression-share and scaling projections explicit scenarios instead of promises, and reinforced that Quality Score is diagnostic rather than a KPI.
+- Replaced legacy bidding, account-structure, search-term, Quality Score, and industry-benchmark references that asserted unsupported universal multipliers or model behavior with concise first-party guidance and testable account-specific decisions.
+
 ## [0.27.6] — 2026-09-09
 
 ### Fixed
