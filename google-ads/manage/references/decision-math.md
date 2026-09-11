@@ -8,7 +8,7 @@ The goal is not a spreadsheet dump. It is a compact derivation ledger containing
 
 1. **Name each denominator.** Separate platform conversion events, unique leads, qualified leads, customers, revenue, and retained value. Never compare them as if they were interchangeable.
 2. **Reconcile scope.** Show the account/entity, date window, timezone, network, conversion action, source, attribution basis, and maturity status that make each value eligible.
-3. **Measure evidence integrity.** When row-level or joined data is supplied, compute extract coverage, join coverage, duplicate rate, deduplicated coverage, timestamp-valid rate, and unresolved rate when each can affect the conclusion.
+3. **Measure evidence integrity.** When row-level or joined data is supplied, compute extract coverage, join coverage, duplicate rate, deduplicated coverage, timestamp-valid rate, and unresolved rate when each can affect the conclusion. Define duplicate rows as rows beyond the first eligible row per decision identifier unless the source specifies another rule.
 4. **Calculate the decision economics.** Compute the relevant raw and cleaned CPA/ROAS, target gap or headroom, spend above target, and any qualified-outcome or contribution-based metric needed for the decision.
 5. **Bound uncertainty.** Use best/worst plausible outcomes when unresolved records could cross the target. Use mature cohorts or an explicit completion fraction when recent conversions are incomplete.
 6. **Test the counterfactual.** For a performance change, calculate the smallest useful decomposition or control comparison. Do not turn a decomposition into a causal claim.
@@ -67,6 +67,7 @@ Confirm that the recommended next step can produce the evidence required by the 
 - If one side has zero exposure, waiting will not create a comparison. Propose a small reversible exposure-building test with a stable control.
 - If the conversion cycle is incomplete, name the maturity date or completion gate rather than saying “wait longer.”
 - If measurement is unreliable, repair or bound measurement before conversion-led optimization.
+- If a denominator is zero, report the rate as undefined or the cost-per-outcome bound as unbounded; never divide by zero or silently substitute zero.
 
 ## Consistency check
 

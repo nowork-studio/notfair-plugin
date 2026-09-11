@@ -13,20 +13,20 @@ Read `{data_dir}/change-log.json`. Find entries where `reviewed` is `false`.
 > _[Date]: [summary]_
 > Google Ads needs time to accumulate enough data for a reliable before/after comparison. Ready for review on [reviewAfter date] ([reviewWindow] review window per `change-tracking.md`).
 
-Do NOT pull metrics or attempt to assess impact early — small sample sizes lead to misleading conclusions.
+Do not declare the primary outcome early. You may still pull safety, spend, delivery, measurement, and policy signals needed to detect a breached guardrail; label the business-outcome verdict immature until the recorded maturity rule is satisfied.
 
 **If unreviewed changes exist AND `reviewAfter` has passed:**
 
-1. Pull current metrics for the affected campaigns over the last 7 days using an available reporting capability scoped to those IDs. Use the `beforeSnapshot` from the change log as the baseline — only query the pre-change period directly if `beforeSnapshot.metrics` is null. Do this in parallel with the user's actual request, and reuse the resulting rows for the anomaly check below.
+1. Pull current metrics for the affected entities over the recorded review window using an available reporting capability scoped to those IDs. Use the `beforeSnapshot` only when its definitions, denominator, scope, and maturity match; otherwise query a complete like-for-like pre-change period. Do this alongside the user's actual request, and reuse the resulting rows for the anomaly check below.
 
-2. Compute deltas: percentage change for spend, conversions, CPA, CTR.
+2. Compute the primary business metric and guardrail recorded for the intervention. Add spend, conversion, CPA, or CTR deltas only when their definitions and denominators are comparable.
 
 3. Present briefly BEFORE the user's request:
 
 > **Follow-up on recent changes:**
 >
 > _[Date]: [summary]_
-> Result after [7/14] days: CPA went from $X -> $Y ([+/-Z%]). Conversions [increased/decreased] from X -> Y. [One sentence assessment]
+> Result after [review window]: [primary metric] went from X to Y ([+/-Z%]) on [named denominator]. [Guardrail] changed from A to B. [One sentence assessment, including maturity or comparability limits.]
 
 4. Mark as `reviewed: true` with `reviewResult`:
 ```json
@@ -41,14 +41,14 @@ Do NOT pull metrics or attempt to assess impact early — small sample sizes lea
 }
 ```
 
-5. If `negative` (CPA increased >20% or conversions dropped >20%): suggest undoing.
+5. If the predeclared rollback threshold is breached on mature, comparable evidence, recommend the recorded rollback. If no threshold was recorded, classify the result as observed/inconclusive and ask for the business guardrail rather than inventing one after seeing the outcome.
 
 ## Check account baseline for anomalies
 
 Read `{data_dir}/account-baseline.json`. If it exists AND was last updated >24 hours ago:
 
-1. Compare each campaign's 7-day metrics to the `rolling30d` baseline.
-2. Flag campaigns where CPA is >1.5x average, conversions dropped >40%, spend rate >1.5x average, or CTR dropped >30%.
+1. Compare each campaign's most recent complete window with a like-for-like mature baseline.
+2. Flag movements that cross a stored account-specific anomaly band or business guardrail. If none exists, rank the largest standardized or percentage movements for review and label them as triage signals, not failures.
 3. Mention anomalies briefly if found.
 4. Update the baseline (see Account Baseline section in SKILL.md).
 

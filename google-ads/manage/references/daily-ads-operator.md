@@ -70,8 +70,8 @@ Calculate:
 - Month-to-date spend.
 - Projected month-end spend at current run rate.
 - Daily budget vs actual spend yesterday and 7-day average.
-- Spike detection: yesterday spend > 150% of 7-day daily average or > 2x daily budget.
-- Under-delivery: spend < 50% of budget while lost IS budget is low.
+- Spike detection: compare yesterday with the account's recent complete-day distribution, expected pacing, and stored spend guardrail. If no guardrail exists, use a large deviation as a review trigger and show the values rather than declaring a universal threshold.
+- Under-delivery: compare actual spend with budget and expected demand, then use lost impression share due to budget versus rank to distinguish budget constraint from eligibility, demand, or relevance. Do not infer a problem from one fixed utilization percentage.
 
 Interpretation:
 

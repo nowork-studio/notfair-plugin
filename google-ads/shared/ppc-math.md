@@ -2,7 +2,7 @@
 
 Formulas and interpretation rules used throughout the Google Ads skills. Load this when a finding needs dollar-denominated impact, profitability framing, or a forecast.
 
-**Priority rule:** When `business-context.json` has `profit_margin` and `aov`, use break-even-based thresholds. Otherwise fall back to account-average heuristics in `analysis-heuristics.md`. Never mix the two in a single finding — the framing should be consistent.
+**Priority rule:** Use a business target or break-even threshold only when the underlying contribution economics are verified for the same outcome and payback window. Otherwise use mature account history as directional context, not as proof of profitability. Keep the chosen denominator and economic basis consistent within a finding.
 
 ---
 
@@ -59,7 +59,7 @@ Weighted Mature Rate                 = Sum(Mature Outcomes) / Sum(Eligible Input
 Weighted Mature CPA                  = Sum(Spend) / Sum(Mature Outcomes)
 ```
 
-Treat completion-fraction projections as maturity adjustments, not causal forecasts. Prefer actual mature cohorts when available, and state the conversion-cycle date or completion gate for the final decision.
+Require `0 < Completion Fraction <= 1`; otherwise do not project. Treat completion-fraction projections as maturity adjustments, not causal forecasts. Prefer actual mature cohorts when available, and state the conversion-cycle date or completion gate for the final decision.
 
 ## Target gaps and cleaned counterfactuals
 
@@ -154,13 +154,7 @@ For a Smart Bidding target or conversion-goal change, isolate the change when pr
 MER = Total Business Revenue / Total Marketing Spend
 ```
 
-Use MER when the user has multi-channel spend and wants blended efficiency. Typical ranges by industry template (see `industry-templates.json`):
-
-| Industry | Typical MER | Excellent |
-|---|---|---|
-| Ecommerce | 3–5x | 8x+ |
-| SaaS | 5–10x | 15x+ |
-| Local Service | 3–8x | 10x+ |
+Use MER when the user has multi-channel spend and wants blended efficiency. Compare it with the business's own contribution, payback target, and mature like-for-like history. External industry ranges are directional context only and do not establish a healthy account-level target.
 
 MER captures organic, brand, and retention — so it's higher than paid ROAS and should never be compared directly to ROAS.
 
@@ -171,13 +165,13 @@ MER captures organic, brand, and retention — so it's higher than paid ROAS and
 **Before (account-average framing):**
 > "Keyword 'emergency plumber example-city' has CPA of $72, which is 150% of account average."
 
-**After (margin-aware framing, requires `margin=0.4`, `aov=$180` from business-context.json):**
-> "Keyword 'emergency plumber example-city' has CPA of $72. Your Break-Even CPA is $72 (AOV $180 × 40% margin) — every conversion from this keyword nets $0 profit. Either improve CVR or pause."
+**After (contribution-aware framing, requires a verified $72 contribution per acquired customer over the chosen payback window):**
+> "Keyword 'emergency plumber example-city' has CPA of $72 against a verified $72 break-even CPA. It has no contribution headroom at the observed volume. Hold scaling; diagnose query and conversion quality, then test the smallest plausible improvement or reduce exposure if the business guardrail is breached."
 
 **Headroom example:**
-> "Example City Search is profitable: CPA $18, Break-Even $72, **~$2,700/mo headroom** at 50 conversions. Budget-Lost IS is 35% — raising budget by $1,500/mo could capture ~$5,000 more revenue."
+> "Example City Search has $54 of CPA headroom against a verified $72 break-even CPA. At the observed 50 monthly conversions, that is a **$2,700 contribution-headroom scenario**. With 35% lost impression share to budget, a linear calculation gives an eligible-revenue upper bound, not expected incremental revenue; use a simulator or staged budget test to estimate the marginal return."
 
-The second framing is concretely actionable. The first is a number without a verdict.
+The second framing is auditable when the contribution inputs and outcome denominator are verified. If they are not, label it as a sensitivity scenario rather than an action threshold.
 
 ---
 
