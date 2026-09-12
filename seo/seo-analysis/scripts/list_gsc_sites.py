@@ -9,15 +9,13 @@ import tempfile
 import urllib.request
 import urllib.error
 
-from _gcloud import gcloud_run
+from _gcloud import adc_config_dir, gcloud_run
 from _uid import portable_uid, secure_write_json
 
 
 def get_quota_project():
     """Return the quota_project_id from the ADC JSON file, or None."""
-    adc_dir = os.environ.get("CLOUDSDK_CONFIG") or os.path.join(
-        os.path.expanduser("~"), ".config", "gcloud"
-    )
+    adc_dir = adc_config_dir()
     adc_path = os.path.join(adc_dir, "application_default_credentials.json")
     try:
         with open(adc_path) as f:

@@ -18,7 +18,7 @@ import subprocess
 import sys
 import urllib.request
 
-from _gcloud import gcloud_run
+from _gcloud import adc_config_dir, gcloud_run
 
 
 def check_python_version():
@@ -252,9 +252,7 @@ def check_adc_credentials():
 
 def _get_adc_quota_project():
     """Return the quota_project_id from the ADC JSON file, or None if absent."""
-    adc_dir = os.environ.get("CLOUDSDK_CONFIG") or os.path.join(
-        os.path.expanduser("~"), ".config", "gcloud"
-    )
+    adc_dir = adc_config_dir()
     adc_path = os.path.join(adc_dir, "application_default_credentials.json")
     if not os.path.isfile(adc_path):
         return None
