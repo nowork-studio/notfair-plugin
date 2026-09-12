@@ -55,3 +55,45 @@ class TestGcloudCommand(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class TestAdcConfigDir(unittest.TestCase):
+    def test_cloudsdk_config_wins(self):
+        with (
+            patch.dict(os.environ, {"CLOUDSDK_CONFIG": "/custom/gcloud"}, clear=False),
+            patch.object(gcloud.sys, "platform", "win32"),
+        ):
+            self.assertEqual(gcloud.adc_config_dir(), "/custom/gcloud")
+
+    def test_windows_uses_appdata(self):
+        env = {"APPDATA": r"C:\Users\ada\AppData\Roaming"}
+        with (
+            patch.dict(os.environ, env, clear=True),
+            patch.object(gcloud.sys, "platform", "win32"),
+        ):
+            self.assertEqual(
+                gcloud.adc_config_dir(),
+                os.path.join(env["APPDATA"], "gcloud"),
+            )
+
+    def test_windows_without_appdata_falls_back_to_home(self):
+        with (
+            patch.dict(os.environ, {}, clear=True),
+            patch.object(gcloud.sys, "platform", "win32"),
+            patch.object(gcloud.os.path, "expanduser", return_value="/home/ada"),
+        ):
+            self.assertEqual(
+                gcloud.adc_config_dir(),
+                os.path.join("/home/ada", ".config", "gcloud"),
+            )
+
+    def test_posix_uses_home_config(self):
+        with (
+            patch.dict(os.environ, {}, clear=True),
+            patch.object(gcloud.sys, "platform", "darwin"),
+            patch.object(gcloud.os.path, "expanduser", return_value="/Users/ada"),
+        ):
+            self.assertEqual(
+                gcloud.adc_config_dir(),
+                os.path.join("/Users/ada", ".config", "gcloud"),
+            )
