@@ -9,6 +9,12 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+## [0.27.9] — 2026-09-17
+
+### Fixed
+
+- GSC scripts now resolve the gcloud config directory per platform, so the Application Default Credentials quota project is found on Windows (`%APPDATA%\gcloud`) as well as POSIX (`~/.config/gcloud`); `CLOUDSDK_CONFIG` still takes precedence. Fixes Search Console calls failing with 403 "requires a quota project" on Windows.
+
 ## [0.27.8] — 2026-09-16
 
 ### Added
