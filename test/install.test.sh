@@ -280,6 +280,13 @@ done
 echo ""
 echo "=== 5. MCP server config ==="
 
+assert_file "$REPO_ROOT/.cursor-plugin/plugin.json" "Cursor plugin manifest exists"
+CURSOR_LOGO=$(python3 -c "import json; print(json.load(open('$REPO_ROOT/.cursor-plugin/plugin.json'))['logo'])")
+case "$CURSOR_LOGO" in
+  *.png) pass "Cursor marketplace logo is a PNG ($CURSOR_LOGO)" ;;
+  *) fail "Cursor marketplace logo should be a PNG, got $CURSOR_LOGO" ;;
+esac
+assert_file "$REPO_ROOT/$CURSOR_LOGO" "Cursor marketplace logo file exists"
 assert_file "$REPO_ROOT/.codex-plugin/plugin.json" "Codex plugin manifest exists"
 assert_contains "$REPO_ROOT/.codex-plugin/plugin.json" '"mcpServers": "./.mcp.json"' "Codex manifest loads the native MCP config"
 assert_contains "$REPO_ROOT/.codex-plugin/plugin.json" '"skills": "./skills/"' "Codex manifest loads the canonical skill index"

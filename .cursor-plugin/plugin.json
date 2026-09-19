@@ -1,8 +1,8 @@
 {
   "name": "notfair",
   "displayName": "NotFair",
-  "version": "0.27.8",
-  "description": "Operate Google, Meta, X, LinkedIn, Reddit and TikTok Ads, WordPress, GoHighLevel, GA4 and Search Console, and run SEO, GEO and content workflows with one NotFair OAuth MCP connection.",
+  "version": "0.27.9",
+  "description": "One NotFair OAuth MCP for Google, Meta, X, LinkedIn, Reddit, and TikTok Ads, GA4, Search Console, GoHighLevel, and WordPress, plus open-source SEO, GEO, and content skills.",
   "author": {
     "name": "Notfair",
     "email": "tong@notfair.co"
@@ -15,14 +15,17 @@
     "analytics",
     "google-ads",
     "meta-ads",
+    "x-ads",
     "linkedin-ads",
     "reddit-ads",
     "tiktok-ads",
     "wordpress",
+    "gohighlevel",
     "marketing",
-    "seo"
+    "seo",
+    "geo"
   ],
-  "logo": "assets/notfair-icon.svg",
+  "logo": "assets/notfair-icon.png",
   "skills": "./skills/",
   "mcpServers": "./.mcp.json"
 }

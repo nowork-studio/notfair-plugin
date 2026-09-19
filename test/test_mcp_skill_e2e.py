@@ -112,6 +112,11 @@ def test_all_host_configs_and_registry_use_one_versioned_connection():
     marketplace = json.loads((ROOT / ".claude-plugin/marketplace.json").read_text())
     assert marketplace["metadata"]["version"] == version
     assert marketplace["plugins"][0]["version"] == version
+    cursor_plugin = json.loads((ROOT / ".cursor-plugin/plugin.json").read_text())
+    logo = Path(cursor_plugin["logo"])
+    assert logo.suffix == ".png", cursor_plugin["logo"]
+    assert not logo.is_absolute() and ".." not in logo.parts
+    assert (ROOT / logo).is_file()
     registry = json.loads((ROOT / "server.json").read_text())
     assert 1 <= len(registry["description"]) <= 100
     assert registry["remotes"] == [{"type": "streamable-http", "url": UNIVERSAL_ENDPOINT}]

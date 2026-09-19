@@ -9,6 +9,12 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+## [0.27.9] — 2026-09-19
+
+### Changed
+
+- **Cursor marketplace listing.** Commit a 512×512 PNG plugin logo at `assets/notfair-icon.png` and point `.cursor-plugin/plugin.json` at it so marketplace cards can render the NotFair mark (GitHub serves committed SVGs as plain text). Refresh Cursor and Agent Plugins listing copy to name the current one-OAuth MCP surfaces — Google, Meta, X, LinkedIn, Reddit, and TikTok Ads, GA4, Search Console, GoHighLevel, and WordPress — plus open-source SEO, GEO, and content skills.
+
 ## [0.27.8] — 2026-09-16
 
 ### Added
