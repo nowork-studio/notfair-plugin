@@ -48,15 +48,15 @@ describe("McpAccountPickerDialog", () => {
       prefetch: {
         ok: true,
         items: [
-          { id: "sc-domain:a.com", name: "a.com", is_default: false },
-          { id: "sc-domain:b.com", name: "b.com", is_default: true },
+          { id: "sc-domain:a.com", name: "a.com" },
+          { id: "sc-domain:b.com", name: "b.com" },
         ],
       },
     });
     expect(
       await screen.findByRole("button", { name: /Use a\.com/ }),
     ).toBeInTheDocument();
-    expect(screen.getByText("default")).toBeInTheDocument();
+    expect(screen.queryByText("default")).not.toBeInTheDocument();
     expect(listGscProperties).not.toHaveBeenCalled();
   });
 
@@ -66,8 +66,8 @@ describe("McpAccountPickerDialog", () => {
       prefetch: {
         ok: true,
         items: [
-          { id: "sc-domain:a.com", name: "a.com", is_default: false },
-          { id: "sc-domain:b.com", name: "b.com", is_default: false },
+          { id: "sc-domain:a.com", name: "a.com" },
+          { id: "sc-domain:b.com", name: "b.com" },
         ],
       },
     });
@@ -84,7 +84,6 @@ describe("McpAccountPickerDialog", () => {
     vi.mocked(listGscProperties).mockResolvedValue({
       ok: true,
       properties: [{ id: "sc-domain:a.com", name: "a.com" }],
-      default_property_id: null,
     });
     renderDialog();
     expect(
@@ -97,7 +96,6 @@ describe("McpAccountPickerDialog", () => {
     vi.mocked(listGscProperties).mockResolvedValue({
       ok: true,
       properties: [],
-      default_property_id: null,
     });
     renderDialog();
     expect(
@@ -113,7 +111,7 @@ describe("McpAccountPickerDialog", () => {
     const { onOpenChange, onPicked } = renderDialog({
       prefetch: {
         ok: true,
-        items: [{ id: "sc-domain:a.com", name: "a.com", is_default: false }],
+        items: [{ id: "sc-domain:a.com", name: "a.com" }],
       },
     });
     fireEvent.click(await screen.findByRole("button", { name: /Use a\.com/ }));
@@ -135,7 +133,7 @@ describe("McpAccountPickerDialog", () => {
     const { onOpenChange, onPicked } = renderDialog({
       prefetch: {
         ok: true,
-        items: [{ id: "sc-domain:a.com", name: "a.com", is_default: false }],
+        items: [{ id: "sc-domain:a.com", name: "a.com" }],
       },
     });
     fireEvent.click(await screen.findByRole("button", { name: /Use a\.com/ }));

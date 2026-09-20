@@ -19,14 +19,14 @@ import type { Project } from "@/types";
  * user to pick one and we persist the choice on `projects.google_ads_account_id`
  * so the audit + later automation target the right account.
  *
- * Single source of truth for the account ID is the DB column. MCP returns
- * a `defaultAccountId` we surface only as a hint; we never silently use it.
+ * Single source of truth for the account ID is the DB column. MCP listings
+ * return accounts equally; we never treat one as the default.
  */
 
 export type GoogleAdsAccount = { id: string; name: string };
 
 export type ListAccountsResult =
-  | { ok: true; accounts: GoogleAdsAccount[]; default_account_id: string | null }
+  | { ok: true; accounts: GoogleAdsAccount[] }
   | { ok: false; error: string; kind: "mcp_not_configured" | "rpc" | "shape" };
 
 type ListAccountsToolResult = {
@@ -36,7 +36,6 @@ type ListAccountsToolResult = {
 
 type AccountsPayload = {
   accounts?: Array<{ id?: unknown; name?: unknown }>;
-  defaultAccountId?: unknown;
   totalAccounts?: unknown;
 };
 
@@ -45,7 +44,7 @@ const LIST_TIMEOUT_MS = 8_000;
 
 /**
  * Call the MCP's listConnectedAccounts tool with the project's stored bearer.
- * Returns the account list (id + name) + the MCP's default-account hint.
+ * Returns the account list (id + name).
  */
 export async function listGoogleAdsAccounts(
   project_slug: string,
@@ -96,7 +95,7 @@ export async function listGoogleAdsAccounts(
 
 function parseAccountsPayload(
   result: ListAccountsToolResult,
-): { accounts: GoogleAdsAccount[]; default_account_id: string | null } | null {
+): { accounts: GoogleAdsAccount[] } | null {
   if (!result || typeof result !== "object") return null;
   if (result.isError) return null;
   const text = result.content?.[0]?.text;
@@ -117,11 +116,7 @@ function parseAccountsPayload(
     const name = String(a.name ?? "").trim() || id;
     if (id) accounts.push({ id, name });
   }
-  const default_account_id =
-    typeof body.defaultAccountId === "string" || typeof body.defaultAccountId === "number"
-      ? String(body.defaultAccountId)
-      : null;
-  return { accounts, default_account_id };
+  return { accounts };
 }
 
 export type SetAccountResult =
@@ -178,7 +173,7 @@ export type MetaAdsAccount = {
 };
 
 export type ListMetaAdsAccountsResult =
-  | { ok: true; accounts: MetaAdsAccount[]; default_account_id: string | null }
+  | { ok: true; accounts: MetaAdsAccount[] }
   | { ok: false; error: string; kind: "mcp_not_configured" | "rpc" | "shape" };
 
 export async function listMetaAdsAccounts(
@@ -221,12 +216,11 @@ type MetaAccountsPayload = {
   // defensively in case the MCP normalizes the shape upstream.
   data?: Array<{ id?: unknown; name?: unknown; account_id?: unknown }>;
   accounts?: Array<{ id?: unknown; name?: unknown }>;
-  defaultAccountId?: unknown;
 };
 
 function parseMetaAccountsPayload(
   result: ListAccountsToolResult,
-): { accounts: MetaAdsAccount[]; default_account_id: string | null } | null {
+): { accounts: MetaAdsAccount[] } | null {
   if (!result || typeof result !== "object") return null;
   if (result.isError) return null;
   const text = result.content?.[0]?.text;
@@ -250,11 +244,7 @@ function parseMetaAccountsPayload(
     const name = String(a.name ?? "").trim() || id;
     if (id) accounts.push({ id, name });
   }
-  const default_account_id =
-    typeof body.defaultAccountId === "string" || typeof body.defaultAccountId === "number"
-      ? String(body.defaultAccountId)
-      : null;
-  return { accounts, default_account_id };
+  return { accounts };
 }
 
 export type SetMetaAdsAccountResult =
@@ -316,7 +306,7 @@ export type GscProperty = {
 };
 
 export type ListGscPropertiesResult =
-  | { ok: true; properties: GscProperty[]; default_property_id: string | null }
+  | { ok: true; properties: GscProperty[] }
   | { ok: false; error: string; kind: "mcp_not_configured" | "rpc" | "shape" };
 
 export async function listGscProperties(
@@ -364,11 +354,11 @@ type GscPropertiesPayload =
   // The actual notfair-googlesearchconsole MCP returns a bare array.
   | GscSiteRow[]
   // Spec shape per the Search Console REST API.
-  | { siteEntry?: GscSiteRow[]; sites?: GscSiteRow[]; defaultPropertyId?: unknown };
+  | { siteEntry?: GscSiteRow[]; sites?: GscSiteRow[] };
 
 function parseGscPropertiesPayload(
   result: ListAccountsToolResult,
-): { properties: GscProperty[]; default_property_id: string | null } | null {
+): { properties: GscProperty[] } | null {
   if (!result || typeof result !== "object") return null;
   if (result.isError) return null;
   const text = result.content?.[0]?.text;
@@ -405,11 +395,7 @@ function parseGscPropertiesPayload(
         typeof s.permissionLevel === "string" ? s.permissionLevel : undefined,
     });
   }
-  const default_property_id =
-    !Array.isArray(body) && typeof body.defaultPropertyId === "string"
-      ? body.defaultPropertyId
-      : null;
-  return { properties, default_property_id };
+  return { properties };
 }
 
 function prettyGscName(siteUrl: string): string {

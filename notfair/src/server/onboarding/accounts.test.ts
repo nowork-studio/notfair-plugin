@@ -75,7 +75,7 @@ describe("listGoogleAdsAccounts", () => {
     expect(mocks.mcpRpcAutoRefresh).not.toHaveBeenCalled();
   });
 
-  it("normalizes accounts, names, ids, and the default hint", async () => {
+  it("normalizes accounts, names, and ids", async () => {
     mocks.mcpRpcAutoRefresh.mockResolvedValue(
       toolResult({
         accounts: [
@@ -93,7 +93,6 @@ describe("listGoogleAdsAccounts", () => {
         { id: "123", name: "Main" },
         { id: "fallback", name: "fallback" },
       ],
-      default_account_id: "123",
     });
     expect(mocks.mcpRpcAutoRefresh).toHaveBeenCalledWith(
       "acme",
@@ -198,8 +197,9 @@ describe("Meta Ads account onboarding", () => {
     );
     await expect(listMetaAdsAccounts("acme")).resolves.toMatchObject({
       ok: true,
-      default_account_id: "act_3",
+      accounts: [{ id: "act_3", name: "Third" }],
     });
+    expect(await listMetaAdsAccounts("acme")).not.toHaveProperty("default_account_id");
   });
 
   it("handles missing config, RPC failure, and malformed payloads", async () => {
@@ -256,12 +256,15 @@ describe("Search Console property onboarding", () => {
         { id: "https://example.com/blog/", name: "example.com/blog/" },
         { id: "not a url", name: "Custom" },
       ],
-      default_property_id: null,
     });
     mocks.mcpRpcAutoRefresh.mockResolvedValue(
       toolResult({ siteEntry: [{ siteUrl: "https://one.example/" }], defaultPropertyId: "one" }),
     );
-    await expect(listGscProperties("acme")).resolves.toMatchObject({ default_property_id: "one" });
+    await expect(listGscProperties("acme")).resolves.toMatchObject({
+      ok: true,
+      properties: [{ id: "https://one.example/", name: "one.example" }],
+    });
+    expect(await listGscProperties("acme")).not.toHaveProperty("default_property_id");
     mocks.mcpRpcAutoRefresh.mockResolvedValue(toolResult({ sites: [] }));
     await expect(listGscProperties("acme")).resolves.toMatchObject({ ok: true, properties: [] });
   });

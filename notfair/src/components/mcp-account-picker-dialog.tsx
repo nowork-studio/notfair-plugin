@@ -199,11 +199,6 @@ export function McpAccountPickerDialog({
                               current
                             </span>
                           )}
-                          {item.is_default && !isSelected && (
-                            <span className="rounded bg-muted px-1.5 py-0.5 text-[10px] font-medium uppercase tracking-wide text-muted-foreground">
-                              default
-                            </span>
-                          )}
                         </div>
                         <p className="truncate text-xs text-muted-foreground tabular-nums">
                           {picker.id_label} {item.id}

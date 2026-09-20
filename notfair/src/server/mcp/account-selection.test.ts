@@ -44,7 +44,6 @@ function gscList(ids: string[]) {
   vi.mocked(listGscProperties).mockResolvedValue({
     ok: true,
     properties: ids.map((id) => ({ id, name: id })),
-    default_property_id: null,
   });
 }
 
@@ -126,7 +125,6 @@ describe("resolvePostConnectSelection", () => {
     vi.mocked(listGoogleAdsAccounts).mockResolvedValue({
       ok: true,
       accounts: [{ id: "123", name: "Only" }],
-      default_account_id: null,
     });
     await resolvePostConnectSelection("proj", "notfair-googleads");
     expect(setProjectGoogleAdsAccount).toHaveBeenCalledWith("proj", "123");
@@ -159,8 +157,8 @@ describe("prefetchAccountChoice", () => {
       prefetch: {
         ok: true,
         items: [
-          { id: "sc-domain:a.com", name: "sc-domain:a.com", is_default: false },
-          { id: "sc-domain:b.com", name: "sc-domain:b.com", is_default: false },
+          { id: "sc-domain:a.com", name: "sc-domain:a.com" },
+          { id: "sc-domain:b.com", name: "sc-domain:b.com" },
         ],
       },
       selected_id: "sc-domain:gone.com",

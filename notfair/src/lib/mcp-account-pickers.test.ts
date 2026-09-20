@@ -60,21 +60,20 @@ describe("accountPickerFor", () => {
 });
 
 describe("list normalization", () => {
-  it("maps Google Ads accounts and flags the MCP default", async () => {
+  it("maps Google Ads accounts without a default flag", async () => {
     vi.mocked(listGoogleAdsAccounts).mockResolvedValue({
       ok: true,
       accounts: [
         { id: "111", name: "Acme" },
         { id: "222", name: "Beta" },
       ],
-      default_account_id: "222",
     });
     const r = await accountPickerFor("notfair-googleads")!.list("proj");
     expect(r).toEqual({
       ok: true,
       items: [
-        { id: "111", name: "Acme", is_default: false },
-        { id: "222", name: "Beta", is_default: true },
+        { id: "111", name: "Acme" },
+        { id: "222", name: "Beta" },
       ],
     });
     expect(listGoogleAdsAccounts).toHaveBeenCalledWith("proj");
@@ -86,12 +85,11 @@ describe("list normalization", () => {
       properties: [
         { id: "sc-domain:a.com", name: "a.com", permission: "siteOwner" },
       ],
-      default_property_id: null,
     });
     const r = await accountPickerFor("notfair-googlesearchconsole")!.list("p");
     expect(r).toEqual({
       ok: true,
-      items: [{ id: "sc-domain:a.com", name: "a.com", is_default: false }],
+      items: [{ id: "sc-domain:a.com", name: "a.com" }],
     });
   });
 

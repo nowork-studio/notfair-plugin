@@ -27,8 +27,6 @@ import type { Project } from "@/types";
 export type AccountPickerItem = {
   id: string;
   name: string;
-  /** True when the MCP flagged this entry as the bearer's default. */
-  is_default: boolean;
 };
 
 export type AccountPickerListResult =
@@ -66,7 +64,6 @@ const PICKERS: Record<string, AccountPickerSpec> = {
         items: r.accounts.map((a) => ({
           id: a.id,
           name: a.name,
-          is_default: a.id === r.default_account_id,
         })),
       };
     },
@@ -88,7 +85,6 @@ const PICKERS: Record<string, AccountPickerSpec> = {
         items: r.accounts.map((a) => ({
           id: a.id,
           name: a.name,
-          is_default: a.id === r.default_account_id,
         })),
       };
     },
@@ -110,7 +106,6 @@ const PICKERS: Record<string, AccountPickerSpec> = {
         items: r.properties.map((p) => ({
           id: p.id,
           name: p.name,
-          is_default: p.id === r.default_property_id,
         })),
       };
     },
