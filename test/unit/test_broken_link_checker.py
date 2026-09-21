@@ -5,6 +5,7 @@ import socket
 import urllib.request
 import importlib.util
 import sys
+from unittest.mock import patch
 from pathlib import Path
 
 # Fix for hyphen in directory name
@@ -107,6 +108,36 @@ class TestBrokenLinkChecker(unittest.TestCase):
         self.assertIn(f"{self.base_url}/broken", targets)
         # Should NOT contain external-mock since it's valid
         self.assertNotIn(f"{self.base_url}/external-mock", targets)
+
+    def test_robots_request_uses_crawler_user_agent(self):
+        seen = []
+
+        original_do_get = self.httpd.RequestHandlerClass.do_GET
+
+        def record_get(handler):
+            if handler.path == '/robots.txt':
+                seen.append(handler.headers.get('User-Agent'))
+            return original_do_get(handler)
+
+        with patch.object(self.httpd.RequestHandlerClass, 'do_GET', record_get):
+            crawl(self.base_url, max_pages=1)
+
+        self.assertEqual(seen, ['NotFairBrokenLinkChecker/1.0'])
+
+    def test_robots_fetch_failure_is_fail_open(self):
+        real_urlopen = urllib.request.urlopen
+
+        def fail_robots(request, *args, **kwargs):
+            url = request.full_url if hasattr(request, 'full_url') else request
+            if str(url).endswith('/robots.txt'):
+                raise urllib.error.URLError('robots unavailable')
+            return real_urlopen(request, *args, **kwargs)
+
+        with patch.object(urllib.request, 'urlopen', side_effect=fail_robots):
+            broken = crawl(self.base_url, max_pages=1)
+
+        targets = [entry.get('target') for entry in broken]
+        self.assertIn(f"{self.base_url}/broken", targets)
 
     def test_robots_txt_respect(self):
         # We need to check if /private is skipped. 

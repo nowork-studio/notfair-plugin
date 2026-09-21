@@ -72,8 +72,15 @@ def crawl(start_url, max_pages=50):
     # Robots.txt check
     rp = urllib.robotparser.RobotFileParser()
     try:
-        rp.set_url(urllib.parse.urljoin(start_url, '/robots.txt'))
-        rp.read()
+        robots_url = urllib.parse.urljoin(start_url, '/robots.txt')
+        robots_request = urllib.request.Request(
+            robots_url,
+            headers={'User-Agent': 'NotFairBrokenLinkChecker/1.0'},
+        )
+        with urllib.request.urlopen(robots_request, timeout=10) as response:
+            robots_text = response.read().decode('utf-8', errors='ignore')
+        rp.set_url(robots_url)
+        rp.parse(robots_text.splitlines())
     except Exception as e:
         print(f"Warning: Could not read robots.txt: {e}", file=sys.stderr)
         # Default to allowing if robots.txt is missing or unreachable

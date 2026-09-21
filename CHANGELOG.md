@@ -9,6 +9,12 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+## [0.27.11] — 2026-09-21
+
+### Fixed
+
+- The broken-link checker now fetches `robots.txt` with its declared crawler user agent, avoiding false fetch failures on sites that block Python's default urllib agent while preserving fail-open behavior when robots rules are unavailable.
+
 ## [0.27.10] — 2026-09-21
 
 ### Fixed

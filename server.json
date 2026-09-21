@@ -8,7 +8,7 @@
     "url": "https://github.com/nowork-studio/notfair-plugin",
     "source": "github"
   },
-  "version": "0.27.10",
+  "version": "0.27.11",
   "remotes": [
     {
       "type": "streamable-http",
