@@ -58,6 +58,22 @@ describe("BrowseConnectorsDialog", () => {
     expect(screen.getByText("NotFair Meta Ads")).toBeInTheDocument();
   });
 
+  it("hides every NotFair tile once the canonical resource URL is connected", () => {
+    render(
+      <BrowseConnectorsDialog
+        open
+        onOpenChange={vi.fn()}
+        onAddCustom={vi.fn()}
+        connectedResourceUrls={["https://notfair.co/api/mcp/notfair"]}
+      />,
+    );
+    expect(screen.queryByText("NotFair Google Ads")).toBeNull();
+    expect(screen.queryByText("NotFair Meta Ads")).toBeNull();
+    expect(screen.queryByText("NotFair Google Search Console")).toBeNull();
+    expect(screen.queryByText("NotFair Google Analytics")).toBeNull();
+    expect(screen.getByText("Stripe")).toBeInTheDocument();
+  });
+
   it("shows an empty state when everything is already connected", () => {
     render(
       <BrowseConnectorsDialog
@@ -118,7 +134,7 @@ describe("BrowseConnectorsDialog", () => {
     await waitFor(() => {
       expect(addServer).toHaveBeenCalledWith({
         display_name: "NotFair Google Ads",
-        resource_url: "https://notfair.co/api/mcp/google_ads",
+        resource_url: "https://notfair.co/api/mcp/notfair",
         key: "notfair-googleads",
       });
       expect(startConnect).toHaveBeenCalledWith({

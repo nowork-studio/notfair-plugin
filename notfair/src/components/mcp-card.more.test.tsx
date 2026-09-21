@@ -41,9 +41,9 @@ const xadsSpec: McpSpec = {
   key: "notfair-xads",
   display_name: "NotFair X Ads",
   description: "X Ads campaigns.",
-  resource_url: "https://notfair.co/api/mcp/x_ads",
+  resource_url: "https://notfair.co/api/mcp/notfair",
   discovery_url:
-    "https://notfair.co/.well-known/oauth-protected-resource/api/mcp/x_ads",
+    "https://notfair.co/.well-known/oauth-protected-resource/api/mcp/notfair",
   source: "preset",
 };
 

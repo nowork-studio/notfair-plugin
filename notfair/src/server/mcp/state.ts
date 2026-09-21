@@ -1,5 +1,9 @@
 import { findMcpToken, upsertMcpToken, deleteMcpToken } from "./tokens";
 import { mcpSpecByKey } from "@/server/mcp-catalog";
+import {
+  catalogKeysSharingResource,
+  findCatalogMcpToken,
+} from "./catalog-token";
 import { mcpRpcAutoRefresh } from "./rpc";
 import {
   getCachedProbe,
@@ -44,7 +48,7 @@ export async function getMcpStatus(
 ): Promise<McpRuntimeStatus> {
   const spec = mcpSpecByKey(project_slug, catalog_key);
   if (!spec) return { state: "not_configured" };
-  const token = findMcpToken(project_slug, catalog_key);
+  const token = findCatalogMcpToken(project_slug, catalog_key);
   if (!token) return { state: "not_configured" };
 
   // Cache short-circuit: only `connected` (60s) and `unreachable` (10s)
@@ -138,9 +142,14 @@ async function probe(
 }
 
 export async function disconnectMcp(project_slug: string, catalog_key: string): Promise<void> {
-  const token = findMcpToken(project_slug, catalog_key);
-  if (token) deleteMcpToken(token.id);
-  invalidateProbe(project_slug, catalog_key);
+  const keys = catalogKeysSharingResource(project_slug, catalog_key);
+  const tokenIds = new Set<string>();
+  for (const key of keys) {
+    const token = findMcpToken(project_slug, key);
+    if (token) tokenIds.add(token.id);
+    invalidateProbe(project_slug, key);
+  }
+  for (const id of tokenIds) deleteMcpToken(id);
 }
 
 export async function setMcpBearer(

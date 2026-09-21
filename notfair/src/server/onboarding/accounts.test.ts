@@ -98,7 +98,7 @@ describe("listGoogleAdsAccounts", () => {
       "acme",
       "notfair-googleads",
       "tools/call",
-      { name: "listConnectedAccounts", arguments: {} },
+      { name: "executeRead", arguments: { capabilityId: "google_ads_listConnectedAccounts", arguments: {} } },
       { timeoutMs: 8_000 },
     );
   });
@@ -200,6 +200,16 @@ describe("Meta Ads account onboarding", () => {
       accounts: [{ id: "act_3", name: "Third" }],
     });
     expect(await listMetaAdsAccounts("acme")).not.toHaveProperty("default_account_id");
+    expect(mocks.mcpRpcAutoRefresh).toHaveBeenCalledWith(
+      "acme",
+      "notfair-metaads",
+      "tools/call",
+      {
+        name: "executeRead",
+        arguments: { capabilityId: "meta_ads_listAdAccounts", arguments: {} },
+      },
+      { timeoutMs: 8_000 },
+    );
   });
 
   it("handles missing config, RPC failure, and malformed payloads", async () => {
@@ -257,6 +267,19 @@ describe("Search Console property onboarding", () => {
         { id: "not a url", name: "Custom" },
       ],
     });
+    expect(mocks.mcpRpcAutoRefresh).toHaveBeenCalledWith(
+      "acme",
+      "notfair-googlesearchconsole",
+      "tools/call",
+      {
+        name: "executeRead",
+        arguments: {
+          capabilityId: "search_console_listProperties",
+          arguments: {},
+        },
+      },
+      { timeoutMs: 8_000 },
+    );
     mocks.mcpRpcAutoRefresh.mockResolvedValue(
       toolResult({ siteEntry: [{ siteUrl: "https://one.example/" }], defaultPropertyId: "one" }),
     );

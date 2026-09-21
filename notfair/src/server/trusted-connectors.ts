@@ -1,3 +1,5 @@
+import { CANONICAL_MCP_RESOURCE_URL } from "@/lib/canonical-mcp";
+
 /**
  * Browseable directory of trusted MCP servers shown in the "Browse
  * connectors" dialog. Distinct from `MCP_CATALOG_PRESETS` (which is
@@ -39,25 +41,25 @@ export const TRUSTED_CONNECTORS: TrustedConnector[] = [
     id: "notfair-googleads",
     display_name: "NotFair Google Ads",
     description: "Campaigns, bids, keywords, search terms.",
-    resource_url: "https://notfair.co/api/mcp/google_ads",
+    resource_url: CANONICAL_MCP_RESOURCE_URL,
   },
   {
     id: "notfair-metaads",
     display_name: "NotFair Meta Ads",
     description: "Facebook + Instagram campaigns, ad sets, budgets.",
-    resource_url: "https://notfair.co/api/mcp/meta_ads",
+    resource_url: CANONICAL_MCP_RESOURCE_URL,
   },
   {
     id: "notfair-googlesearchconsole",
     display_name: "NotFair Google Search Console",
     description: "Organic search performance, queries, pages, indexing.",
-    resource_url: "https://notfair.co/api/mcp/google_search_console",
+    resource_url: CANONICAL_MCP_RESOURCE_URL,
   },
   {
     id: "notfair-googleanalytics",
     display_name: "NotFair Google Analytics",
     description: "GA4 traffic, channels, conversions, audiences.",
-    resource_url: "https://notfair.co/api/mcp/google_analytics",
+    resource_url: CANONICAL_MCP_RESOURCE_URL,
   },
   {
     id: "stripe",

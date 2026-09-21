@@ -9,6 +9,8 @@ const mocks = vi.hoisted(() => ({
   getCachedProbe: vi.fn(),
   setCachedProbe: vi.fn(),
   invalidateProbe: vi.fn(),
+  findCatalogMcpToken: vi.fn(),
+  catalogKeysSharingResource: vi.fn(),
 }));
 
 vi.mock("./tokens", () => ({
@@ -18,6 +20,10 @@ vi.mock("./tokens", () => ({
 }));
 vi.mock("@/server/mcp-catalog", () => ({
   mcpSpecByKey: mocks.mcpSpecByKey,
+}));
+vi.mock("./catalog-token", () => ({
+  findCatalogMcpToken: mocks.findCatalogMcpToken,
+  catalogKeysSharingResource: mocks.catalogKeysSharingResource,
 }));
 vi.mock("./rpc", () => ({
   mcpRpcAutoRefresh: mocks.mcpRpcAutoRefresh,
@@ -36,6 +42,8 @@ beforeEach(() => {
   vi.clearAllMocks();
   mocks.mcpSpecByKey.mockReturnValue(SPEC);
   mocks.findMcpToken.mockReturnValue({ id: "tok-1" });
+  mocks.findCatalogMcpToken.mockReturnValue({ id: "tok-1" });
+  mocks.catalogKeysSharingResource.mockImplementation((_slug: string, key: string) => [key]);
   mocks.getCachedProbe.mockReturnValue(null);
 });
 
@@ -46,7 +54,7 @@ describe("getMcpStatus short-circuits", () => {
   });
 
   it("returns not_configured when no token", async () => {
-    mocks.findMcpToken.mockReturnValue(null);
+    mocks.findCatalogMcpToken.mockReturnValue(null);
     expect(await getMcpStatus("p", "k")).toEqual({ state: "not_configured" });
   });
 
@@ -137,6 +145,18 @@ describe("disconnectMcp", () => {
     await disconnectMcp("p", "k");
     expect(mocks.deleteMcpToken).not.toHaveBeenCalled();
     expect(mocks.invalidateProbe).toHaveBeenCalledWith("p", "k");
+  });
+
+  it("disconnects every catalog key that shares the same resource URL", async () => {
+    mocks.catalogKeysSharingResource.mockReturnValue(["notfair-googleads", "notfair-metaads"]);
+    mocks.findMcpToken.mockImplementation((_slug: string, key: string) =>
+      key === "notfair-googleads" ? { id: "tok-g" } : { id: "tok-m" },
+    );
+    await disconnectMcp("p", "notfair-googleads");
+    expect(mocks.deleteMcpToken).toHaveBeenCalledWith("tok-g");
+    expect(mocks.deleteMcpToken).toHaveBeenCalledWith("tok-m");
+    expect(mocks.invalidateProbe).toHaveBeenCalledWith("p", "notfair-googleads");
+    expect(mocks.invalidateProbe).toHaveBeenCalledWith("p", "notfair-metaads");
   });
 });
 

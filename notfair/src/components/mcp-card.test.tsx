@@ -28,9 +28,9 @@ const gscSpec: McpSpec = {
   key: "notfair-googlesearchconsole",
   display_name: "NotFair Google Search Console",
   description: "Organic search performance.",
-  resource_url: "https://notfair.co/api/mcp/google_search_console",
+  resource_url: "https://notfair.co/api/mcp/notfair",
   discovery_url:
-    "https://notfair.co/.well-known/oauth-protected-resource/api/mcp/google_search_console",
+    "https://notfair.co/.well-known/oauth-protected-resource/api/mcp/notfair",
   source: "preset",
 };
 
@@ -38,7 +38,7 @@ const xadsSpec: McpSpec = {
   ...gscSpec,
   key: "notfair-xads",
   display_name: "NotFair X Ads",
-  resource_url: "https://notfair.co/api/mcp/x_ads",
+  resource_url: "https://notfair.co/api/mcp/notfair",
 };
 
 const connected: McpRuntimeStatus = { state: "connected" } as McpRuntimeStatus;

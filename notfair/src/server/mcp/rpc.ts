@@ -1,4 +1,4 @@
-import { findMcpToken } from "@/server/mcp/tokens";
+import { findCatalogMcpToken } from "@/server/mcp/catalog-token";
 import { mcpSpecByKey } from "@/server/mcp-catalog";
 import { refreshMcpToken, isExpiringSoon } from "./refresh";
 
@@ -45,7 +45,7 @@ export function readMcpConfigRow(
 ): McpConfigRow | null {
   const spec = mcpSpecByKey(project_slug, catalog_key);
   if (!spec) return null;
-  const token = findMcpToken(project_slug, catalog_key);
+  const token = findCatalogMcpToken(project_slug, catalog_key);
   if (!token) return { url: spec.resource_url };
   return {
     url: spec.resource_url,
@@ -187,7 +187,7 @@ export async function mcpRpcAutoRefresh<T = unknown>(
   if (!spec) {
     return { ok: false, kind: "http_error", status: 404, body: "unknown mcp catalog key" };
   }
-  let token = findMcpToken(project_slug, catalog_key);
+  let token = findCatalogMcpToken(project_slug, catalog_key);
   if (!token) {
     return { ok: false, kind: "http_error", status: 401, body: "no token stored" };
   }

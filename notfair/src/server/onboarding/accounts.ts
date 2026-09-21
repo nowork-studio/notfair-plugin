@@ -41,9 +41,17 @@ type AccountsPayload = {
 
 const MCP_CATALOG_KEY = "notfair-googleads";
 const LIST_TIMEOUT_MS = 8_000;
+const GOOGLE_ADS_LIST_CAPABILITY = "google_ads_listConnectedAccounts";
+
+function compactExecuteRead(capabilityId: string) {
+  return {
+    name: "executeRead" as const,
+    arguments: { capabilityId, arguments: {} },
+  };
+}
 
 /**
- * Call the MCP's listConnectedAccounts tool with the project's stored bearer.
+ * Call compact `executeRead` for Google Ads accounts with the project's stored bearer.
  * Returns the account list (id + name).
  */
 export async function listGoogleAdsAccounts(
@@ -62,7 +70,7 @@ export async function listGoogleAdsAccounts(
     project_slug,
     MCP_CATALOG_KEY,
     "tools/call",
-    { name: "listConnectedAccounts", arguments: {} },
+    compactExecuteRead(GOOGLE_ADS_LIST_CAPABILITY),
     { timeoutMs: LIST_TIMEOUT_MS },
   );
 
@@ -163,7 +171,7 @@ export async function setOnboardingAccountAction(
 }
 
 const META_ADS_MCP_KEY = "notfair-metaads";
-const META_ADS_LIST_TOOL = "listAdAccounts";
+const META_ADS_LIST_CAPABILITY = "meta_ads_listAdAccounts";
 
 export type MetaAdsAccount = {
   /** Numeric ad-account id with the `act_` prefix (e.g. `act_123456`). */
@@ -192,7 +200,7 @@ export async function listMetaAdsAccounts(
     project_slug,
     META_ADS_MCP_KEY,
     "tools/call",
-    { name: META_ADS_LIST_TOOL, arguments: {} },
+    compactExecuteRead(META_ADS_LIST_CAPABILITY),
     { timeoutMs: LIST_TIMEOUT_MS },
   );
   if (!rpcResult.ok) {
@@ -204,7 +212,7 @@ export async function listMetaAdsAccounts(
     return {
       ok: false,
       kind: "shape",
-      error: `MCP ${META_ADS_LIST_TOOL} returned an unexpected shape.`,
+      error: `MCP ${META_ADS_LIST_CAPABILITY} returned an unexpected shape.`,
     };
   }
   return { ok: true, ...parsed };
@@ -287,14 +295,14 @@ export async function setOnboardingMetaAdsAccountAction(
 // surface them as "properties" in the UI to match what users see in
 // Search Console.
 //
-// The notfair-googlesearchconsole MCP exposes a `listProperties` tool
-// (verified against the live server) which returns a bare JSON array
-// of `{ siteUrl, permissionLevel }`. We also accept the spec-shaped
+// The compact NotFair MCP exposes `search_console_listProperties` via
+// executeRead (verified against the live server) which returns a bare JSON
+// array of `{ siteUrl, permissionLevel }`. We also accept the spec-shaped
 // `{ siteEntry: [...] }` wrap and a defensive `{ sites: [...] }` so a
 // future server-side change doesn't break the picker.
 
 const GSC_MCP_KEY = "notfair-googlesearchconsole";
-const GSC_LIST_TOOL = "listProperties";
+const GSC_LIST_CAPABILITY = "search_console_listProperties";
 
 export type GscProperty = {
   /** Site URL exactly as Search Console uses it. */
@@ -325,7 +333,7 @@ export async function listGscProperties(
     project_slug,
     GSC_MCP_KEY,
     "tools/call",
-    { name: GSC_LIST_TOOL, arguments: {} },
+    compactExecuteRead(GSC_LIST_CAPABILITY),
     { timeoutMs: LIST_TIMEOUT_MS },
   );
   if (!rpcResult.ok) {
@@ -337,7 +345,7 @@ export async function listGscProperties(
     return {
       ok: false,
       kind: "shape",
-      error: `MCP ${GSC_LIST_TOOL} returned an unexpected shape.`,
+      error: `MCP ${GSC_LIST_CAPABILITY} returned an unexpected shape.`,
     };
   }
   return { ok: true, ...parsed };

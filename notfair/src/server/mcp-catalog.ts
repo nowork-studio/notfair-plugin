@@ -19,6 +19,15 @@
 
 import { listUserMcpServers } from "@/server/db/user-mcp-servers";
 import { getHiddenMcpPresetKeys } from "@/server/db/projects";
+import {
+  CANONICAL_MCP_DISCOVERY_URL,
+  CANONICAL_MCP_RESOURCE_URL,
+} from "@/lib/canonical-mcp";
+
+export {
+  CANONICAL_MCP_DISCOVERY_URL,
+  CANONICAL_MCP_RESOURCE_URL,
+} from "@/lib/canonical-mcp";
 
 export type McpSpec = {
   /** Stable catalog identifier (used by the UI + mcp_tokens.server_name). */
@@ -39,9 +48,8 @@ export const MCP_CATALOG_PRESETS: McpSpec[] = [
     display_name: "NotFair Google Ads",
     description:
       "Live Google Ads operations: campaigns, bids, budgets, keywords, search terms, change history.",
-    resource_url: "https://notfair.co/api/mcp/google_ads",
-    discovery_url:
-      "https://notfair.co/.well-known/oauth-protected-resource/api/mcp/google_ads",
+    resource_url: CANONICAL_MCP_RESOURCE_URL,
+    discovery_url: CANONICAL_MCP_DISCOVERY_URL,
     source: "preset",
   },
   {
@@ -49,9 +57,8 @@ export const MCP_CATALOG_PRESETS: McpSpec[] = [
     display_name: "NotFair Meta Ads",
     description:
       "Live Meta Ads (Facebook + Instagram) operations: campaigns, ad sets, ads, creatives, insights.",
-    resource_url: "https://notfair.co/api/mcp/meta_ads",
-    discovery_url:
-      "https://notfair.co/.well-known/oauth-protected-resource/api/mcp/meta_ads",
+    resource_url: CANONICAL_MCP_RESOURCE_URL,
+    discovery_url: CANONICAL_MCP_DISCOVERY_URL,
     source: "preset",
   },
   {
@@ -59,9 +66,8 @@ export const MCP_CATALOG_PRESETS: McpSpec[] = [
     display_name: "NotFair Google Search Console",
     description:
       "Organic search performance: queries, pages, impressions, clicks, indexing.",
-    resource_url: "https://notfair.co/api/mcp/google_search_console",
-    discovery_url:
-      "https://notfair.co/.well-known/oauth-protected-resource/api/mcp/google_search_console",
+    resource_url: CANONICAL_MCP_RESOURCE_URL,
+    discovery_url: CANONICAL_MCP_DISCOVERY_URL,
     source: "preset",
   },
   {
@@ -69,9 +75,8 @@ export const MCP_CATALOG_PRESETS: McpSpec[] = [
     display_name: "NotFair Google Analytics",
     description:
       "GA4 traffic and conversion analytics: sessions, channels, pages, events, audiences.",
-    resource_url: "https://notfair.co/api/mcp/google_analytics",
-    discovery_url:
-      "https://notfair.co/.well-known/oauth-protected-resource/api/mcp/google_analytics",
+    resource_url: CANONICAL_MCP_RESOURCE_URL,
+    discovery_url: CANONICAL_MCP_DISCOVERY_URL,
     source: "preset",
   },
   {
@@ -79,9 +84,8 @@ export const MCP_CATALOG_PRESETS: McpSpec[] = [
     display_name: "NotFair X Ads",
     description:
       "Live X (Twitter) Ads operations: campaigns, line items, promoted posts, analytics.",
-    resource_url: "https://notfair.co/api/mcp/x_ads",
-    discovery_url:
-      "https://notfair.co/.well-known/oauth-protected-resource/api/mcp/x_ads",
+    resource_url: CANONICAL_MCP_RESOURCE_URL,
+    discovery_url: CANONICAL_MCP_DISCOVERY_URL,
     source: "preset",
   },
 ];

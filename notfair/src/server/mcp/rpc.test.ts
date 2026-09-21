@@ -29,7 +29,7 @@ import { upsertMcpToken, type McpToken } from "./tokens";
 import { getDb } from "@/server/db/db";
 
 const ADS = "notfair-googleads";
-const ADS_URL = "https://notfair.co/api/mcp/google_ads";
+const ADS_URL = "https://notfair.co/api/mcp/notfair";
 
 const fetchMock = vi.fn();
 
@@ -95,6 +95,19 @@ describe("readMcpConfigRow / getMcpConfig", () => {
       headers: { Authorization: "Bearer secret-bearer" },
     });
     expect(getMcpConfig(slug, ADS)).toEqual({ url: ADS_URL, token: "secret-bearer" });
+  });
+
+  it("reuses a token stored under another catalog key that shares the resource URL", () => {
+    const slug = freshProject();
+    upsertMcpToken({
+      project_slug: slug,
+      server_name: "notfair-metaads",
+      access_token: "shared-bearer",
+    });
+    expect(getMcpConfig(slug, ADS)).toEqual({
+      url: ADS_URL,
+      token: "shared-bearer",
+    });
   });
 });
 

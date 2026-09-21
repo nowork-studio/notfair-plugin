@@ -44,8 +44,8 @@ describe("normalizeResourceUrl", () => {
 
 describe("deriveDiscoveryUrl", () => {
   it("inserts the well-known suffix between origin and path", () => {
-    expect(deriveDiscoveryUrl("https://notfair.co/api/mcp/google_ads")).toBe(
-      "https://notfair.co/.well-known/oauth-protected-resource/api/mcp/google_ads",
+    expect(deriveDiscoveryUrl("https://notfair.co/api/mcp/notfair")).toBe(
+      "https://notfair.co/.well-known/oauth-protected-resource/api/mcp/notfair",
     );
   });
 

@@ -51,6 +51,17 @@ describe("isPresetKey / getMcpPresets", () => {
     expect(getMcpPresets()).toBe(MCP_CATALOG_PRESETS);
     expect(getMcpPresets().every((p) => p.source === "preset")).toBe(true);
   });
+
+  it("points every NotFair preset at the canonical MCP resource", () => {
+    expect(new Set(MCP_CATALOG_PRESETS.map((p) => p.resource_url))).toEqual(
+      new Set(["https://notfair.co/api/mcp/notfair"]),
+    );
+    expect(new Set(MCP_CATALOG_PRESETS.map((p) => p.discovery_url))).toEqual(
+      new Set([
+        "https://notfair.co/.well-known/oauth-protected-resource/api/mcp/notfair",
+      ]),
+    );
+  });
 });
 
 describe("getMcpCatalog", () => {

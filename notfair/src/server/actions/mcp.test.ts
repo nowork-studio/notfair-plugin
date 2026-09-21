@@ -463,7 +463,7 @@ describe("addUserMcpServerAction", () => {
     addHiddenMcpPresetKey(SLUG, "notfair-googleads");
     const r = await addUserMcpServerAction({
       display_name: "NotFair Google Ads",
-      resource_url: "https://notfair.co/api/mcp/google_ads",
+        resource_url: "https://notfair.co/api/mcp/notfair",
       key: "notfair-googleads",
     });
     expect(r).toEqual({ ok: true, key: "notfair-googleads" });
