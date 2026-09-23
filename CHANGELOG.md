@@ -9,6 +9,12 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+## [0.27.12] — 2026-09-23
+
+### Fixed
+
+- Seven SEO skill descriptions (`seo-analysis`, `hreflang-international`, `ecommerce-seo`, `local-seo`, `sxo`, `programmatic-seo`, `seo-page`) were over the 1024-character description limit. They are trimmed in both `seo/` and the Codex `skills/` wrappers with every quoted trigger phrase and cross-skill pointer kept, and a unit test now enforces the limit and keeps wrapper descriptions in sync with their canonical skills.
+
 ## [0.27.11] — 2026-09-21
 
 ### Fixed
