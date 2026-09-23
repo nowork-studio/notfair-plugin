@@ -165,6 +165,22 @@ describe("getOrLaunchBrowser", () => {
     expect(mocks.stopChrome).toHaveBeenCalledWith(chrome);
   });
 
+  it("reports an incomplete package when playwright-core is missing browsers.json", async () => {
+    const chrome = launched();
+    await expect(
+      getOrLaunchBrowser("acme", {
+        launch: vi.fn(async () => chrome as never),
+        connectOverCDP: vi.fn(async () => {
+          throw new Error(
+            "Cannot find module '/pkg/.next/node_modules/playwright-core-b643089f39648130/browsers.json'",
+          );
+        }),
+      }),
+    ).rejects.toThrow(/NotFair package is incomplete.*browsers\.json/);
+    expect(mocks.stopChrome).toHaveBeenCalledWith(chrome);
+    expect(_sessionsByProject.has("acme")).toBe(false);
+  });
+
   it("closes both handles when CDP has no default context", async () => {
     const chrome = launched();
     const attached = browser([]);

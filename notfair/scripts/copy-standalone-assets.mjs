@@ -15,6 +15,7 @@ import { existsSync, cpSync, lstatSync, readdirSync, realpathSync, rmSync, renam
 import { execSync } from "node:child_process";
 import { basename, dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
+import { findPlaywrightDirsMissingBrowsersJson } from "./lib/standalone-integrity.mjs";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = dirname(__dirname);
@@ -112,4 +113,17 @@ function countSymlinks(dir) {
     }
   }
   return count;
+}
+
+// playwright-core requires its own browsers.json at runtime. next.config.ts
+// force-includes it; fail the build if any copy in the tree is still missing
+// it, since the workspace browser cannot launch from such a package.
+const missingBrowsersJson = findPlaywrightDirsMissingBrowsersJson(STANDALONE);
+if (missingBrowsersJson.length > 0) {
+  console.error(
+    `playwright-core is missing browsers.json in the standalone tree:\n${missingBrowsersJson
+      .map((dir) => `  ${dir.replace(ROOT + "/", "")}`)
+      .join("\n")}\nCheck outputFileTracingIncludes in next.config.ts.`,
+  );
+  process.exit(1);
 }

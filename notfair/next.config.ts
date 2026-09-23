@@ -16,6 +16,10 @@ const config: NextConfig = {
     "*": [
       "./node_modules/@swc/helpers/**/*",
       "./node_modules/@next/env/**/*",
+      // playwright-core reads browsers.json at runtime via require(); file
+      // tracing only follows code, so the workspace browser fails to launch
+      // from the published tarball without it.
+      "./node_modules/playwright-core/browsers.json",
     ],
   },
   // typedRoutes intentionally disabled in V1 — our nav table builds Link hrefs

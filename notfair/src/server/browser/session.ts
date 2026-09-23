@@ -139,8 +139,14 @@ async function launchSession(
     browser = await connect(launched.cdpHttpUrl);
   } catch (err) {
     await stopChrome(launched).catch(() => {});
+    const message = (err as Error).message ?? String(err);
+    if (/playwright-core[^'"]*[\\/]browsers\.json/.test(message)) {
+      throw new Error(
+        "The installed NotFair package is incomplete: playwright-core is missing browsers.json, so the workspace browser cannot start. Reinstall or upgrade NotFair to repair it.",
+      );
+    }
     throw new Error(
-      `Failed to attach Playwright to Chrome CDP at ${launched.cdpHttpUrl}: ${(err as Error).message}`,
+      `Failed to attach Playwright to Chrome CDP at ${launched.cdpHttpUrl}: ${message}`,
     );
   }
 
