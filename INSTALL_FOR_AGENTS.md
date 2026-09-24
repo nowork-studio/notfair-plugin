@@ -66,12 +66,14 @@ Verify that `notfair@nowork-studio` is installed and `codex mcp list` reports `N
 
 ### host = `hermes`
 
-Hermes reads `AGENTS.md` at the workspace root. From the repo root:
+Hermes loads `AGENTS.md` from the directory it starts in. From the repo root:
 
 ```bash
-# Point Hermes at this directory; it will discover skills via AGENTS.md.
-hermes init --workspace .
+# Start Hermes here; it loads AGENTS.md at startup and routes to skills from there.
+hermes chat
 ```
+
+From another directory, `hermes --in /path/to/notfair-plugin chat` does the same.
 
 > **Note:** A dedicated Hermes install adapter (`install/hermes/`) may be added in future versions. For now, workspace-local usage is the supported path.
 
