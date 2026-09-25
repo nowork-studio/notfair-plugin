@@ -37,6 +37,7 @@ These are candidates, not automatic answers. Availability and labels vary by cam
 - For uncertainty, use **Save as experiment** or the supported experiment capability when available.
 - After target or conversion-goal changes, assess mature results over the relevant conversion cycle. Google's current guidance says one to two conversion cycles are commonly needed; the account's displayed status and lag take precedence over a fixed number of days.
 - Intervene earlier only when a policy, tracking, capacity, or spend guardrail is breached. State that override explicitly.
+- Before moving to value-based bidding, check the uploaded values against the most recent cohort that has matured. Values averaged over a long history can overstate or understate the customers the account acquires today, and Smart Bidding will act on that gap.
 
 ## Troubleshooting before changing targets
 

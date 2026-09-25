@@ -9,6 +9,15 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+## [0.27.13] — 2026-09-25
+
+### Changed
+
+- Google Ads business context records lead quality and linked accounts. `lead_quality` notes what the primary conversion actually counts, where leads become customers, how a lead joins back to a click, and the qualified or booked rate by campaign. `linked_accounts` lists other ad accounts for the same business, such as Local Services Ads. The audit asks for them on lead-gen accounts, and the local lead-gen playbook compares campaigns on cost per booking when the rates exist.
+- Anomaly checks compare the last 7 complete days with the prior 28 in the performance read the skill already makes, instead of maintaining a local `account-baseline.json`.
+- Audits build personas only when the task needs them or copy/landing work is next, instead of on every full audit.
+- Experiment readouts judge a partial-campaign change on the part that changed, not arm totals. Bid-strategy guidance checks uploaded values against the most recent matured cohort before moving to value-based bidding.
+
 ## [0.27.12] — 2026-09-23
 
 ### Fixed

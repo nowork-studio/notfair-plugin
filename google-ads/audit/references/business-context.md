@@ -88,6 +88,14 @@ Write the complete business context to `{data_dir}/business-context.json`:
     "source": "user_provided | inferred_from_template | unknown",
     "last_confirmed": ""
   },
+  "lead_quality": {
+    "primary_conversion_definition": "",
+    "crm_source": "",
+    "join_key": "",
+    "qualified_rate_by_campaign": {},
+    "last_confirmed": ""
+  },
+  "linked_accounts": [],
   "social_proof": [],
   "offers_or_promotions": [],
   "landing_pages": {},
@@ -110,6 +118,18 @@ Unit economics drive margin-aware profitability framing (see `../../shared/ppc-m
 3. **Leave null (last resort):** If no industry template match and user declines to provide, leave all fields `null`. The audit falls back to account-average heuristics and skips break-even / headroom framing.
 
 **Never compute break-even CPA when `source == "inferred_from_template"` without surfacing the assumption.** A template-inferred margin that's off by 15% changes every dollar-impact figure in the audit. Transparency is non-negotiable.
+
+## Lead Quality and Linked Accounts — How to Populate
+
+For lead-gen accounts, the primary Google Ads conversion often overstates leads: a form conversion can fire on repeat submits and existing customers. Record what the business can tell you, and leave fields empty rather than guessing.
+
+- `primary_conversion_definition`: what the primary conversion actually counts (for example "every phone-form submit, including repeats").
+- `crm_source`: where leads are deduplicated and turn into customers (a CRM, a booking system).
+- `join_key`: how a lead links back to an ad click, if the business stores one (for example a gclid captured in a UTM field).
+- `qualified_rate_by_campaign`: the share of each campaign's leads that became qualified, booked or paying, with the window it was measured over.
+- `linked_accounts`: other ad accounts that serve the same business, such as Local Services Ads, with their account IDs. An audit of one account cannot see their spend or leads.
+
+When `qualified_rate_by_campaign` exists, compare campaigns on cost per qualified lead or booking, not Google-reported CPL alone.
 
 ### Industry template matching
 

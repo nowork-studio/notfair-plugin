@@ -43,13 +43,10 @@ Do not declare the primary outcome early. You may still pull safety, spend, deli
 
 5. If the predeclared rollback threshold is breached on mature, comparable evidence, recommend the recorded rollback. If no threshold was recorded, classify the result as observed/inconclusive and ask for the business guardrail rather than inventing one after seeing the outcome.
 
-## Check account baseline for anomalies
+## Check for anomalies
 
-Read `{data_dir}/account-baseline.json`. If it exists AND was last updated >24 hours ago:
+In the same performance read you already make, compare each campaign's last 7 complete days with its prior 28 complete days (scaled to a 7-day rate):
 
-1. Compare each campaign's most recent complete window with a like-for-like mature baseline.
-2. Flag movements that cross a stored account-specific anomaly band or business guardrail. If none exists, rank the largest standardized or percentage movements for review and label them as triage signals, not failures.
+1. Use complete days in the account's time zone. Mark campaigns whose budget, bidding or status changed inside either window, so a movement caused by that change is reported with it, not as an unexplained anomaly.
+2. Flag movements that cross an account-specific anomaly band or business guardrail. If none exists, rank the largest movements for review and label them as triage signals, not failures.
 3. Mention anomalies briefly if found.
-4. Update the baseline (see Account Baseline section in SKILL.md).
-
-If `account-baseline.json` doesn't exist, skip — it will be created at session end.

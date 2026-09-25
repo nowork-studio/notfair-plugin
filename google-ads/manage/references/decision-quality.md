@@ -60,7 +60,7 @@ Before sending the answer, recalculate the decisive values and verify that the r
 
 - **Observe** when exposure is small, data is immature, or a later conversion could reverse the conclusion.
 - **Stage a reversible change** when downside is bounded and operational urgency matters. Change one decision lever, record before/after state, and wait for the defined maturity window.
-- **Run an experiment** when the change is material and causality matters. State a business-linked hypothesis, test one variable, preselect one or two success metrics, preserve the base campaign while the test is running, and use the platform result plus mature conversions before choosing a winner.
+- **Run an experiment** when the change is material and causality matters. State a business-linked hypothesis, test one variable, preselect one or two success metrics, preserve the base campaign while the test is running, and use the platform result plus mature conversions before choosing a winner. When the treatment changes only part of a campaign (one ad group's landing page or ads), read the result on the part that changed; arm totals can be driven by ad groups the treatment did not touch.
 - **Act protectively** before full maturity only for policy, safety, broken measurement with uncontrolled exposure, obvious irrelevant intent, or a breached spend/business guardrail. Explain why the normal evidence bar is being overridden.
 
 ### Common ambiguity gates

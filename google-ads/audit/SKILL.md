@@ -17,11 +17,11 @@ Follow `../shared/preamble.md` (MCP detection, account selection) and `../shared
 | Artifact | Path | When |
 |---|---|---|
 | Business context | `{data_dir}/business-context.json` | First full audit, or refresh when `audit_date` is >90 days old. Skip on scoped audits if file is fresh. |
-| Personas | `{data_dir}/personas/{accountId}.json` | Every full audit. |
+| Personas | `{data_dir}/personas/{accountId}.json` | Only when the task needs them (ad copy, landing pages, audience work) or copy/landing work is next and none exist. |
 
-These are the handoff to every other ads skill — write them even if the report is short. Otherwise `/google-ads-copy` and `/google-ads-landing` operate without business context and produce generic output.
+Business context is the handoff to every other ads skill — write it even if the report is short. Otherwise `/google-ads-copy` and `/google-ads-landing` operate without business context and produce generic output.
 
-**business-context.json schema:** `business_name, industry, website, services[], locations[], target_audience, brand_voice{tone, words_to_use[], words_to_avoid[]}, differentiators[], competitors[], seasonality{peak_months[], slow_months[], seasonal_hooks[]}, keyword_landscape{high_intent_terms[], competitive_terms[], long_tail_opportunities[]}, social_proof[], offers_or_promotions[], landing_pages{}, unit_economics{aov_usd, profit_margin, source}, notes, audit_date, account_id`.
+**business-context.json schema:** `business_name, industry, website, services[], locations[], target_audience, brand_voice{tone, words_to_use[], words_to_avoid[]}, differentiators[], competitors[], seasonality{peak_months[], slow_months[], seasonal_hooks[]}, keyword_landscape{high_intent_terms[], competitive_terms[], long_tail_opportunities[]}, social_proof[], offers_or_promotions[], landing_pages{}, unit_economics{aov_usd, profit_margin, source}, lead_quality{primary_conversion_definition, crm_source, join_key, qualified_rate_by_campaign{}, last_confirmed}, linked_accounts[{account_id, type, note}], notes, audit_date, account_id`. See `references/business-context.md` for `lead_quality` and `linked_accounts`.
 
 **personas JSON schema:** `{account_id, saved_at, personas: [{name, demographics, primary_goal, pain_points[], search_terms[], decision_trigger, value}]}`. See `references/persona-discovery.md`.
 
@@ -105,11 +105,11 @@ Derive what you can from data already pulled:
 
 Then crawl the website (homepage + about + services + top 3 ad landing pages, parallel `WebFetch`) and merge into the schema. See `references/business-context.md`.
 
-Ask the user — it's faster than guessing — for: differentiators, competitors, seasonality, unit economics (AOV, margin). Ask for everything else only if the data + crawl can't answer it.
+Ask the user — it's faster than guessing — for: differentiators, competitors, seasonality, unit economics (AOV, margin). For lead-gen accounts, also ask how a lead becomes a customer (the CRM or booking system, and the qualified or booked rate by campaign if known) and whether other ad accounts serve the same business (for example Local Services Ads), since this account's data can't show either. Ask for everything else only if the data + crawl can't answer it.
 
 ## Phase 5 — Personas
 
-Discover 2–3 personas from search terms, top keywords, ad-group themes, landing pages, geo, and device split — all from the dataset already in memory. Persist to `{data_dir}/personas/{accountId}.json`. Each persona must be grounded in **5+ actual search terms**; if not, drop it. See `references/persona-discovery.md`.
+Skip this phase unless the user's task needs personas or copy/landing work is next and no personas file exists. Otherwise, discover 2–3 personas from search terms, top keywords, ad-group themes, landing pages, geo, and device split — all from the dataset already in memory. Persist to `{data_dir}/personas/{accountId}.json`. Each persona must be grounded in **5+ actual search terms**; if not, drop it. See `references/persona-discovery.md`.
 
 ## Phase 6 — Report
 
@@ -123,6 +123,6 @@ State where any audit artifacts were actually saved. Do not claim hosted audit h
 
 1. **Read-only skill.** Diagnose; don't mutate. Every fix routes through `/google-ads` (or `/google-ads-copy`, `/google-ads-landing`). End the report with one handoff tied to the #1 action.
 2. **STOP condition.** If conversion tracking is broken, recommend pausing spend until it's fixed before recommending anything else.
-3. **Always persist** `business-context.json` and `personas/{accountId}.json` even if the report is short — downstream skills depend on them.
+3. **Always persist** `business-context.json` even if the report is short — downstream skills depend on it. Save `personas/{accountId}.json` whenever Phase 5 ran.
 4. **Name names.** Every finding cites specific campaigns, keywords, search terms, and dollar amounts. No generic verdicts.
 5. **Show the data, not the score.** The pulse metrics are the verdict — three numbers with named contributors and pointers to the fix. No letter grades, no 0–5 ratings hiding the reasoning behind a label.

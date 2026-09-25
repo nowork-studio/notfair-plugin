@@ -85,28 +85,9 @@ These live alongside this skill. Read on demand — not preemptively.
 
 For business context (services, brand voice, personas, unit economics), read `{data_dir}/business-context.json` and `{data_dir}/personas/{accountId}.json`. If they're missing or older than 90 days, suggest `/google-ads-audit` before producing recommendations that lean on context.
 
-## Account baseline
+## Anomaly check
 
-Maintain `{data_dir}/account-baseline.json` for cross-session anomaly detection. Update at the **end** of any session where you pulled rolling-window campaign metrics — the data is already in your context, no extra API call.
-
-```json
-{
-  "accountId": "<from config>",
-  "lastUpdated": "<ISO 8601>",
-  "campaigns": {
-    "<campaignId>": {
-      "name": "<campaign name>",
-      "rolling30d": { "avgDailySpend": 0, "totalConversions": 0, "avgCpa": 0, "avgCtr": 0, "avgConvRate": 0, "totalSpend": 0 },
-      "recent7d": { "spend": 0, "conversions": 0, "cpa": 0, "ctr": 0, "clicks": 0, "impressions": 0 },
-      "snapshotDate": "<ISO 8601>"
-    }
-  }
-}
-```
-
-Update formula: `rolling30d = (0.7 × previous_rolling30d) + (0.3 × recent7d × (30/7))`. New campaigns: initialize `rolling30d` from `recent7d` directly. Cap at 50 campaigns (spend > $0 in last 30 days) so the file stays small.
-
-When the baseline is older than 24h, see `references/session-checks.md` for the anomaly comparison.
+For cross-session anomaly detection, compare each campaign's last 7 complete days with its prior 28 complete days in the same read you already make for performance. Do not maintain a local baseline file; live data is the baseline. See `references/session-checks.md`.
 
 ## Conditional handoffs
 

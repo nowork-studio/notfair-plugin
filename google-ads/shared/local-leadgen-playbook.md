@@ -37,6 +37,10 @@ Google Ads conversions are not enough. When possible, connect:
 
 Judge terms by qualified lead or booking quality once that data exists.
 
+- Check what the primary conversion counts before comparing CPLs. A form conversion that fires on every submit can report well above the leads the CRM keeps, and the gap can differ by campaign.
+- Keep the qualified or booked rate per campaign in `business-context.json` (`lead_quality`) and compare campaigns on cost per booking. Two campaigns with the same CPL can differ several times over in cost per booked customer.
+- Ask whether the business runs other ad accounts for the same locations, especially Local Services Ads. Record them under `linked_accounts`; budget moves between Search and LSA need both views.
+
 ## Output priorities
 
 For local accounts, reports should emphasize:
