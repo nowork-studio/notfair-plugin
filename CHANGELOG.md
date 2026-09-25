@@ -9,6 +9,12 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+## [0.27.14] — 2026-09-25
+
+### Changed
+
+- Meta Ads anomaly checks compare the last 7 complete days with the prior 28 in the insights read the skill already makes, instead of maintaining a local `meta/account-baseline.json`. Campaigns whose budget, bid strategy, optimization event or status changed inside either window are marked, so a change-driven movement is reported with its cause.
+
 ## [0.27.13] — 2026-09-25
 
 ### Changed

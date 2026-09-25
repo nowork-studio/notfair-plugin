@@ -72,49 +72,9 @@ what can be read or changed. Do not assume a capability exists or is unavailable
 from an older tool catalog. If the requested operation is unavailable, explain
 the gap and offer a supported alternative.
 
-## Account baseline
+## Anomaly check
 
-Maintain `{data_dir}/meta/account-baseline.json` for anomaly detection across sessions. Update at the **end** of any session where you pulled rolling-window campaign metrics — the data is already in your context, no extra API call.
-
-```json
-{
-  "metaAccountId": "<from config>",
-  "lastUpdated": "<ISO 8601>",
-  "campaigns": {
-    "<campaignId>": {
-      "name": "<campaign name>",
-      "objective": "<OUTCOME_SALES | OUTCOME_LEADS | OUTCOME_TRAFFIC | ...>",
-      "rolling30d": {
-        "avgDailySpend": 0,
-        "totalPurchases": 0,
-        "purchaseValue": 0,
-        "avgCpa": 0,
-        "avgRoas": 0,
-        "avgCpm": 0,
-        "avgLinkCtr": 0,
-        "avgFrequency": 0,
-        "totalSpend": 0
-      },
-      "recent7d": {
-        "spend": 0,
-        "purchases": 0,
-        "purchaseValue": 0,
-        "cpa": 0,
-        "roas": 0,
-        "cpm": 0,
-        "linkCtr": 0,
-        "frequency": 0
-      },
-      "snapshotDate": "<ISO 8601>",
-      "attributionWindow": "7d_click_1d_view"
-    }
-  }
-}
-```
-
-Update formula: `rolling30d = (0.7 × previous_rolling30d) + (0.3 × recent7d × (30/7))`. The `(30/7)` factor projects 7-day numbers to a 30-day equivalent. New campaigns: initialize `rolling30d` from `recent7d` directly. Cap at 50 campaigns (spend > $0 in last 30 days only) so the file stays small.
-
-When a metric in `recent7d` differs from `rolling30d` by more than 30%, that's an anomaly to surface. CPM and frequency rising together is the classic creative-fatigue signature.
+For cross-session anomaly detection, compare each campaign's last 7 complete days with its prior 28 complete days in the same insights read you already make for performance. Do not maintain a local baseline file; live data is the baseline. Mark campaigns whose budget, bid strategy, optimization event or status changed inside either window, so a movement caused by that change is reported with it, not as an unexplained anomaly. If no account-specific anomaly band or business guardrail exists, rank the largest movements for review and label them as triage signals, not failures. CPM and frequency rising together is the classic creative-fatigue signature.
 
 ## Conditional handoffs
 
