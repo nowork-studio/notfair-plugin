@@ -5,7 +5,7 @@ import sys
 from pathlib import Path
 
 # bin script has no .py extension, so give spec an explicit source loader.
-script_path = Path(__file__).parent.parent.parent / 'bin' / 'notfair-content-calendar'
+script_path = Path(__file__).parent.parent.parent / 'scripts' / 'notfair-content-calendar.py'
 loader = SourceFileLoader("notfair_content_calendar", str(script_path))
 spec = importlib.util.spec_from_file_location("notfair_content_calendar", str(script_path), loader=loader)
 mod = importlib.util.module_from_spec(spec)

@@ -7,9 +7,9 @@ import pytest
 
 ROOT = Path(__file__).resolve().parents[2]
 HELPERS = [
-    "bin/notfair-change-watch",
-    "bin/notfair-config",
-    "bin/notfair-update-check",
+    "scripts/notfair-change-watch.sh",
+    "scripts/notfair-config.sh",
+    "scripts/notfair-update-check.sh",
 ]
 
 

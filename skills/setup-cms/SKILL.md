@@ -9,13 +9,8 @@ description: >
   user says "connect my CMS", "set up WordPress", "configure Strapi", "add
   Contentful", "connect Ghost", or "CMS setup". Also trigger if the user asks
   why no CMS data appears in a seo-analysis report.
-allowed-tools:
-  - Bash
-  - Read
-  - Write
-  - AskUserQuestion
 ---
 
 # Canonical NotFair workflow
 
-Read [`../../seo/setup-cms/SKILL.md`](../../seo/setup-cms/SKILL.md) completely, then follow it as the active workflow. Resolve every relative reference from that file against `../../seo/setup-cms/`.
+Read [`../../seo/setup-cms/WORKFLOW.md`](../../seo/setup-cms/WORKFLOW.md) completely, then follow it as the active workflow. Resolve every relative reference from that file against `../../seo/setup-cms/`.

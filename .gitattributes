@@ -1,4 +1,4 @@
 *.sh text eol=lf
-bin/notfair-change-watch text eol=lf
-bin/notfair-config text eol=lf
-bin/notfair-update-check text eol=lf
+scripts/notfair-change-watch.sh text eol=lf
+scripts/notfair-config.sh text eol=lf
+scripts/notfair-update-check.sh text eol=lf

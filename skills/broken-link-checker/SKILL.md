@@ -10,4 +10,4 @@ description: >
 
 # Canonical NotFair workflow
 
-Read [`../../seo/broken-link-checker/SKILL.md`](../../seo/broken-link-checker/SKILL.md) completely, then follow it as the active workflow. Resolve every relative reference from that file against `../../seo/broken-link-checker/`.
+Read [`../../seo/broken-link-checker/WORKFLOW.md`](../../seo/broken-link-checker/WORKFLOW.md) completely, then follow it as the active workflow. Resolve every relative reference from that file against `../../seo/broken-link-checker/`.

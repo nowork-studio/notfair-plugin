@@ -1,6 +1,6 @@
 {
   "name": "notfair",
-  "version": "0.27.15",
+  "version": "0.27.16",
   "description": "The official ads, analytics, SEO, and GEO plugin from NotFair.",
   "author": {
     "name": "NotFair",
@@ -38,6 +38,7 @@
     ],
     "brandColor": "#111827",
     "logo": "./assets/notfair-icon.png",
-    "composerIcon": "./assets/notfair-icon.png"
+    "composerIcon": "./assets/notfair-icon.png",
+    "supportURL": "https://notfair.co/contact"
   }
 }

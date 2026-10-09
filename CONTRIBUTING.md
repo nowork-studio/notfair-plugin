@@ -13,9 +13,9 @@ Please be respectful and professional in all your interactions with the communit
 Each skill lives in its own folder under a category directory (e.g., `seo/`, `google-ads/`).
 
 1.  **Create the Skill Directory**: `mkdir seo/your-new-skill`
-2.  **Add `SKILL.md`**: This is the heart of the skill. It must contain frontmatter with `name` and `description`.
+2.  **Add `WORKFLOW.md`**: Put the full instructions and frontmatter with `name` and `description` in the category directory. Create one `skills/<name>/SKILL.md` entry with the same frontmatter that loads the workflow. Only this entry is registered as a skill across hosts.
 3.  **Optional Scripts/References**: Add any supporting Python scripts in a `scripts/` folder and reference documents in a `references/` folder within your skill directory.
-4.  **Register the Skill**: Add the path to your skill (relative to the repo root) to the `skills` array in `.claude-plugin/plugin.json`.
+4.  **Register the Skill**: Add `./skills/<name>` to the `skills` array in `.claude-plugin/plugin.json` and the entry point to `AGENTS.md`.
 5.  **Bump Versions**: Update the version in:
     *   `.claude-plugin/plugin.json`
     *   `.claude-plugin/marketplace.json`
@@ -24,7 +24,7 @@ Each skill lives in its own folder under a category directory (e.g., `seo/`, `go
 
 ### 2. Improving Existing Skills
 
-*   Refine prompts in `SKILL.md` for better accuracy.
+*   Refine prompts in `WORKFLOW.md` for better accuracy and synchronize its frontmatter with the skill entry.
 *   Add more robust error handling to scripts.
 *   Update reference documentation.
 

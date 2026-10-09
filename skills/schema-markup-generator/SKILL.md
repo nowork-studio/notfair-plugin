@@ -12,4 +12,4 @@ description: >
 
 # Canonical NotFair workflow
 
-Read [`../../seo/schema-markup-generator/SKILL.md`](../../seo/schema-markup-generator/SKILL.md) completely, then follow it as the active workflow. Resolve every relative reference from that file against `../../seo/schema-markup-generator/`.
+Read [`../../seo/schema-markup-generator/WORKFLOW.md`](../../seo/schema-markup-generator/WORKFLOW.md) completely, then follow it as the active workflow. Resolve every relative reference from that file against `../../seo/schema-markup-generator/`.

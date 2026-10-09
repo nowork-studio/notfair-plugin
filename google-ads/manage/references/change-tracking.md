@@ -42,12 +42,12 @@ Append to the `changes` array:
 
 Users shouldn't have to remember to come back. Two complementary mechanisms:
 
-1. **SessionStart hook** — `bin/notfair-change-watch` scans every account's `change-log.json` and prints any entry whose `reviewAfter` has passed and `reviewed == false`. Wire it in `~/.claude/settings.json`:
+1. **SessionStart hook** — `bash scripts/notfair-change-watch.sh` scans every account's `change-log.json` and prints any entry whose `reviewAfter` has passed and `reviewed == false`. Wire it in `~/.claude/settings.json`:
    ```json
    {
      "hooks": {
        "SessionStart": [
-         { "hooks": [ { "type": "command", "command": "/home/user/notfair/bin/notfair-change-watch" } ] }
+         { "hooks": [ { "type": "command", "command": "bash \"${CLAUDE_PLUGIN_ROOT}/scripts/notfair-change-watch.sh\"" } ] }
        ]
      }
    }
@@ -56,6 +56,6 @@ Users shouldn't have to remember to come back. Two complementary mechanisms:
 
 2. **Calendar (.ics) reminder** — after logging a change, offer to generate a calendar invite the user can drop into any calendar app:
    ```
-   notfair-change-watch ics <account_id> <change_id> > ~/review-<change_id>.ics
+   bash "${CLAUDE_PLUGIN_ROOT}/scripts/notfair-change-watch.sh" ics <account_id> <change_id> > ~/review-<change_id>.ics
    ```
    The .ics file includes a 9-hour-before alarm so the user gets notified on review day. Cross-platform, no cloud dependency, works offline.

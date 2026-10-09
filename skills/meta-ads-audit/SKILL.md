@@ -6,4 +6,4 @@ argument-hint: "<account name or 'audit my Meta ads'>"
 
 # Canonical NotFair workflow
 
-Read [`../../meta-ads/audit/SKILL.md`](../../meta-ads/audit/SKILL.md) completely, then follow it as the active workflow. Normalize that path from the directory containing this wrapper: the canonical file is `<plugin-root>/meta-ads/audit/SKILL.md`, not `<plugin-root>/skills/meta-ads-audit/audit/SKILL.md`. Resolve every relative reference from the canonical file against `<plugin-root>/meta-ads/audit/`. If the canonical file cannot be read, stop and report the packaging error; never substitute a similarly named skill from another plugin.
+Read [`../../meta-ads/audit/WORKFLOW.md`](../../meta-ads/audit/WORKFLOW.md) completely, then follow it as the active workflow. Normalize that path from the directory containing this wrapper: the canonical file is `<plugin-root>/meta-ads/audit/WORKFLOW.md`, not `<plugin-root>/skills/meta-ads-audit/audit/SKILL.md`. Resolve every relative reference from the canonical file against `<plugin-root>/meta-ads/audit/`. If the canonical file cannot be read, stop and report the packaging error; never substitute a similarly named skill from another plugin.

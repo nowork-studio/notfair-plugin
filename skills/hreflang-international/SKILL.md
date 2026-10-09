@@ -19,4 +19,4 @@ description: >
 
 # Canonical NotFair workflow
 
-Read [`../../seo/hreflang-international/SKILL.md`](../../seo/hreflang-international/SKILL.md) completely, then follow it as the active workflow. Resolve every relative reference from that file against `../../seo/hreflang-international/`.
+Read [`../../seo/hreflang-international/WORKFLOW.md`](../../seo/hreflang-international/WORKFLOW.md) completely, then follow it as the active workflow. Resolve every relative reference from that file against `../../seo/hreflang-international/`.

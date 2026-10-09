@@ -14,4 +14,4 @@ description: >
 
 # Canonical NotFair workflow
 
-Read [`../../seo/content-planner/SKILL.md`](../../seo/content-planner/SKILL.md) completely, then follow it as the active workflow. Resolve every relative reference from that file against `../../seo/content-planner/`.
+Read [`../../seo/content-planner/WORKFLOW.md`](../../seo/content-planner/WORKFLOW.md) completely, then follow it as the active workflow. Resolve every relative reference from that file against `../../seo/content-planner/`.

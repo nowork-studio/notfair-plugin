@@ -17,4 +17,4 @@ description: >
 
 # Canonical NotFair workflow
 
-Read [`../../seo/geo-optimizer/SKILL.md`](../../seo/geo-optimizer/SKILL.md) completely, then follow it as the active workflow. Resolve every relative reference from that file against `../../seo/geo-optimizer/`.
+Read [`../../seo/geo-optimizer/WORKFLOW.md`](../../seo/geo-optimizer/WORKFLOW.md) completely, then follow it as the active workflow. Resolve every relative reference from that file against `../../seo/geo-optimizer/`.

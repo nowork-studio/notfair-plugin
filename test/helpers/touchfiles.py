@@ -24,11 +24,11 @@ LLM_JUDGE_TOUCHFILES: dict[str, list[str]] = {
 }
 
 ADS_LLM_JUDGE_TOUCHFILES: dict[str, list[str]] = {
-    'ads-heuristics-clarity':    ['google-ads/manage/SKILL.md', 'google-ads/manage/references/**'],
-    'ads-workflows-clarity':     ['google-ads/manage/SKILL.md'],
-    'ads-audit-scoring-clarity': ['google-ads/audit/SKILL.md', 'google-ads/audit/references/**'],
-    'ads-audit-report-clarity':  ['google-ads/audit/SKILL.md'],
-    'ads-copy-formulas-clarity': ['google-ads/copy/SKILL.md', 'google-ads/copy/references/**'],
+    'ads-heuristics-clarity':    ['google-ads/manage/WORKFLOW.md', 'google-ads/manage/references/**'],
+    'ads-workflows-clarity':     ['google-ads/manage/WORKFLOW.md'],
+    'ads-audit-scoring-clarity': ['google-ads/audit/WORKFLOW.md', 'google-ads/audit/references/**'],
+    'ads-audit-report-clarity':  ['google-ads/audit/WORKFLOW.md'],
+    'ads-copy-formulas-clarity': ['google-ads/copy/WORKFLOW.md', 'google-ads/copy/references/**'],
 }
 
 ROUTING_TOUCHFILES: dict[str, list[str]] = {

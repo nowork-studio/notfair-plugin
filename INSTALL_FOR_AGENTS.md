@@ -102,7 +102,7 @@ Do **not** invent credentials. If a skill needs auth that isn't present, surface
 ## Step 5 — Verify and hand back
 
 1. Confirm `AGENTS.md` is readable from the working directory.
-2. Confirm at least one canonical skill (e.g., `seo/seo-analysis/SKILL.md`) is readable.
+2. Confirm at least one entry point (e.g., `skills/seo-analysis/SKILL.md`) and its full workflow (`seo/seo-analysis/WORKFLOW.md`) is readable.
 3. Tell the user: "NotFair is installed. Try `/notfair:google-ads-audit` for ads or `/notfair:seo-analysis` for SEO."
 
 ---

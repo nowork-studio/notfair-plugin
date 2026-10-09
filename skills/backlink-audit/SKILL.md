@@ -19,4 +19,4 @@ description: >
 
 # Canonical NotFair workflow
 
-Read [`../../seo/backlink-audit/SKILL.md`](../../seo/backlink-audit/SKILL.md) completely, then follow it as the active workflow. Resolve every relative reference from that file against `../../seo/backlink-audit/`.
+Read [`../../seo/backlink-audit/WORKFLOW.md`](../../seo/backlink-audit/WORKFLOW.md) completely, then follow it as the active workflow. Resolve every relative reference from that file against `../../seo/backlink-audit/`.

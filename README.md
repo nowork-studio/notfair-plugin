@@ -7,7 +7,7 @@
 
 The NotFair Plugin gives Claude Code, Codex, Hermes, and other compatible agents practical marketing workflows they can follow—not another generic prompt collection. Use it to audit a site, investigate a traffic drop, analyze GA4 and Search Console, find wasted ad spend across Google, Meta, X, LinkedIn, Reddit, and TikTok, operate connected WordPress and GoHighLevel accounts, build campaign plans, and make reviewable changes.
 
-Every skill is built in the open as a readable `SKILL.md`, with supporting references, scripts, and evals where needed. Inspect it, adapt it, or contribute a better workflow.
+Each skill has one discoverable `skills/<name>/SKILL.md` entry point. It loads a readable `WORKFLOW.md` in the category folder, with supporting references, scripts, and evals where needed. Inspect it, adapt it, or contribute a better workflow.
 
 ## What your agent can do
 
@@ -248,7 +248,30 @@ Supported account operations come from the live connection. Changes must stay wi
 
 ## Privacy and support
 
+The plugin connects to the declared NotFair MCP endpoint through browser OAuth.
+Requested tool arguments go to NotFair and results from connected providers return
+to your authorized AI client. See the privacy policy for storage, retention, and
+deletion details. Connect only the workspace and platform accounts you intend to use.
+
+Optional local workflows run readable Python or shell scripts. Crawlers request
+the URLs you supply; direct Search Console scripts use your explicitly authorized
+Google Cloud login; CMS scripts use the site credentials you configure through
+`setup-cms`. Gemini review sends the selected review context to Google's Gemini
+CLI after its authentication setup. Choose these workflows explicitly, keep
+credentials out of reports and commits, and use the OAuth MCP for live platform
+work when it is available. There are no automatic plugin hooks or local MCP servers.
+The calendar viewer serves local planning data on loopback, and the optional
+update checker reads the public version file from GitHub.
+
+The separately published `notfair-nextjs-blog` library remains in this repository.
+It is installed in a website separately and receives a site API key to fetch
+published content from NotFair. Installing the AI plugin does not launch the
+library or install its dependencies. The retired NotFair CMO application is no
+longer included.
+
 - [Privacy Policy](https://notfair.co/privacy)
+- [Terms of Service](https://notfair.co/terms)
+- [Product and integration support](https://notfair.co/contact)
 - [Support and community](https://discord.gg/gVJCRczpps)
 - [Issue tracker](https://github.com/nowork-studio/notfair-plugin/issues)
 
@@ -269,20 +292,10 @@ notfair-plugin/
 ├── seo/                         # SEO, GEO, content, and technical-search skills
 ├── gemini/                      # cross-model review
 ├── test/                        # unit and LLM-judge evals
-└── notfair/                     # optional local goal-loop application
+└── skills/                      # shared entry points for every agent host
 ```
 
 [`AGENTS.md`](AGENTS.md) is the universal entry point. It maps user intent to the canonical `SKILL.md` and documents the external dependency each workflow requires.
-
-## Optional: run recurring marketing goals locally
-
-This repository also includes a local application for turning a measurable marketing outcome into a recurring agent loop. It is a companion to the skill library, not a requirement for using the skills.
-
-```bash
-npx notfair@latest
-```
-
-The app runs on your machine with Codex or Claude Code, stores state locally, and can track a verified metric over time. See [`notfair/README.md`](notfair/README.md) for setup, architecture, and operating details.
 
 ## Contributing
 
@@ -290,7 +303,7 @@ Each skill lives in its own category folder:
 
 ```text
 seo/your-skill-name/
-├── SKILL.md          # required instructions and frontmatter
+├── WORKFLOW.md       # full instructions and frontmatter
 ├── references/       # optional supporting knowledge
 └── scripts/          # optional deterministic tooling
 ```
@@ -298,11 +311,11 @@ seo/your-skill-name/
 When adding or changing a skill:
 
 1. Keep the workflow focused on one clear marketing job.
-2. Use imperative, testable instructions in `SKILL.md`.
+2. Use imperative, testable instructions in `WORKFLOW.md`, and keep the entry point under `skills/` in sync.
 3. Add or update eval coverage.
 4. Update [`AGENTS.md`](AGENTS.md), the plugin manifest, [`VERSION`](VERSION), and [`CHANGELOG.md`](CHANGELOG.md).
 
-Open a pull request with one skill or one coherent improvement. For application contributions, see [`notfair/CONTRIBUTING.md`](notfair/CONTRIBUTING.md) and [`notfair/ARCHITECTURE.md`](notfair/ARCHITECTURE.md).
+Open a pull request with one skill or one coherent improvement. See [plugin development](docs/plugin-development.md) for repository conventions.
 
 ## Community
 

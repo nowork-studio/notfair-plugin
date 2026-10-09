@@ -9,6 +9,19 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+## [0.27.16] — 2026-10-08
+
+### Removed
+
+- Retired the optional NotFair CMO goal-loop application, its npm publishing workflow, and its dashboard screenshot. The marketing plugin, hosted MCP connection, and separate blog library remain available.
+
+### Fixed
+
+- All hosts now register the same 48 entry points under `skills/`. Each entry loads one full workflow in its category folder, avoiding duplicate Claude skill names without copying workflow code.
+- Added Claude directory icon, documentation, support, privacy-policy, and terms links. Existing OpenAI and Cursor manifests retain their identity and MCP connection.
+- Removed blanket shell and file-write pre-approvals from CMS setup and upgrade. Upgrades use the host's plugin manager instead of resetting checkouts, rewriting installation records, and deleting caches.
+- Bundled helpers are readable shell and Python source under `scripts/`, invoked explicitly through an interpreter. Repository development guidance is separate from installed plugin context.
+
 ## [0.27.15] — 2026-09-30
 
 ### Fixed
@@ -52,7 +65,7 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Changed
 
-- **Cursor marketplace listing.** Commit a 512×512 PNG plugin logo at `assets/notfair-icon.png` and point `.cursor-plugin/plugin.json` at it so marketplace cards can render the NotFair mark (GitHub serves committed SVGs as plain text). Refresh Cursor and Agent Plugins listing copy to name the current one-OAuth MCP surfaces — Google, Meta, X, LinkedIn, Reddit, and TikTok Ads, GA4, Search Console, GoHighLevel, and WordPress — plus open-source SEO, GEO, and content skills.
+- **Cursor marketplace listing.** Commit a 512×512 PNG plugin logo in the assets folder and point `.cursor-plugin/plugin.json` at it so marketplace cards can render the NotFair mark (GitHub serves committed SVGs as plain text). Refresh Cursor and Agent Plugins listing copy to name the current one-OAuth MCP surfaces — Google, Meta, X, LinkedIn, Reddit, and TikTok Ads, GA4, Search Console, GoHighLevel, and WordPress — plus open-source SEO, GEO, and content skills.
 
 ## [0.27.8] — 2026-09-16
 
@@ -335,7 +348,7 @@ reflects that. CHANGELOG entries below this one are unchanged.
   `openclaw cron remove "Toprank OpenClaw Scheduler"` and equivalent for
   each per-site weekly review job before re-installing.
 - **Hooks pointing at `bin/toprank-change-watch`** in `~/.claude/settings.json`
-  must be updated to `bin/notfair-change-watch` after reinstall.
+  must be updated to `scripts/notfair-change-watch.sh` after reinstall.
 
 ---
 

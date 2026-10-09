@@ -47,49 +47,36 @@ def test_universal_mcp_is_the_only_registered_server_and_skills_are_portable():
     assert codex_plugin["mcpServers"] == "./.mcp.json"
     assert codex_plugin["version"] == plugin["version"]
 
-    codex_wrappers = {path.name: path for path in (ROOT / "skills").iterdir()}
-    assert len(codex_wrappers) == len(plugin["skills"])
-    for skill in plugin["skills"]:
-        canonical = (ROOT / skill).resolve()
-        canonical_text = (canonical / "SKILL.md").read_text()
-        skill_name = re.search(r"^name:\s*(.+)$", canonical_text, re.MULTILINE)
-        assert skill_name, skill
-        wrapper = codex_wrappers[skill_name.group(1).strip()]
-        assert wrapper.is_dir() and not wrapper.is_symlink()
-        wrapper_text = (wrapper / "SKILL.md").read_text()
-        assert wrapper_text.split("---\n", 2)[1] == canonical_text.split("---\n", 2)[1]
-        canonical_rel = canonical.relative_to(ROOT).as_posix()
-        assert f"../../{canonical_rel}/SKILL.md" in wrapper_text
+    entries = sorted((ROOT / "skills").glob("*/SKILL.md"))
+    assert len(entries) == len(plugin["skills"]) == 48
+    assert {"./" + p.parent.relative_to(ROOT).as_posix() for p in entries} == set(plugin["skills"])
+    names = []
+    for entry in entries:
+        entry_text = entry.read_text()
+        name = re.search(r"^name:\s*(.+)$", entry_text, re.MULTILINE).group(1).strip()
+        names.append(name.casefold())
+        target = re.search(r"\]\((\.\./\.\./[^)]+/WORKFLOW\.md)\)", entry_text)
+        assert target, entry
+        workflow = (entry.parent / target.group(1)).resolve()
+        assert workflow.is_relative_to(ROOT) and workflow.is_file()
+        assert entry_text.split("---\n", 2)[1] == workflow.read_text().split("---\n", 2)[1]
+    assert len(names) == len(set(names))
 
     for skill, placeholder in PLATFORM_SKILLS.items():
-        skill_path = ROOT / skill / "SKILL.md"
-        assert skill_path.is_file()
-        skill_text = skill_path.read_text()
-        assert placeholder in skill_text
-        assert f"./{skill}" in plugin["skills"]
+        workflow = ROOT / skill / "WORKFLOW.md"
+        assert placeholder in workflow.read_text()
+        assert not (workflow.parent / "SKILL.md").exists()
 
 
 def test_ads_wrappers_resolve_from_the_plugin_root_without_fallback():
-    plugin = json.loads((ROOT / ".claude-plugin/plugin.json").read_text())
-    ads_skill_roots = ("./paid-ads/", "./google-ads/", "./meta-ads/")
-    canonical_paths = [
-        ROOT / skill.removeprefix("./") / "SKILL.md"
-        for skill in plugin["skills"]
-        if skill.startswith(ads_skill_roots)
-    ]
-
-    for canonical in canonical_paths:
-        canonical_text = canonical.read_text()
-        skill_name = re.search(r"^name:\s*(.+)$", canonical_text, re.MULTILINE)
-        assert skill_name, canonical
-        wrapper = ROOT / "skills" / skill_name.group(1).strip() / "SKILL.md"
-        wrapper_text = wrapper.read_text()
-        relative_target = re.search(r"\]\((\.\./\.\./[^)]+/SKILL\.md)\)", wrapper_text)
-
-        assert relative_target, skill_name
-        assert (wrapper.parent / relative_target.group(1)).resolve() == canonical.resolve()
-        assert "not `<plugin-root>/skills/" in wrapper_text
-        assert "never substitute a similarly named skill from another plugin" in wrapper_text
+    for entry in (ROOT / "skills").glob("*/SKILL.md"):
+        text = entry.read_text()
+        if not any("../../" + prefix in text for prefix in ("paid-ads/", "google-ads/", "meta-ads/")):
+            continue
+        target = re.search(r"\]\((\.\./\.\./[^)]+/WORKFLOW\.md)\)", text)
+        assert target and (entry.parent / target.group(1)).resolve().is_file()
+        assert "not `<plugin-root>/skills/" in text
+        assert "never substitute a similarly named skill from another plugin" in text
 
 
 def test_all_host_configs_and_registry_use_one_versioned_connection():
@@ -130,7 +117,7 @@ def test_active_plugin_files_do_not_advertise_legacy_endpoints():
     # Historical release notes and the separately shipped local app are not
     # plugin installation configuration. Inspect every active plugin surface.
     roots = [ROOT / name for name in (
-        "README.md", "AGENTS.md", "CLAUDE.md", "INSTALL_FOR_AGENTS.md",
+        "README.md", "AGENTS.md", "INSTALL_FOR_AGENTS.md",
         "docs", "install", "paid-ads", "google-ads", "meta-ads", "analytics", "seo",
         "wordpress", "gohighlevel",
         ".claude-plugin", ".codex-plugin", ".cursor-plugin", ".github",

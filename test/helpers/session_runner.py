@@ -87,6 +87,9 @@ def create_skill_workdir(skill_path: str, skill_name: str) -> str:
     tmpdir = tempfile.mkdtemp(prefix=f'notfair-test-')
     dest = os.path.join(tmpdir, '.claude', 'skills', skill_name)
     shutil.copytree(skill_path, dest)
+    workflow = os.path.join(dest, "WORKFLOW.md")
+    if os.path.isfile(workflow):
+        shutil.copyfile(workflow, os.path.join(dest, "SKILL.md"))
     return tmpdir
 
 

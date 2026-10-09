@@ -28,4 +28,4 @@ triggers:
 
 # Canonical NotFair workflow
 
-Read [`../../gemini/SKILL.md`](../../gemini/SKILL.md) completely, then follow it as the active workflow. Resolve every relative reference from that file against `../../gemini/`.
+Read [`../../gemini/WORKFLOW.md`](../../gemini/WORKFLOW.md) completely, then follow it as the active workflow. Resolve every relative reference from that file against `../../gemini/`.

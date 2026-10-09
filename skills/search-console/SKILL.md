@@ -6,4 +6,4 @@ argument-hint: "<property, URL, query, date range, or sitemap>"
 
 # Canonical NotFair workflow
 
-Read [`../../analytics/search-console/SKILL.md`](../../analytics/search-console/SKILL.md) completely, then follow it as the active workflow. Resolve every relative reference from that file against `../../analytics/search-console/`.
+Read [`../../analytics/search-console/WORKFLOW.md`](../../analytics/search-console/WORKFLOW.md) completely, then follow it as the active workflow. Resolve every relative reference from that file against `../../analytics/search-console/`.

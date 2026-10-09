@@ -12,4 +12,4 @@ description: >
 
 # Canonical NotFair workflow
 
-Read [`../../seo/meta-tags-optimizer/SKILL.md`](../../seo/meta-tags-optimizer/SKILL.md) completely, then follow it as the active workflow. Resolve every relative reference from that file against `../../seo/meta-tags-optimizer/`.
+Read [`../../seo/meta-tags-optimizer/WORKFLOW.md`](../../seo/meta-tags-optimizer/WORKFLOW.md) completely, then follow it as the active workflow. Resolve every relative reference from that file against `../../seo/meta-tags-optimizer/`.

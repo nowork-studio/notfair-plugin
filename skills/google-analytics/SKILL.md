@@ -6,4 +6,4 @@ argument-hint: "<property, date range, metric, or GA4 question>"
 
 # Canonical NotFair workflow
 
-Read [`../../analytics/google-analytics/SKILL.md`](../../analytics/google-analytics/SKILL.md) completely, then follow it as the active workflow. Resolve every relative reference from that file against `../../analytics/google-analytics/`.
+Read [`../../analytics/google-analytics/WORKFLOW.md`](../../analytics/google-analytics/WORKFLOW.md) completely, then follow it as the active workflow. Resolve every relative reference from that file against `../../analytics/google-analytics/`.

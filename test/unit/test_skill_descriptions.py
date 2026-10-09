@@ -13,7 +13,7 @@ import pytest
 
 ROOT = Path(__file__).resolve().parents[2]
 MAX_DESCRIPTION_CHARS = 1024
-SKIP_DIRS = {".git", "node_modules"}
+SKIP_DIRS = {".git", ".claude", "node_modules"}
 
 
 def _skill_files():
@@ -66,9 +66,9 @@ def test_description_within_limit(path):
 
 WRAPPERS = []
 for wrapper in sorted((ROOT / "skills").glob("*/SKILL.md")):
-    target = re.search(r"\.\./\.\./(.+?)/SKILL\.md", wrapper.read_text(encoding="utf-8"))
-    if target and (ROOT / target.group(1) / "SKILL.md").exists():
-        WRAPPERS.append((wrapper, ROOT / target.group(1) / "SKILL.md"))
+    target = re.search(r"\.\./\.\./(.+?)/WORKFLOW\.md", wrapper.read_text(encoding="utf-8"))
+    if target and (ROOT / target.group(1) / "WORKFLOW.md").exists():
+        WRAPPERS.append((wrapper, ROOT / target.group(1) / "WORKFLOW.md"))
 
 
 @pytest.mark.parametrize(

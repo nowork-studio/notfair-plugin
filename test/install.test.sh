@@ -192,11 +192,11 @@ for entry in "${SKILL_ENTRIES[@]}"; do
   skill=$(skill_name "$entry")
   path=$(skill_path "$entry")
   assert_dir "$REPO_ROOT/$path" "skill directory: $skill ($path)"
-  assert_file "$REPO_ROOT/$path/SKILL.md" "SKILL.md exists: $skill"
+  assert_file "$REPO_ROOT/$path/WORKFLOW.md" "SKILL.md exists: $skill"
 done
 
 # Guard: actual SKILL.md count must match
-actual_skill_count=$(find "$REPO_ROOT/paid-ads" "$REPO_ROOT/google-ads" "$REPO_ROOT/seo" "$REPO_ROOT/meta-ads" "$REPO_ROOT/analytics" "$REPO_ROOT/wordpress" "$REPO_ROOT/gohighlevel" "$REPO_ROOT/notfair-upgrade-skill" "$REPO_ROOT/gemini" -name "SKILL.md" | wc -l | tr -d ' ')
+actual_skill_count=$(find "$REPO_ROOT/paid-ads" "$REPO_ROOT/google-ads" "$REPO_ROOT/seo" "$REPO_ROOT/meta-ads" "$REPO_ROOT/analytics" "$REPO_ROOT/wordpress" "$REPO_ROOT/gohighlevel" "$REPO_ROOT/notfair-upgrade-skill" "$REPO_ROOT/gemini" -name "WORKFLOW.md" | wc -l | tr -d ' ')
 if [ "$actual_skill_count" -ne "${#SKILL_ENTRIES[@]}" ]; then
   fail "Expected ${#SKILL_ENTRIES[@]} SKILL.md files but found $actual_skill_count"
 else
@@ -212,10 +212,10 @@ echo "=== 3. Legacy structure + helpers ==="
   && pass "setup script removed" \
   || fail "setup script still exists (should be deleted)"
 
-assert_dir "$REPO_ROOT/bin" "bin/ helper directory exists"
-assert_file "$REPO_ROOT/bin/notfair-config" "bin/notfair-config exists"
-assert_file "$REPO_ROOT/bin/notfair-update-check" "bin/notfair-update-check exists"
-assert_file "$REPO_ROOT/bin/notfair-change-watch" "bin/notfair-change-watch exists"
+assert_dir "$REPO_ROOT/scripts" "scripts/ readable helper directory exists"
+assert_file "$REPO_ROOT/scripts/notfair-config.sh" "scripts/notfair-config.sh exists"
+assert_file "$REPO_ROOT/scripts/notfair-update-check.sh" "scripts/notfair-update-check.sh exists"
+assert_file "$REPO_ROOT/scripts/notfair-change-watch.sh" "scripts/notfair-change-watch.sh exists"
 
 # Old toprank-* bin names must not coexist (0.24.0 rename should be clean)
 [ ! -f "$REPO_ROOT/bin/toprank-config" ] \
@@ -241,7 +241,7 @@ for entry in "${SKILL_ENTRIES[@]}"; do
   path=$(skill_path "$entry")
   wrapper="$REPO_ROOT/skills/$skill/SKILL.md"
   assert_file "$wrapper" "Codex skill wrapper: $skill"
-  assert_contains "$wrapper" "../../$path/SKILL.md" "Codex skill wrapper forwards $skill to $path"
+  assert_contains "$wrapper" "../../$path/WORKFLOW.md" "Codex skill wrapper forwards $skill to $path"
 done
 
 [ ! -d "$REPO_ROOT/.agents" ] \
@@ -260,18 +260,18 @@ assert_file "$REPO_ROOT/analytics/shared/operating-contract.md" "Analytics share
 
 # Ads skills reference the shared preamble (not inline MCP detection)
 for skill in manage audit copy assets; do
-  assert_contains "$REPO_ROOT/google-ads/$skill/SKILL.md" "../shared/preamble.md" \
+  assert_contains "$REPO_ROOT/google-ads/$skill/WORKFLOW.md" "../shared/preamble.md" \
     "google-ads/$skill references shared preamble"
-  assert_not_contains "$REPO_ROOT/google-ads/$skill/SKILL.md" "mcp__notfair__listConnectedAccounts" \
+  assert_not_contains "$REPO_ROOT/google-ads/$skill/WORKFLOW.md" "mcp__notfair__listConnectedAccounts" \
     "google-ads/$skill does not inline MCP detection (notfair prefix)"
 done
 
-assert_contains "$REPO_ROOT/meta-ads/creative/SKILL.md" "../shared/preamble.md" \
+assert_contains "$REPO_ROOT/meta-ads/creative/WORKFLOW.md" "../shared/preamble.md" \
   "meta-ads/creative references shared preamble"
 
 # SEO skills that need GSC reference the shared preamble
 for skill in seo-analysis setup-cms; do
-  assert_contains "$REPO_ROOT/seo/$skill/SKILL.md" "../shared/preamble.md" \
+  assert_contains "$REPO_ROOT/seo/$skill/WORKFLOW.md" "../shared/preamble.md" \
     "$skill references shared preamble"
 done
 
@@ -345,7 +345,7 @@ echo "=== 9. Argument hints ==="
 for entry in "${SKILL_ENTRIES[@]}"; do
   skill=$(skill_name "$entry")
   path=$(skill_path "$entry")
-  assert_contains "$REPO_ROOT/$path/SKILL.md" "argument-hint" \
+  assert_contains "$REPO_ROOT/$path/WORKFLOW.md" "argument-hint" \
     "$skill has argument-hint in frontmatter"
 done
 

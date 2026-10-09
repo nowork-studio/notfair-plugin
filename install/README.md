@@ -1,6 +1,6 @@
 # Per-host install adapters
 
-This directory is the home for **thin install adapters** that wire NotFair into a specific AI agent host. Each adapter registers the *same* host-agnostic skills (under `seo/`, `google-ads/`, `meta-ads/`, `gemini/` at the repo root) into the host's expected layout.
+This directory is the home for **thin install adapters** that wire NotFair into a specific AI agent host. Each adapter registers the *same* `skills/` entry points, which load host-agnostic workflows (under `seo/`, `google-ads/`, `meta-ads/`, `gemini/` at the repo root) into the host's expected layout.
 
 ## Why this exists
 
