@@ -9,6 +9,9 @@ Usage:
 
 import argparse
 import json
+import http.client
+import ipaddress
+import socket
 import os
 import sys
 import urllib.parse
@@ -18,6 +21,79 @@ import urllib.robotparser
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from collections import deque
 from html.parser import HTMLParser
+
+
+def _validate_public_url(url):
+    try:
+        parsed = urllib.parse.urlsplit(url)
+        if parsed.scheme not in ("http", "https") or not parsed.hostname or parsed.username is not None or parsed.password is not None:
+            raise ValueError("only public HTTP/HTTPS URLs without credentials are allowed")
+        parsed.port  # reject malformed/out-of-range ports before a connection
+    except ValueError as exc:
+        raise urllib.error.URLError(str(exc)) from exc
+
+
+def _public_connection(address, timeout=socket._GLOBAL_DEFAULT_TIMEOUT, source_address=None):
+    """Resolve once, validate every answer, then connect to those exact addresses."""
+    host, port = address
+    answers = socket.getaddrinfo(host, port, 0, socket.SOCK_STREAM)
+    if not answers:
+        raise urllib.error.URLError("hostname has no addresses")
+    for _, _, _, _, sockaddr in answers:
+        ip = ipaddress.ip_address(sockaddr[0].split("%", 1)[0])
+        if isinstance(ip, ipaddress.IPv6Address) and ip.ipv4_mapped:
+            ip = ip.ipv4_mapped
+        if not ip.is_global or ip.is_multicast or ip.is_reserved:
+            raise urllib.error.URLError("blocked non-public destination")
+    last_error = None
+    for family, socktype, proto, _, sockaddr in answers:
+        sock = socket.socket(family, socktype, proto)
+        try:
+            if timeout is not socket._GLOBAL_DEFAULT_TIMEOUT:
+                sock.settimeout(timeout)
+            if source_address:
+                sock.bind(source_address)
+            sock.connect(sockaddr)
+            return sock
+        except OSError as exc:
+            last_error = exc
+            sock.close()
+    raise last_error
+
+
+class _PublicHTTPConnection(http.client.HTTPConnection):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._create_connection = _public_connection
+
+
+class _PublicHTTPSConnection(http.client.HTTPSConnection):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._create_connection = _public_connection
+
+
+class _PublicHTTPHandler(urllib.request.HTTPHandler):
+    def http_open(self, req):
+        return self.do_open(_PublicHTTPConnection, req)
+
+
+class _PublicHTTPSHandler(urllib.request.HTTPSHandler):
+    def https_open(self, req):
+        return self.do_open(_PublicHTTPSConnection, req, context=self._context)
+
+
+class _PublicRedirectHandler(urllib.request.HTTPRedirectHandler):
+    def redirect_request(self, req, fp, code, msg, headers, newurl):
+        _validate_public_url(newurl)
+        return super().redirect_request(req, fp, code, msg, headers, newurl)
+
+
+def public_urlopen(request, timeout=10):
+    """Public-only transport for robots, crawling, link checks and every redirect."""
+    _validate_public_url(request.full_url if isinstance(request, urllib.request.Request) else request)
+    opener = urllib.request.build_opener(urllib.request.ProxyHandler({}), _PublicHTTPHandler(), _PublicHTTPSHandler(), _PublicRedirectHandler())
+    return opener.open(request, timeout=timeout)
 
 
 class LinkParser(HTMLParser):
@@ -44,7 +120,7 @@ def check_url(url, timeout=10):
     # Try HEAD first for efficiency
     req = urllib.request.Request(url, method='HEAD', headers=headers)
     try:
-        with urllib.request.urlopen(req, timeout=timeout) as response:
+        with public_urlopen(req, timeout=timeout) as response:
             return response.getcode(), None
     except urllib.error.HTTPError as e:
         # Many servers block HEAD, fall back to GET for accuracy
@@ -52,7 +128,7 @@ def check_url(url, timeout=10):
             req = urllib.request.Request(url, method='GET', headers=headers)
             try:
                 # We only need the headers/status, so we don't read the body here
-                with urllib.request.urlopen(req, timeout=timeout) as response:
+                with public_urlopen(req, timeout=timeout) as response:
                     return response.getcode(), None
             except urllib.error.HTTPError as e2:
                 return e2.code, str(e2.reason)
@@ -77,7 +153,7 @@ def crawl(start_url, max_pages=50):
             robots_url,
             headers={'User-Agent': 'NotFairBrokenLinkChecker/1.0'},
         )
-        with urllib.request.urlopen(robots_request, timeout=10) as response:
+        with public_urlopen(robots_request, timeout=10) as response:
             robots_text = response.read().decode('utf-8', errors='ignore')
         rp.set_url(robots_url)
         rp.parse(robots_text.splitlines())
@@ -110,7 +186,7 @@ def crawl(start_url, max_pages=50):
 
         try:
             req = urllib.request.Request(current_url, headers={'User-Agent': 'NotFairBrokenLinkChecker/1.0'})
-            with urllib.request.urlopen(req, timeout=10) as response:
+            with public_urlopen(req, timeout=10) as response:
                 status = response.getcode()
                 if status >= 400:
                     broken_links.append({"url": current_url, "status": status, "reason": "Page itself is broken"})

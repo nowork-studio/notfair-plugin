@@ -22,6 +22,10 @@ crawl = checker.crawl
 class TestBrokenLinkChecker(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
+        # The production transport forbids loopback; the local server tests exercise
+        # crawl/status semantics using a deliberately injected test-only transport.
+        cls.transport_patch = patch.object(checker, "public_urlopen", side_effect=urllib.request.urlopen)
+        cls.transport_patch.start()
         # Find a free port dynamically
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         sock.bind(('127.0.0.1', 0))
@@ -82,6 +86,7 @@ class TestBrokenLinkChecker(unittest.TestCase):
 
     @classmethod
     def tearDownClass(cls):
+        cls.transport_patch.stop()
         cls.httpd.shutdown()
         cls.server_thread.join()
 
@@ -125,7 +130,7 @@ class TestBrokenLinkChecker(unittest.TestCase):
         self.assertEqual(seen, ['NotFairBrokenLinkChecker/1.0'])
 
     def test_robots_fetch_failure_is_fail_open(self):
-        real_urlopen = urllib.request.urlopen
+        real_urlopen = checker.public_urlopen
 
         def fail_robots(request, *args, **kwargs):
             url = request.full_url if hasattr(request, 'full_url') else request
@@ -133,7 +138,7 @@ class TestBrokenLinkChecker(unittest.TestCase):
                 raise urllib.error.URLError('robots unavailable')
             return real_urlopen(request, *args, **kwargs)
 
-        with patch.object(urllib.request, 'urlopen', side_effect=fail_robots):
+        with patch.object(checker, 'public_urlopen', side_effect=fail_robots):
             broken = crawl(self.base_url, max_pages=1)
 
         targets = [entry.get('target') for entry in broken]

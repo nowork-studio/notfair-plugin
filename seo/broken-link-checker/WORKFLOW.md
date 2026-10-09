@@ -56,3 +56,13 @@ The script will output a JSON report. Analyze the `broken_links` array:
     - For external 404s: "The external site at [Target URL] is down or moved. Update or remove the link on [Source Page]."
 
 If no broken links are found, congratulate the user on a healthy site!
+
+
+### Network boundary
+
+The local checker fetches only public HTTP/HTTPS destinations. Every DNS answer
+and redirect is checked, and connections use the validated addresses rather
+than resolving again. Private, loopback, link-local, shared, reserved and
+multicast targets are rejected. Ambient proxy configuration is disabled for
+this crawler. Use a separately reviewed tool for internal-network audits; do
+not add private-network exceptions to scraped links.

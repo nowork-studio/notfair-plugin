@@ -122,7 +122,7 @@ def render_page(cal: dict) -> str:
       <div class="brand">NotFair · Content Calendar</div>
       <div class="meta">
         <span>Site: <strong>{html.escape(str(site))}</strong></span>
-        <span>{lookback}d lookback · {horizon}w horizon</span>
+        <span>{html.escape(str(lookback))}d lookback · {html.escape(str(horizon))}w horizon</span>
         <span>Generated: {html.escape(str(generated))}</span>
       </div>
     </header>

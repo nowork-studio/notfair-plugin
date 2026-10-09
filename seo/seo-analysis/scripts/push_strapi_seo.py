@@ -53,6 +53,7 @@ import time
 import urllib.error
 import urllib.parse
 import urllib.request
+from _http import authenticated_urlopen
 
 
 _RETRY_CODES = {429, 502, 503, 504}
@@ -161,7 +162,7 @@ def strapi_get(base_url, api_key, path, params=None, timeout=15, retries=3):
     last_exc = None
     for attempt in range(retries):
         try:
-            with urllib.request.urlopen(req, timeout=timeout) as resp:
+            with authenticated_urlopen(req, timeout=timeout) as resp:
                 return json.loads(resp.read())
         except urllib.error.HTTPError as e:
             if e.code in _RETRY_CODES and attempt < retries - 1:
@@ -187,7 +188,7 @@ def strapi_put(base_url, api_key, path, payload, timeout=30, retries=3):
     last_exc = None
     for attempt in range(retries):
         try:
-            with urllib.request.urlopen(req, timeout=timeout) as resp:
+            with authenticated_urlopen(req, timeout=timeout) as resp:
                 return json.loads(resp.read())
         except urllib.error.HTTPError as e:
             if e.code in _RETRY_CODES and attempt < retries - 1:

@@ -1343,3 +1343,12 @@ Before finishing, verify:
 - As agents complete, present each piece of content to the user with its metadata
 - After all agents finish, provide a summary: what was generated, suggested
   publishing order (highest impact first), and any cross-linking between new pages
+
+
+### Local CMS redirect boundary
+
+WordPress and Strapi script requests carrying Authorization follow only
+same-origin HTTP/HTTPS redirects (same scheme, hostname and effective port,
+without URL userinfo). Cross-origin redirects fail through the existing error
+path. Configure the final CMS base URL directly when a site redirects to another
+origin. This policy does not enable redirecting PUT writes.

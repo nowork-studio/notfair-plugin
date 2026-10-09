@@ -30,6 +30,7 @@ import time
 import urllib.error
 import urllib.parse
 import urllib.request
+from _http import authenticated_urlopen
 
 from _uid import portable_uid, secure_write_json
 
@@ -139,7 +140,7 @@ def strapi_get(base_url, api_key, path, params, timeout=30, retries=3):
     last_exc = None
     for attempt in range(retries):
         try:
-            with urllib.request.urlopen(req, timeout=timeout) as resp:
+            with authenticated_urlopen(req, timeout=timeout) as resp:
                 return json.loads(resp.read())
         except urllib.error.HTTPError as e:
             if e.code in _RETRY_CODES and attempt < retries - 1:

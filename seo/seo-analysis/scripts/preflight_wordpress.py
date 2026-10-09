@@ -24,6 +24,7 @@ import time
 import urllib.error
 import urllib.parse
 import urllib.request
+from _http import authenticated_urlopen
 
 
 _RETRY_CODES = {429, 502, 503, 504}
@@ -135,7 +136,7 @@ def wp_get(url, auth_header, path, params=None, timeout=15, retries=3):
     last_exc = None
     for attempt in range(retries):
         try:
-            with urllib.request.urlopen(req, timeout=timeout) as resp:
+            with authenticated_urlopen(req, timeout=timeout) as resp:
                 body = json.loads(resp.read())
                 total = int(resp.headers.get("X-WP-Total", 0))
                 total_pages = int(resp.headers.get("X-WP-TotalPages", 1))
