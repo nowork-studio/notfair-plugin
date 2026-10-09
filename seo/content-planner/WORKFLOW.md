@@ -195,6 +195,10 @@ Merge with an existing calendar instead of overwriting:
 
 ## Step 6 — Present + offer the viewer
 
+Resolve `<plugin-root>` from the location of this workflow and substitute its
+absolute path in helper commands. Do not rely on `CLAUDE_PLUGIN_ROOT` being
+exported by the host; these instructions also run on other agents.
+
 Print:
 
 1. A Markdown summary table (top 12 topics by click potential), with columns:
@@ -203,13 +207,13 @@ Print:
 3. The viewer command, with the exact invocation:
 
 ```
-python3 "${CLAUDE_PLUGIN_ROOT}/scripts/notfair-content-calendar.py" [--port 8323] [--calendar {data_dir}/content-calendar.json]
+python3 "<plugin-root>/scripts/notfair-content-calendar.py" [--port 8323] [--calendar {data_dir}/content-calendar.json]
 ```
 
 > Open the calendar in your browser:
 >
 > ```bash
-> python3 "${CLAUDE_PLUGIN_ROOT}/scripts/notfair-content-calendar.py"
+> python3 "<plugin-root>/scripts/notfair-content-calendar.py"
 > ```
 >
 > (or run it from a clone of the notfair repo: `python3 scripts/notfair-content-calendar.py`.)
