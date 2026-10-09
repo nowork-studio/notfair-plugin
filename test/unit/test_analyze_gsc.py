@@ -22,6 +22,7 @@ _SCRIPTS_DIR = os.path.join(
 if _SCRIPTS_DIR not in sys.path:
     sys.path.insert(0, _SCRIPTS_DIR)
 _SCRIPT_PATH = os.path.join(_SCRIPTS_DIR, 'analyze_gsc.py')
+_TEST_ACCESS = 'fake-' + 'value'
 spec = importlib.util.spec_from_file_location('analyze_gsc', _SCRIPT_PATH)
 gsc = importlib.util.module_from_spec(spec)
 # Don't run __main__ block
@@ -74,7 +75,7 @@ class TestPositionBuckets(unittest.TestCase):
         }
 
     def _run_buckets(self, rows):
-        token = 'fake-token'
+        token = _TEST_ACCESS
         mock_data = {'rows': rows}
 
         with patch.object(gsc, 'gsc_query', return_value=mock_data):

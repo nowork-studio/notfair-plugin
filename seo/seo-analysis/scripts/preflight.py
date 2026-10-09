@@ -384,8 +384,8 @@ def check_pagespeed_api_key():
     print("", file=sys.stderr)
     print("  To create one:", file=sys.stderr)
     print("  1. Go to https://console.cloud.google.com/apis/credentials", file=sys.stderr)
-    print("  2. Click 'Create Credentials' > 'API key'", file=sys.stderr)
-    print("  3. Set: export PAGESPEED_API_KEY='your-key-here'", file=sys.stderr)
+    print("  3. Set the PAGESPEED_API_KEY environment variable to your key", file=sys.stderr)
+    print("     Or add PAGESPEED_API_KEY=<your key> to ~/.toprank/.env", file=sys.stderr)
     print("     Or add to ~/.toprank/.env: PAGESPEED_API_KEY=your-key-here", file=sys.stderr)
     print("", file=sys.stderr)
 

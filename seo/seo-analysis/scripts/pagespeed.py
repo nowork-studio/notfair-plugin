@@ -65,7 +65,7 @@ def run_pagespeed(url, strategy="mobile", api_key=None):
             print("", file=sys.stderr)
             print("  HINT: Quota exceeded. Fix options:", file=sys.stderr)
             print("  1. Create an API key: https://console.cloud.google.com/apis/credentials", file=sys.stderr)
-            print("     Then: export PAGESPEED_API_KEY='your-key'", file=sys.stderr)
+            print("     Then set the PAGESPEED_API_KEY environment variable to your key", file=sys.stderr)
             print("  2. Enable the API: gcloud services enable pagespeedonline.googleapis.com", file=sys.stderr)
         return None
     except urllib.error.URLError as e:
