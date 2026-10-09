@@ -263,11 +263,10 @@ work when it is available. There are no automatic plugin hooks or local MCP serv
 The calendar viewer serves local planning data on loopback, and the optional
 update checker reads the public version file from GitHub.
 
-The separately published `notfair-nextjs-blog` library remains in this repository.
-It is installed in a website separately and receives a site API key to fetch
-published content from NotFair. Installing the AI plugin does not launch the
-library or install its dependencies. The retired NotFair CMO application is no
-longer included.
+The separate [NotFair Next.js blog library](https://github.com/nowork-studio/notfair-nextjs-blog)
+now lives in its own public repository and is distributed through its GitHub
+releases. Its source and publishing workflow are no longer bundled in this
+AI-agent plugin. The retired NotFair CMO application is also no longer included.
 
 - [Privacy Policy](https://notfair.co/privacy)
 - [Terms of Service](https://notfair.co/terms)

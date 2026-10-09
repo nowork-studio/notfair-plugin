@@ -25,7 +25,7 @@ def test_package_stays_within_directory_inspection_limits():
     for name in files:
         path = ROOT / name
         assert not path.is_symlink()
-        assert not name.startswith(("notfair/", "bin/"))
+        assert not name.startswith(("notfair/", "notfair-nextjs-blog/", "bin/"))
         if path.suffix not in {".png", ".svg"}:
             assert path.stat().st_size < 256 * 1024, name
             assert b"\x00" not in path.read_bytes(), name

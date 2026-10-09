@@ -17,7 +17,7 @@ Cursor. A separate generated plugin directory is unnecessary after retiring CMO.
 | No icon | Added the Claude-native `icon` referencing the existing 512-pixel PNG. |
 | Root CLAUDE.md is not loaded | Moved contributor guidance to `docs/plugin-development.md`; the resolver links it for repository maintenance. Installed instructions stay in the skills. |
 | Image paths treated as code | Removed CMO design documents and screenshot and removed the historical code-formatted logo path. The only bundled image is the listing icon, with its SVG source. |
-| Credential reads from CMO | Removed CMO, its publisher, and its credential-handling source. Other optional credential workflows remain disclosed rather than silently removed. |
+| Credential reads from CMO | Removed CMO, its publisher, and its credential-handling source. Moved the separate blog library and its publisher to their dedicated public repository. Optional local credential workflows remain disclosed. |
 
 The root Agent Plugins manifest is intentionally retained for OpenAI and other
 portable hosts. Claude's note that it ignores this manifest is informational.
@@ -42,11 +42,12 @@ change reaches the tracked default branch, use **Check for new commits**, then
 inspect that exact commit in Versions. Do not withdraw or recreate the submission
 just to refresh it.
 
-The separate blog library and its npm publishing workflow remain in the shared
-repository. The library's explicitly configured site API key, optional local CMS
-and Google Cloud workflows, Gemini CLI authentication, and eval harness credentials
-may still draw credential-use review findings. The README discloses these paths;
-none is an automatic hook or a credential header on the declared OAuth MCP server.
+The blog library and its publishing workflow were moved to
+[notfair-nextjs-blog](https://github.com/nowork-studio/notfair-nextjs-blog).
+Neither is included in this plugin. Optional local CMS and Google Cloud
+workflows, Gemini CLI authentication, and eval harness credentials may still
+draw credential-use review findings. The README discloses these paths; none is
+an automatic hook or a credential header on the declared OAuth MCP server.
 Only a new portal report establishes which findings remain.
 
 The existing Listing tab records the publisher's avatar as its icon. The portal

@@ -13,7 +13,9 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Removed
 
-- Retired the optional NotFair CMO goal-loop application, its npm publishing workflow, and its dashboard screenshot. The marketing plugin, hosted MCP connection, and separate blog library remain available.
+- Retired the optional NotFair CMO goal-loop application, its npm publishing workflow, and its dashboard screenshot. The marketing plugin and hosted MCP connection remain available.
+
+- Moved the Next.js blog client and its release tooling to [nowork-studio/notfair-nextjs-blog](https://github.com/nowork-studio/notfair-nextjs-blog), preserving its package name and runtime exports while keeping it outside the AI-agent plugin.
 
 ### Fixed
 
