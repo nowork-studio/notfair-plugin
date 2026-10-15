@@ -1,4 +1,23 @@
-# Claude submission preparation — 0.27.16
+# Claude submission preparation — 0.27.17
+
+## October 15 refresh
+
+The existing submission reports **Needs changes** for commit `9afd332`: its
+fetch stage refused the repository archive, before validation or a security scan.
+The portal supplies a general file-layout error, without naming a rejected file.
+The exact GitHub archive was inspected: 289 regular files, 181 directories,
+500,732 compressed bytes, and 1,598,481 unpacked file bytes. It contains no OS
+metadata, symbolic links, submodules, special entries, invalid portable names,
+or case-colliding paths. Local package checks pass. The cause of the portal's
+fetch rejection remains unconfirmed; no removed offending file is claimed.
+
+Version 0.27.17 records the safety fixes merged after the prior release, adds
+committed-archive layout checks, and ignores the remaining OS metadata names.
+Refresh the existing submission after this release reaches its tracked branch,
+then verify the new commit's fetch, validation, security scan, and review state.
+Do not treat detecting the commit as a completed scan or review submission.
+
+## October 8 preparation
 
 Checked on October 8, 2026 against the existing NotFair submission and Anthropic's
 [pre-submission checklist](https://claude.com/docs/plugins/pre-submission-checklist).

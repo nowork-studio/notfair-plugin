@@ -9,6 +9,13 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+## [0.27.17] — 2026-10-15
+
+### Fixed
+
+- Release the shared approval and untrusted-content safeguards for ads, WordPress, CRM, and SEO workflows, including stricter crawler destinations and authenticated CMS redirects.
+- Guard the committed plugin archive against OS metadata, unsupported Git entries, nonportable file names, and directory size limits before submission. Ignore Windows metadata and macOS archive folders alongside `.DS_Store`.
+
 ## [0.27.16] — 2026-10-08
 
 ### Removed

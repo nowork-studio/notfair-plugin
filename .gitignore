@@ -16,8 +16,11 @@ service-account*.json
 # GSC output files
 /tmp/
 
-# macOS
+# OS metadata rejected by plugin directories
 .DS_Store
+Thumbs.db
+desktop.ini
+__MACOSX/
 
 # Editor
 .vscode/

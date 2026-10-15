@@ -31,6 +31,35 @@ def test_package_stays_within_directory_inspection_limits():
             assert b"\x00" not in path.read_bytes(), name
 
 
+def test_committed_archive_has_only_portable_regular_files():
+    entries = subprocess.check_output(
+        ["git", "ls-tree", "-rz", "HEAD"], cwd=ROOT
+    ).split(b"\x00")
+    seen = set()
+    total_size = 0
+    for entry in filter(None, entries):
+        metadata, encoded_name = entry.split(b"\t", 1)
+        mode, kind, object_id = metadata.decode().split()
+        name = encoded_name.decode()
+        assert kind == "blob" and mode in {"100644", "100755"}, name
+        assert name.casefold() not in seen, name
+        seen.add(name.casefold())
+        for part in name.split("/"):
+            assert part.casefold() not in {
+                ".ds_store", "thumbs.db", "desktop.ini", "__macosx"
+            }, name
+            assert not re.search(r'[<>:"\\|?*\x00-\x1f]|[. ]$', part), name
+            assert not re.fullmatch(
+                r"(?:con|prn|aux|nul|com[1-9]|lpt[1-9])(?:\..*)?", part, re.I
+            ), name
+        size = int(subprocess.check_output(
+            ["git", "cat-file", "-s", object_id], cwd=ROOT
+        ))
+        assert size < 5 * 1024 * 1024, name
+        total_size += size
+    assert total_size < 256 * 1024 * 1024
+
+
 def test_claude_listing_metadata_and_icon():
     manifest = json.loads((ROOT / ".claude-plugin/plugin.json").read_text())
     for key in ("documentationUrl", "supportUrl", "privacyPolicyUrl", "termsOfServiceUrl"):
