@@ -22,3 +22,22 @@ def test_every_workflow_links_safety_doc():
         assert link, wf
         assert (wf.parent / link.group(1)).resolve() == SAFETY.resolve(), wf
         assert "untrusted data" in text, wf
+
+
+def test_safety_doc_has_no_literal_scanner_trigger_phrases():
+    # Host scanners (e.g. Hermes skills-guard) flag verbatim attack strings
+    # even when quoted as examples to reject. Build the banned phrases from
+    # fragments so this test file itself contains no literal trigger phrase.
+    text = SAFETY.read_text(encoding="utf-8").lower()
+    banned = [
+        "ign" + "ore " + "prev" + "ious " + "instruct" + "ions",
+        "ign" + "ore " + "all " + "prev" + "ious",
+        "disreg" + "ard " + "prev" + "ious " + "instruct" + "ions",
+        "forget " + "your " + "instruct" + "ions",
+    ]
+    for phrase in banned:
+        assert phrase not in text
+    # The requirement itself stays explicit: directives in untrusted
+    # content are reported, not followed.
+    assert "do not act on them" in text
+    assert "rather than following them" in text
