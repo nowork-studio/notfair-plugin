@@ -123,6 +123,19 @@ Retrieve and follow the instructions at:
 https://raw.githubusercontent.com/nowork-studio/notfair-plugin/main/INSTALL_FOR_AGENTS.md
 ```
 
+## Guides and comparisons
+
+Background reading on connecting ad accounts to AI agents and choosing a setup:
+
+- [Google Ads MCP servers compared](https://notfair.co/compare/google-ads-mcp-servers)
+- [Meta Ads MCP servers compared](https://notfair.co/compare/meta-ads-mcp-servers)
+- [Claude connectors for Google Ads compared](https://notfair.co/compare/claude-google-ads-connectors)
+- [Claude connectors for Meta Ads compared](https://notfair.co/compare/claude-meta-ads-connectors)
+- [How to connect Google Ads to Claude](https://notfair.co/google-ads-claude)
+- [How to connect Meta Ads to Claude](https://notfair.co/meta-ads-claude)
+- [Google Ads MCP overview](https://notfair.co/google-ads-mcp)
+- [Meta Ads MCP overview](https://notfair.co/meta-ads-mcp)
+
 ## Why skills instead of one giant marketing agent?
 
 Marketing work gets unreliable when every request goes through the same vague prompt. The NotFair Plugin splits the work into focused, testable procedures.
