@@ -60,12 +60,19 @@ You can also use plain language:
 
 > Review last month's ad spend and show me the safest opportunities to improve ROAS.
 
-### Cursor
+### Grok Bot and Cursor
 
-Install **NotFair** from Cursor's plugin marketplace. The plugin loads the
+The repository includes a native Cursor manifest and a portable Agent Plugins
+manifest for compatible hosts. Marketplace submission does not imply approval.
+See the [xAI marketplace review guide](docs/xai-marketplace-submission.md) for
+reviewer setup, test prompts, and expected results.
+
+In Grok Bot, open **Connect apps** and look for **NotFair** once its public listing
+is approved. In Cursor, install **NotFair** from its plugin marketplace once
+available. The plugin loads the
 open-source marketing skills in this repository and registers one hosted
 NotFair MCP connection. Complete the browser OAuth flow when Cursor prompts
-you, then ask Cursor to audit an ad account, analyze GA4 or Search Console, or
+you, then ask the agent to audit an ad account, analyze GA4 or Search Console, or
 run one of the SEO and GEO workflows listed below.
 
 For local testing before the marketplace listing is available, clone this

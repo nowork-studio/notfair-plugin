@@ -9,6 +9,13 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+## [0.27.18] — 2026-11-06
+
+### Changed
+
+- Document Grok Bot and Cursor marketplace setup, OAuth prerequisites, and read-only reviewer cases for the xAI submission. Distinguish a submitted listing from marketplace approval.
+- Correct the Cursor manifest publisher capitalization to NotFair and keep all host and registry versions aligned.
+
 ## [0.27.17] — 2026-10-15
 
 ### Fixed
