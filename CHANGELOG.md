@@ -9,6 +9,14 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+## [0.27.19] — 2026-11-09
+
+### Changed
+
+- Add a separate declarative Claude Directory distribution for community plugin
+  requirements. The full multi-host plugin retains its local tools; the Directory
+  release uses connectors and supplied evidence.
+
 ## [0.27.18] — 2026-11-06
 
 ### Changed
