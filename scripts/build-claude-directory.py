@@ -69,7 +69,7 @@ def build(destination):
             add(path)
     for entry in entries:
         add(ROOT / entry / "SKILL.md")
-    for relative in ("docs/safety.md", "docs/mcp-connection.md", "LICENSE", "VERSION", "assets/notfair-icon.png"):
+    for relative in ("docs/safety.md", "docs/mcp-connection.md", "LICENSE", "assets/notfair-icon.png"):
         add(ROOT / relative)
     for relative in ("README.md", "AGENTS.md", "CHANGELOG.md"):
         files[relative] = (OVERLAYS / (relative + ".in")).read_bytes()

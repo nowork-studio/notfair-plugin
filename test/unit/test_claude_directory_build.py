@@ -19,6 +19,7 @@ def test_directory_release_is_declarative_and_preserves_full_source(tmp_path):
     result = BUILDER.build(tmp_path / "release")
     release = tmp_path / "release"
     assert result["skills"] == 45
+    assert not (release / "VERSION").exists()
     assert result["files"] <= 512
     manifest = json.loads((release / ".claude-plugin/plugin.json").read_text())
     names = {Path(p).name for p in manifest["skills"]}
@@ -27,7 +28,7 @@ def test_directory_release_is_declarative_and_preserves_full_source(tmp_path):
     for path in release.rglob("*"):
         if not path.is_file():
             continue
-        assert path.suffix in {".md", ".json", ".png"} or path.name in {"LICENSE", "VERSION"}
+        assert path.suffix in {".md", ".json", ".png"} or path.name in {"LICENSE"}
         assert not path.is_symlink()
         assert path.stat().st_size < 256 * 1024
         assert not path.stat().st_mode & 0o111
