@@ -9,6 +9,12 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+## [0.27.20] — 2026-11-09
+
+### Fixed
+
+- Keep the extensionless source version marker out of the Claude Directory bundle; its version remains declared in the manifest.
+
 ## [0.27.19] — 2026-11-09
 
 ### Changed
