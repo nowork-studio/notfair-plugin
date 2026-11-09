@@ -1,6 +1,5 @@
 ---
 name: keyword-research
-argument-hint: "<topic, niche, or seed keyword>"
 description: >
   Discover, analyze, and prioritize keywords for SEO and GEO content strategies
   from a seed keyword or niche. Identifies high-value opportunities based on

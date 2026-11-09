@@ -42,3 +42,9 @@ __MACOSX/
 
 # Logs
 log/
+
+# Private files and dependency directories
+.env.*
+*.pem
+*.key
+node_modules/

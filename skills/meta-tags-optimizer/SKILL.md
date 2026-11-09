@@ -1,6 +1,5 @@
 ---
 name: meta-tags-optimizer
-argument-hint: "<URL or page title to optimize>"
 description: >
   Optimize title tags, meta descriptions, Open Graph, and Twitter cards for
   maximum click-through rate. Generates multiple A/B test variations with

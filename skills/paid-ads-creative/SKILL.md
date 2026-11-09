@@ -1,7 +1,6 @@
 ---
 name: paid-ads-creative
 description: Create grounded paid-media creative concepts, copy angles, refresh hypotheses, and measurable test briefs across advertising platforms. Use for ad copy, creative briefs, UGC concepts, headlines, creative fatigue, asset ideas, or a creative refresh.
-argument-hint: "<platform, audience, or campaign>"
 ---
 
 # Canonical NotFair workflow

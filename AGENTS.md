@@ -41,7 +41,6 @@ Skills under `skills/` are **host-agnostic**; each entry loads its full workflow
 | Search Experience Optimization (SXO), CTR + on-page conversion | `sxo` | `skills/sxo/SKILL.md` |
 | SEO drift / regression monitoring, baseline & compare over time | `seo-drift` | `skills/seo-drift/SKILL.md` |
 | Backlink / off-page audit, anchor text, referring domains, disavow | `backlink-audit` | `skills/backlink-audit/SKILL.md` |
-| Local Application-Password / `.env.local` CMS setup for SEO scripts (WordPress, Strapi, Contentful, or Ghost) | `setup-cms` | `skills/setup-cms/SKILL.md` |
 
 ## Paid Ads
 
@@ -99,25 +98,12 @@ Skills under `skills/` are **host-agnostic**; each entry loads its full workflow
 | Facebook/Instagram performance, ROAS, CPM, creative fatigue, audience overlap | `meta-ads` | `skills/meta-ads/SKILL.md` |
 | Facebook/Instagram ad creative, copy angles, UGC concepts, asset briefs, creative refreshes | `meta-ads-creative` | `skills/meta-ads-creative/SKILL.md` |
 
-## Cross-model review
-
-| Intent | Skill | Path |
-|---|---|---|
-| Second opinion / review / challenge / consult via Google Gemini | `gemini` | `skills/gemini/SKILL.md` |
-
-## Plugin maintenance
-
-| Intent | Skill | Path |
-|---|---|---|
-| Upgrade NotFair to the latest version | `upgrade` | `skills/upgrade/SKILL.md` |
-
 ## External dependencies
 
 - **Universal NotFair MCP** — `https://notfair.co/api/mcp/notfair`, OAuth. The plugin registers this single connection for Google Ads, Meta Ads, X Ads, LinkedIn Ads, Reddit Ads, TikTok Ads, Google Search Console, Google Analytics, WordPress, and GoHighLevel. Read [`docs/mcp-connection.md`](docs/mcp-connection.md) before live work. Use the connected server's current instructions and capability descriptions to select tools and verify workspace/platform access; do not prescribe tool names or call sequences in skills.
 - **Platform connections** — each live skill still requires its corresponding account or property to be connected inside the selected NotFair workspace. A universal MCP session does not imply that every platform is connected.
-- **Google Gemini API key** — required for `gemini`.
 
-Amazon and ChatGPT Ads skills are planning/review workflows unless the current session exposes a verified connector. They do not imply account or mutation access. `setup-cms` is local Application-Password / `.env.local` setup for SEO scripts; it is not the NotFair WordPress MCP connector.
+Amazon and ChatGPT Ads skills are planning/review workflows unless the current session exposes a verified connector. They do not imply account or mutation access. This plugin contains declarative workflows and a remote OAuth MCP connection; it has no bundled local programs, local CMS credential wizard, or automatic hooks.
 
 Skills check for missing credentials at startup and walk the user through setup. Do not invent credentials or skip skills silently — surface the gap.
 
@@ -143,7 +129,7 @@ When a new skill is added or removed in this repo, update:
 
 1. The relevant table above in this file.
 2. `.claude-plugin/plugin.json` → `skills` array.
-3. `VERSION`, `.claude-plugin/plugin.json`, and `.claude-plugin/marketplace.json` (version bump).
+3. All host plugin manifests and `.claude-plugin/marketplace.json` (version bump).
 4. `CHANGELOG.md` (user-facing note).
 
 A skill that exists on disk but is missing from this file or `plugin.json` is invisible to agents.

@@ -53,16 +53,19 @@ For a manual host configuration:
 }
 ```
 
-## Host manifests
+## Shared release and host manifests
 
-Claude Code, Codex, and Cursor's native manifest load `.mcp.json` with transport
-type `http`. Agent Plugins hosts load the standards-based `mcp.json`, whose schema
-requires transport type `streamable-http`. Gemini CLI embeds the native `http`
-configuration in `gemini-extension.json`. These host-specific transport labels
-all describe the same single NotFair Streamable HTTP connection and endpoint.
+All supported hosts install the same declarative release from `main`. Claude Code,
+Codex, and Cursor load `.mcp.json` with transport `http`; portable Agent Plugins
+hosts load `mcp.json` with transport `streamable-http`. Gemini CLI embeds the same
+connection in `gemini-extension.json`. These transport labels refer to the same
+single NotFair Streamable HTTP endpoint.
 
-## Registry metadata
+There is no local MCP process, helper program, automatic hook, or credential
+header. Use the host's plugin controls to update. Direct CMS credential setup,
+local crawlers, and program-based fallback paths are not included. Ask for a
+supplied report when an available connector or public fetch cannot obtain the
+requested evidence.
 
-`server.json` is the single MCP Registry listing and the source used by the
-registry publish workflow. Platform-specific registry manifests are retired;
-they must not be reintroduced as plugin connections or publish targets.
+`server.json` describes the independently versioned remote MCP registry entry;
+its version is not the plugin package version.

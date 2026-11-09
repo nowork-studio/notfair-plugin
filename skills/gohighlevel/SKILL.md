@@ -1,7 +1,6 @@
 ---
 name: gohighlevel
 description: Operate connected GoHighLevel CRM accounts through the NotFair MCP. Use for GoHighLevel, HighLevel, GHL contacts, conversations, opportunities, calendars, pipelines, tags, tasks, forms, invoices, products, or approved CRM changes.
-argument-hint: "<location, contact, opportunity, or GHL question>"
 ---
 
 # Canonical NotFair workflow

@@ -7,7 +7,7 @@
 
 The NotFair Plugin gives Claude Code, Codex, Hermes, and other compatible agents practical marketing workflows they can follow—not another generic prompt collection. Use it to audit a site, investigate a traffic drop, analyze GA4 and Search Console, find wasted ad spend across Google, Meta, X, LinkedIn, Reddit, and TikTok, operate connected WordPress and GoHighLevel accounts, build campaign plans, and make reviewable changes.
 
-Each skill has one discoverable `skills/<name>/SKILL.md` entry point. It loads a readable `WORKFLOW.md` in the category folder, with supporting references, scripts, and evals where needed. Inspect it, adapt it, or contribute a better workflow.
+Each skill has one discoverable `skills/<name>/SKILL.md` entry point. It loads a readable `WORKFLOW.md` in the category folder, with supporting references and declarative eval cases where needed. Inspect it, adapt it, or contribute a better workflow.
 
 ## What your agent can do
 
@@ -27,7 +27,7 @@ Each skill has one discoverable `skills/<name>/SKILL.md` entry point. It loads a
 | **Analytics** | Query live GA4 and Search Console data, compare complete periods, inspect URLs, manage sitemaps, and update supported measurement configuration |
 | **Content** | Turn search demand into editorial plans, briefs, articles, landing pages, metadata, and structured data |
 
-The NotFair Plugin currently ships **48 skills** across SEO, GEO, paid media, advertising platforms, analytics, WordPress, CRM, and cross-model review.
+The NotFair Plugin currently ships **45 skills** across SEO, GEO, paid media, advertising platforms, analytics, WordPress, and CRM.
 
 ## Quick start
 
@@ -178,7 +178,6 @@ Marketing work gets unreliable when every request goes through the same vague pr
 | [`sxo`](seo/sxo/) | Connects search visibility and SERP CTR to the post-click conversion experience. |
 | [`seo-drift`](seo/seo-drift/) | Creates a baseline and detects ranking, metadata, canonical, and indexation regressions. |
 | [`backlink-audit`](seo/backlink-audit/) | Reviews referring domains, anchor text, link risk, and internal-link opportunities. |
-| [`setup-cms`](seo/setup-cms/) | Local Application-Password / `.env.local` setup for SEO scripts against WordPress, Strapi, Contentful, or Ghost. |
 
 ### Paid media
 
@@ -236,13 +235,6 @@ Marketing work gets unreliable when every request goes through the same vague pr
 |---|---|
 | [`gohighlevel`](gohighlevel/) | Operates connected GoHighLevel contacts, conversations, opportunities, calendars, and other approved CRM changes. |
 
-### Cross-model review and maintenance
-
-| Skill | What it does |
-|---|---|
-| [`gemini`](gemini/) | Uses Google Gemini for a second opinion, adversarial challenge, or open consultation. |
-| [`upgrade`](notfair-upgrade-skill/) | Updates an installed NotFair plugin and summarizes what changed. |
-
 ## Live data and integrations
 
 Some skills work entirely from a repository, URL, or supplied export. Live account analysis uses one OAuth-connected [universal NotFair MCP](https://notfair.co/api/mcp/notfair). The plugin registers exactly one server named **NotFair**, shared by every supported platform.
@@ -261,10 +253,8 @@ The agent chooses tools from the live server's instructions and capability descr
 | **TikTok Ads** | Advertiser delivery, reporting, creative, targeting, and approved mutations | One NotFair connection |
 | **WordPress** | Connected site content, media, comments, design, settings, plugins, themes, and approved mutations | One NotFair connection |
 | **GoHighLevel** | Contacts, conversations, opportunities, calendars, and approved CRM mutations | One NotFair connection |
-| **Other CMS platforms** | Local SEO-script content review in Strapi, Contentful, or Ghost | `setup-cms` Application Password / API token, not NotFair MCP |
-| **Google Gemini** | Cross-model review | Gemini API key |
 
-Supported account operations come from the live connection. Changes must stay within the user's authorization and be verified against the resulting account state. Amazon and ChatGPT Ads remain planning or export-review workflows unless the current agent session exposes a verified connector. `setup-cms` is a local SEO-script credential wizard; live WordPress work uses `/notfair:wordpress`.
+Supported account operations come from the live connection. Changes must stay within the user's authorization and be verified against the resulting account state. Amazon and ChatGPT Ads remain planning or export-review workflows unless the current agent session exposes a verified connector. Live WordPress work uses `/notfair:wordpress`.
 
 ## Privacy and support
 
@@ -273,15 +263,17 @@ Requested tool arguments go to NotFair and results from connected providers retu
 to your authorized AI client. See the privacy policy for storage, retention, and
 deletion details. Connect only the workspace and platform accounts you intend to use.
 
-Optional local workflows run readable Python or shell scripts. Crawlers request
-the URLs you supply; direct Search Console scripts use your explicitly authorized
-Google Cloud login; CMS scripts use the site credentials you configure through
-`setup-cms`. Gemini review sends the selected review context to Google's Gemini
-CLI after its authentication setup. Choose these workflows explicitly, keep
-credentials out of reports and commits, and use the OAuth MCP for live platform
-work when it is available. There are no automatic plugin hooks or local MCP servers.
-The calendar viewer serves local planning data on loopback, and the optional
-update checker reads the public version file from GitHub.
+The shared release on `main` contains declarative skills and one remote OAuth
+MCP connection. It has no local helper programs, credential-file readers,
+automatic hooks, package installs, or local servers. Public browser/fetch requests
+go to the public sites requested by the user. Search and content workflows use
+connected capabilities or supplied reports and state their actual coverage.
+
+Local CMS setup, direct Strapi/Contentful/Ghost integration, the Gemini CLI review
+skill, the scripted crawler, the localhost calendar viewer, and shell update or
+reminder helpers have been removed. Content planning still returns Markdown and
+optional JSON. Use your host's plugin update controls. Do not download and run
+removed helpers as a fallback; obtain a supplied report when evidence is missing.
 
 The separate [NotFair Next.js blog library](https://github.com/nowork-studio/notfair-nextjs-blog)
 now lives in its own public repository and is distributed through its GitHub
@@ -309,8 +301,6 @@ notfair-plugin/
 ├── wordpress/                   # live WordPress MCP operator
 ├── gohighlevel/                 # live GoHighLevel CRM MCP operator
 ├── seo/                         # SEO, GEO, content, and technical-search skills
-├── gemini/                      # cross-model review
-├── test/                        # unit and LLM-judge evals
 └── skills/                      # shared entry points for every agent host
 ```
 
@@ -323,8 +313,7 @@ Each skill lives in its own category folder:
 ```text
 seo/your-skill-name/
 ├── WORKFLOW.md       # full instructions and frontmatter
-├── references/       # optional supporting knowledge
-└── scripts/          # optional deterministic tooling
+└── references/       # optional supporting knowledge
 ```
 
 When adding or changing a skill:
@@ -332,7 +321,7 @@ When adding or changing a skill:
 1. Keep the workflow focused on one clear marketing job.
 2. Use imperative, testable instructions in `WORKFLOW.md`, and keep the entry point under `skills/` in sync.
 3. Add or update eval coverage.
-4. Update [`AGENTS.md`](AGENTS.md), the plugin manifest, [`VERSION`](VERSION), and [`CHANGELOG.md`](CHANGELOG.md).
+4. Update [`AGENTS.md`](AGENTS.md), all host plugin manifests and [`CHANGELOG.md`](CHANGELOG.md).
 
 Open a pull request with one skill or one coherent improvement. See [plugin development](docs/plugin-development.md) for repository conventions.
 

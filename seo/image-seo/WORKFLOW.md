@@ -1,6 +1,5 @@
 ---
 name: image-seo
-argument-hint: "<website URL or page URL, e.g. https://example.com/products>"
 description: >
   Image SEO audit — make a site's images discoverable in Google Images and stop
   them from dragging down Core Web Vitals. Audits alt text quality and coverage,

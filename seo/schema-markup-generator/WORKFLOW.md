@@ -1,6 +1,5 @@
 ---
 name: schema-markup-generator
-argument-hint: "<URL or page type, e.g. 'FAQ page' or 'product page'>"
 description: >
   Generate JSON-LD structured data markup for rich results in Google Search.
   Supports FAQ, HowTo, Article, Product, LocalBusiness, and multi-type schemas.

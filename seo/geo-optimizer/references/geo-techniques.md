@@ -527,17 +527,10 @@ GEO without measurement is a vibe. Set up at minimum:
 
 ### Citation tracking
 
-- **gego** — open source (Go), self-host. Schedules prompts across
-  OpenAI, Anthropic, Gemini, Perplexity, Ollama; regex-matches brand
-  mentions; Perplexity Sonar URL capture is unique. Repo:
-  https://github.com/AI2HU/gego — clone, follow README to set API keys
-  and run the cron scheduler.
-- **llmopt** — open source (Go + React), self-host. Richer multi-pillar
-  scoring (LLM knowledge testing, AEO content scoring, video authority
-  via YouTube transcripts, Reddit authority, search visibility), MCP
-  integration for Claude Code/Desktop. Repo:
-  https://github.com/jonradoff/llmopt — clone, follow README to
-  configure API keys and start the dashboard.
+- **Existing measurement reports** — If the user already uses a citation
+  tracker, review a supplied export with prompt, engine, date, brand mention,
+  cited URL, and sampling method. Do not install a tracker or request its API
+  credentials as a prerequisite to this content audit.
 - **Manual baseline** — every 2 weeks, run 5 brand queries + 5 category
   queries against ChatGPT, Claude, Perplexity, Gemini. Log: cited (Y/N),
   position in answer, sentiment.

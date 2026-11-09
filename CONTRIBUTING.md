@@ -1,64 +1,31 @@
 # Contributing to NotFair
 
-Thank you for your interest in contributing to NotFair! We welcome contributions from the community to help make this the best SEO and Google Ads plugin for Claude Code.
+NotFair ships one declarative plugin from `main` to every supported host. Read
+[plugin development](docs/plugin-development.md) before changing the source.
+Keep contributions focused, evidence-based, and free of credentials or private data.
 
-## Code of Conduct
+## Skills and references
 
-Please be respectful and professional in all your interactions with the community.
+Put the full workflow in a category's `WORKFLOW.md`, with only `name` and
+`description` in its YAML frontmatter. Add one matching entry point under
+`skills/<name>/SKILL.md`, register it in `AGENTS.md` and the Claude plugin manifest,
+and keep all references inside the plugin. Supporting Markdown, JSON reference
+data, and declarative JSON eval cases are welcome.
 
-## How to Contribute
+Do not bundle local programs, test runners, package-manager configuration,
+credential-file readers, hooks, or helper downloads. Use the existing OAuth MCP,
+public browser/fetch capabilities, or supplied reports. Report missing access
+and coverage honestly. Adding a second connector or an unverified live capability
+is not a substitute for a missing local helper.
 
-### 1. Adding a New Skill
+## Review and validation
 
-Each skill lives in its own folder under a category directory (e.g., `seo/`, `google-ads/`).
+Create a focused pull request. Update the changelog and versions in all host
+plugin manifests and the marketplace manifest. Validate both Claude manifests,
+check skill registration and relative references, and inspect the exact committed
+archive for allowed file types, UTF-8 text, file limits, and unsupported frontmatter.
+See [the release checklist](docs/claude-directory-release.md).
 
-1.  **Create the Skill Directory**: `mkdir seo/your-new-skill`
-2.  **Add `WORKFLOW.md`**: Put the full instructions and frontmatter with `name` and `description` in the category directory. Create one `skills/<name>/SKILL.md` entry with the same frontmatter that loads the workflow. Only this entry is registered as a skill across hosts.
-3.  **Optional Scripts/References**: Add any supporting Python scripts in a `scripts/` folder and reference documents in a `references/` folder within your skill directory.
-4.  **Register the Skill**: Add `./skills/<name>` to the `skills` array in `.claude-plugin/plugin.json` and the entry point to `AGENTS.md`.
-5.  **Bump Versions**: Update the version in:
-    *   `.claude-plugin/plugin.json`
-    *   `.claude-plugin/marketplace.json`
-    *   `VERSION`
-6.  **Update Changelog**: Add a brief description of your new skill to `CHANGELOG.md`.
-
-### 2. Improving Existing Skills
-
-*   Refine prompts in `WORKFLOW.md` for better accuracy and synchronize its frontmatter with the skill entry.
-*   Add more robust error handling to scripts.
-*   Update reference documentation.
-
-### 3. Bug Fixes and Documentation
-
-*   Fix issues in scripts or skill logic.
-*   Improve the `README.md` or other documentation files.
-
-## Development Workflow
-
-1.  **Fork the repository**.
-2.  **Clone your fork**: `git clone https://github.com/YOUR_USERNAME/notfair.git`
-3.  **Create a branch**: `git checkout -b feature/your-feature-name`
-4.  **Make your changes**.
-5.  **Run tests**: We use `pytest` for the main test suite, but `unittest` is also used for script-specific unit tests. Ensure your changes don't break existing functionality.
-    ```bash
-    pip install -r requirements-test.txt
-    pytest
-    # or run specific unit tests
-    python3 test/unit/test_your_script.py
-    ```
-6.  **Commit and push**: Use descriptive commit messages.
-7.  **Open a Pull Request**: Provide a clear description of your changes and why they are beneficial.
-
-## Quality Standards
-
-*   **Be brutally honest**: If a skill won't work in certain scenarios, document it.
-*   **Relentless quality**: High-quality, reliable, and maintainable code is a must.
-*   **No secrets**: Never include API keys or sensitive information in your commits.
-
-## Testing
-
-Ensure your skill is discovery-ready by Claude Code. Test it locally by pointing your Claude Code to your local repository or a development version of the plugin.
-
----
-
-We look forward to your contributions!
+Run relevant declarative review prompts in the intended host when connected
+access is available. Report local package checks separately from authenticated
+behavior, Directory validation, security scans, review, and publication.

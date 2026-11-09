@@ -93,7 +93,6 @@ NotFair skills depend on external APIs. Walk the user through whichever they nee
 
 - **Google Ads** — connected in the same first-run flow for workspaces enabled in the staged Google-first rollout; otherwise connect it in NotFair.
 - **Google Search Console, Google Analytics, Meta Ads, X Ads, LinkedIn Ads, Reddit Ads, TikTok Ads, WordPress, and GoHighLevel** — available through the same MCP after each platform is connected in the selected NotFair workspace.
-- **Google Gemini** — required only for the `gemini` skill. Needs a Gemini API key in environment.
 
 Do **not** invent credentials. If a skill needs auth that isn't present, surface the gap and walk the user through the connection flow.
 
@@ -110,6 +109,6 @@ Do **not** invent credentials. If a skill needs auth that isn't present, surface
 ## Notes for agents
 
 - **Read `AGENTS.md` first** for any user intent. It is the resolver.
-- **Skills are host-agnostic.** A `SKILL.md` under `seo/`, `paid-ads/`, `google-ads/`, `meta-ads/`, `analytics/`, `wordpress/`, `gohighlevel/`, or `gemini/` works identically on every supported host.
+- **Skills are host-agnostic.** The `skills/<name>/SKILL.md` entries load category `WORKFLOW.md` files that work across supported hosts.
 - **If you write into a user-edited file** (e.g., their workspace `AGENTS.md`), wrap your insertions in `<!-- notfair:managed -->` ... `<!-- /notfair:managed -->` fences so re-runs are idempotent and hand-edits survive.
 - **Do not duplicate skills** when adding new host adapters. Add a thin install adapter under `install/<host>/` that points the host at the existing skill files.

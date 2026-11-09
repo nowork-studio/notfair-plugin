@@ -1,25 +1,14 @@
-# SEO Shared Preamble
+# SEO evidence and access
 
-Match setup to the task. URL-only reviews and supplied exports do not require
-Search Console authentication. For live Search Console work, use an available
-connector and follow [`../../docs/mcp-connection.md`](../../docs/mcp-connection.md)
-for NotFair. Let the connection's current instructions and schemas determine
-tool selection, and confirm the intended property from live data.
+For live Search Console, use the selected NotFair OAuth workspace and follow
+[`../../docs/mcp-connection.md`](../../docs/mcp-connection.md). Choose tools from
+the connection's current instructions and schemas, and verify property access.
+URL-only reviews and supplied exports do not require authentication. Confirm
+dates and coverage for exports and report missing metrics as unknown.
 
-## Optional local scripts
-
-The repository also provides scripts under `seo/seo-analysis/scripts/` for
-crawling, local analysis, and direct Search Console access. Locate them relative
-to the installed skill directory and set `SKILL_SCRIPTS` to that directory when a
-workflow uses them. Choose the script or connected capability that fits the task;
-a script example in a workflow is not a requirement to replace a working MCP.
-
-Only run `preflight.py` when the task actually needs the direct Google API script
-path and its dependencies are missing. This path uses gcloud credentials and
-Google Cloud setup; it is not required for NotFair MCP access. See
-`../seo-analysis/references/gsc_setup.md` for that optional setup. Do not install
-additional dependencies or start a second authentication flow just because an
-SEO skill was invoked.
-
-If live data is unavailable, explain the gap and continue the portions supported
-by the user's URL, repository, or export. Do not present missing data as zero.
+This plugin release ships declarative skills and a remote OAuth MCP
+connection. It contains no local helpers, credential-file readers, or automatic
+hooks. Use available public browser/fetch capabilities and verified connectors;
+do not download and run programs to replace omitted helpers. Request a supplied
+crawl, Lighthouse report, or CMS inventory when current capabilities cannot
+obtain the evidence. Do not claim full coverage from a sampled inspection.

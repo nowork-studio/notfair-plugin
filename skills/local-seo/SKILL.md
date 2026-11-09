@@ -1,6 +1,5 @@
 ---
 name: local-seo
-argument-hint: "<business name or website URL, e.g. https://example.com or 'Dolly Solutions Bangkok'>"
 description: >
   Local SEO and Google Business Profile audit: diagnose why a business isn't ranking
   in the local pack / map results and produce a fix plan. Covers GBP completeness,

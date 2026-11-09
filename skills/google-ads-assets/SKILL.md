@@ -1,7 +1,6 @@
 ---
 name: google-ads-assets
 description: Plan, validate, and safely publish Google Ads assets, including sitelinks, callouts, structured snippets, image assets, and Performance Max asset briefs. Use when asked for Google Ads assets, ad extensions, sitelinks, callouts, snippets, image assets, Performance Max assets, PMax creative, or an asset audit.
-argument-hint: "<campaign, asset group, or 'build an asset brief'>"
 ---
 
 # Canonical NotFair workflow

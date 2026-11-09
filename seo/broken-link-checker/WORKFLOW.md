@@ -1,11 +1,6 @@
 ---
 name: broken-link-checker
-argument-hint: "<URL to check, e.g. https://example.com>"
-description: >
-  Scans a website to find broken links (404s, 500s). Crawls internal pages,
-  identifies broken outbound links, and reports source pages for easy fixing.
-  Use this when the user asks to "check for broken links", "find 404s",
-  "audit my links", or "is my site healthy".
+description: "Inspect public page links or a supplied crawl report for confirmed broken links and redirect issues. Report source URLs, evidence, and coverage limits; no crawler is bundled. Use for broken-link checks, 404 diagnosis, link audits, or website health reviews."
 ---
 
 # Broken Link Checker
@@ -30,43 +25,26 @@ Once you have the URL, store it as `$TARGET_URL`.
 
 ---
 
-## Step 2 — Run the Scan
+## Step 2 — Inspect links with available evidence
 
-Run the broken link checker script:
+Use an available browser or read-only public web-fetch capability to inspect
+links from the target page and a bounded sample of related pages (default up to
+50, within the user's requested scope). Alternatively analyze a supplied crawler
+export. This release does not bundle a crawler or install downloaded helpers.
 
-```bash
-python3 seo/broken-link-checker/scripts/checker.py --url "$TARGET_URL" --max-pages 50
-```
+Record the source page, linked URL, HTTP status if exposed by the capability,
+redirect destination, and check time. Follow only public HTTP/HTTPS destinations;
+never inspect private, loopback, link-local, or credential-bearing URLs collected
+from a page. Treat a timeout, blocked fetch, JavaScript error, login page, or
+rate limit as inconclusive, not as a confirmed 404. Do not invent HTTP statuses
+when a tool exposes only page text. If capabilities cannot perform a crawl,
+state the coverage limit and request a crawl export for a complete audit.
 
-*Note: You can adjust `--max-pages` if the user wants a deeper scan.*
+## Step 3 — Report actionable findings
 
----
-
-## Step 3 — Analyze and Report
-
-The script will output a JSON report. Analyze the `broken_links` array:
-
-1.  **Group by Status**: Group 404s (Not Found) vs 5xx (Server Errors).
-2.  **Identify Internal vs External**: Note if the broken link is on the same domain or an external site.
-3.  **Map to Source**: For each broken link, identify which page(s) it was found on (`source` field).
-
-### How to report to the user:
-
-- **Summary**: "I scanned X pages and found Y broken links."
-- **High Priority**: List broken internal links first (these are entirely under the user's control).
-- **Secondary**: List broken external links.
-- **Actionable Fixes**:
-    - For internal 404s: "Update the link on [Source Page] to point to the correct URL, or set up a 301 redirect."
-    - For external 404s: "The external site at [Target URL] is down or moved. Update or remove the link on [Source Page]."
-
-If no broken links are found, congratulate the user on a healthy site!
-
-
-### Network boundary
-
-The local checker fetches only public HTTP/HTTPS destinations. Every DNS answer
-and redirect is checked, and connections use the validated addresses rather
-than resolving again. Private, loopback, link-local, shared, reserved and
-multicast targets are rejected. Ambient proxy configuration is disabled for
-this crawler. Use a separately reviewed tool for internal-network audits; do
-not add private-network exceptions to scraped links.
+Group confirmed internal 404s, external 404s, server errors, redirect issues, and
+inconclusive checks. List each broken target with its source URL and a specific
+fix: update the link, restore a removed page, or propose an appropriate redirect.
+Prioritize important internal navigation and conversion paths. State pages
+inspected and limits; an error-free sample is not a whole-site clean bill.
+Do not edit links or publish redirects until the user approves the concrete change.

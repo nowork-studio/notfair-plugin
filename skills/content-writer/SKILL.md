@@ -1,6 +1,5 @@
 ---
 name: content-writer
-argument-hint: "<keyword, topic, or URL to improve>"
 description: >
   Write SEO-optimized blog posts, landing pages, and content improvements
   following Google's E-E-A-T and Helpful Content guidelines. Handles new content

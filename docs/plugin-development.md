@@ -36,7 +36,7 @@ This code ships to real users. Sycophancy and rubber-stamping cost us credibilit
 ## Repository purpose
 
 - Home of the `notfair` plugin — the public artifact customers install.
-- Contains host-agnostic skills under `paid-ads/`, `google-ads/`, `meta-ads/`, `analytics/`, `wordpress/`, `gohighlevel/`, `seo/`, `gemini/`, and `notfair-upgrade-skill/`.
+- Contains host-agnostic skills under `paid-ads/`, `google-ads/`, `meta-ads/`, `analytics/`, `wordpress/`, `gohighlevel/`, `seo/`.
 - Registered via `.claude-plugin/plugin.json` + `.claude-plugin/marketplace.json` (Claude Code), `.codex-plugin/plugin.json` (Codex), and `AGENTS.md` (every host's resolver).
 - Paired with one universal NotFair MCP server for Google, Meta, X, LinkedIn, Reddit, and TikTok Ads plus Google Search Console, Google Analytics, WordPress, and GoHighLevel (OAuth at notfair.co).
 
@@ -44,7 +44,7 @@ This code ships to real users. Sycophancy and rubber-stamping cost us credibilit
 
 - Treat every commit as a release candidate. Broken skills, bad prompts, or missing files become customer bug reports.
 - Never add internal-only notes, secrets, credentials, dev scratch files, or references to private infra. This repo is public.
-- Test skills end-to-end before shipping — `SKILL.md` frontmatter (`name`, `description`, triggers) is how Claude decides to invoke them; typos or stale descriptions break discovery.
+- Test skills end-to-end before shipping — `SKILL.md` frontmatter (`name` and `description`) is how Claude decides to invoke them; typos or stale descriptions break discovery.
 
 ## Branding: NotFair
 
@@ -60,14 +60,28 @@ The product is **NotFair**. All user-facing text, documentation, skill descripti
    - `.claude-plugin/plugin.json` → `version`
    - `.codex-plugin/plugin.json` → `version`
    - `.claude-plugin/marketplace.json` → both `metadata.version` and `plugins[0].version`
-   - `VERSION` file at repo root
+   - `.cursor-plugin/plugin.json`, root `plugin.json`, and `gemini-extension.json`
 6. Update `CHANGELOG.md` with a user-facing note.
-7. Verify locally, then ship via `/ship`. Users pick up the new version through `notfair:upgrade`.
+7. Verify the committed package, merge the reviewed pull request, then update the existing Directory submission from `main`. Users update through their host's plugin controls.
 
 ## Versioning
 
-Semantic-ish: bump patch for skill additions / fixes, minor for new categories or meaningful capability jumps, major for breaking skill API changes. Keep `VERSION`, `plugin.json`, and `marketplace.json` in lockstep — drift causes upgrade detection bugs.
+Semantic-ish: bump patch for skill additions / fixes, minor for new categories or meaningful capability jumps, major for breaking skill API changes. Keep host plugin manifests and the marketplace manifest in lockstep — drift causes upgrade detection bugs.
 
 ## Related repos
 
 - NotFair MCP server — private, powers the Google Ads tool calls the skills depend on.
+
+## Declarative package requirement
+
+The repository root is the installed plugin and the Directory submission path.
+Keep it free of local programs, shebang files, package-manager configuration,
+unsupported binary files, credential-file readers, automatic hooks, and helper
+installers. Test/build programs are subject to the same package rule as runtime
+programs; do not ship them or rename them to allowed extensions. Use Markdown
+instructions, JSON reference/eval data, YAML host metadata, and the PNG icon.
+Skill and workflow frontmatter contains only `name` and `description`.
+
+Read the version from the plugin manifest. The extensionless source version marker
+has been retired. The remote MCP registry entry is independently versioned.
+The [release checklist](claude-directory-release.md) covers package verification.

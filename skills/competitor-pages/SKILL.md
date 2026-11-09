@@ -1,6 +1,5 @@
 ---
 name: competitor-pages
-argument-hint: "<your page URL + 1-3 competitor URLs ranking for the same query>"
 description: >
   Competitor page gap analysis — take a query you want to win and the pages
   currently outranking you, and produce a concrete brief on what to add or change
