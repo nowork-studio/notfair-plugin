@@ -12,7 +12,7 @@
         "Classifies opportunities into the 5 buckets (striking-distance, gap, ctr-underperformer, related-expansion, cannibalization)",
         "Computes clickPotential per topic using the documented formula",
         "Every scheduled title uses a hook pattern (number, audience, contrarian, or outcome-promise) — no bare keyword titles",
-        "Writes content-calendar.json to {data_dir}/content-calendar.json with the documented schema",
+        "Returns the documented calendar schema as optional JSON at the user’s requested destination",
         "Returns a dated Markdown calendar and optional JSON without a local server or helper command",
         "Caps at 12 topics for a 90-day horizon unless user asks for more"
       ]
