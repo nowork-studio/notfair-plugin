@@ -8,7 +8,7 @@
       "files": [],
       "expectations": [
         "Resolves the WordPress connector and selected site before claiming live access",
-        "Does not use setup-cms Application Password credentials for this mutation",
+        "Does not read local CMS credentials for this mutation",
         "Reads the current resource and expectedVersion before proposing the edit",
         "Creates or leaves content as draft unless publish is explicitly requested and approved",
         "Verifies the result from returned evidence or a fresh read"
