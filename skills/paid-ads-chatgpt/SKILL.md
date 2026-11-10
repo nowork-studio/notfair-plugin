@@ -1,7 +1,6 @@
 ---
 name: paid-ads-chatgpt
 description: Plan and review ChatGPT Ads experiments without assuming ad inventory, account access, or platform capabilities. Use for ChatGPT advertising, OpenAI ads, conversational ad concepts, ChatGPT campaign plans, or performance reviews from a verified export.
-argument-hint: "<objective, audience, or verified ChatGPT Ads export>"
 ---
 
 # Canonical NotFair workflow

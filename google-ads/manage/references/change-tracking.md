@@ -38,27 +38,9 @@ Append to the `changes` array:
 - **Max 200 entries** (remove oldest reviewed first).
 - **Group related writes** in one session as a single entry.
 
-## Proactive reminders (SessionStart hook + calendar)
+## Follow-up
 
-Users shouldn't have to remember to come back. Two complementary mechanisms:
-
-1. **SessionStart hook** — `bash scripts/notfair-change-watch.sh` scans every account's `change-log.json` and prints any entry whose `reviewAfter` has passed and `reviewed == false`. If the user asks to enable the reminder, resolve the script
-   from the installed plugin and substitute its actual absolute path in
-   `~/.claude/settings.json`. A global user hook does not receive a plugin-root
-   environment variable. For example:
-   ```json
-   {
-     "hooks": {
-       "SessionStart": [
-         { "hooks": [ { "type": "command", "command": "bash \"/absolute/path/to/notfair-plugin/scripts/notfair-change-watch.sh\"" } ] }
-       ]
-     }
-   }
-   ```
-   When the user opens a new Claude session, any pending reviews appear as session context — the assistant can proactively offer to run a scoped `/google-ads-audit`.
-
-2. **Calendar (.ics) reminder** — after logging a change, offer to generate a calendar invite the user can drop into any calendar app:
-   ```
-   bash "/absolute/path/to/notfair-plugin/scripts/notfair-change-watch.sh" ics <account_id> <change_id> > ~/review-<change_id>.ics
-   ```
-   The .ics file includes a 9-hour-before alarm so the user gets notified on review day. Cross-platform, no cloud dependency, works offline.
+Include review dates and the maturity rule in the change summary. A written
+follow-up date does not create a reminder. Use an available scheduling capability
+only when the user requests a reminder, and verify its saved state. This release
+adds no local hooks or calendar helper programs.

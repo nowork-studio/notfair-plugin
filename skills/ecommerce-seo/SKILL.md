@@ -1,6 +1,5 @@
 ---
 name: ecommerce-seo
-argument-hint: "<store URL, e.g. https://example.com or a category/product URL>"
 description: >
   E-commerce SEO audit for online stores (WooCommerce, Shopify, Magento, custom).
   Covers category / product listing pages (PLP), product detail pages (PDP), faceted

@@ -1,6 +1,5 @@
 ---
 name: sxo
-argument-hint: "<page or site URL, e.g. https://example.com/landing>"
 description: >
   Search Experience Optimization (SXO), the bridge between SEO and UX/CRO. Audits
   the journey from the SERP click to the on-page goal: click-through factors (title,

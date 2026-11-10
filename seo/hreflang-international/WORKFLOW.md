@@ -1,6 +1,5 @@
 ---
 name: hreflang-international
-argument-hint: "<website URL, e.g. https://example.com>"
 description: >
   International / multilingual SEO audit focused on hreflang correctness: missing or
   broken return tags, wrong language/region codes, missing x-default,

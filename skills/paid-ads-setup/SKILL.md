@@ -1,7 +1,6 @@
 ---
 name: paid-ads-setup
 description: Connect NotFair paid-ad accounts and establish reusable campaign context. Use when setting up paid media in a new workspace, connecting Google, Meta, X, LinkedIn, Reddit, or TikTok Ads, refreshing brand context, or preparing an agent to work on ads safely.
-argument-hint: "<connect accounts, workspace, or brand>"
 ---
 
 # Canonical NotFair workflow

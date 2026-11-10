@@ -15,11 +15,11 @@
     {
       "id": 2,
       "prompt": "My site is https://acme-saas.com. I want a full SEO audit but I don't have gcloud installed or Google Search Console set up. What can you do?",
-      "expected_output": "The skill gracefully handles missing gcloud/GSC by falling back to a technical-only audit. It should still perform metadata audit, schema markup audit, technical crawl of the homepage and key pages, and offer to run /meta-tags-optimizer and /schema-markup-generator based on what it finds. It should be honest about what it can and can't do without GSC data.",
+      "expected_output": "The skill explains that local Google Cloud tooling is not required. It offers the OAuth connector or a supplied export for Search Console data and continues a bounded public-page technical review, metadata and schema audit with available capabilities. It offers relevant metadata/schema handoffs and states missing data and coverage without installing helpers.",
       "files": [],
       "expectations": [
         "The skill acknowledges the URL https://acme-saas.com and confirms it will use this",
-        "The skill does not fail or stop when gcloud is unavailable — it falls back to Phase 5 technical audit",
+        "The skill does not require gcloud or local helper installation and continues the supported public-page audit",
         "The response includes a crawl or fetch of the site's homepage",
         "The response includes a metadata audit section (title tags, meta descriptions)",
         "The response includes a schema markup audit section",

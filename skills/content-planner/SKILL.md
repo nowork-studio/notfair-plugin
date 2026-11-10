@@ -1,15 +1,6 @@
 ---
 name: content-planner
-argument-hint: "<site URL or 'plan from GSC'>"
-description: >
-  GSC-driven content calendar. Pulls real Search Console data, finds the highest
-  click-potential opportunities (striking-distance queries at positions 5-20,
-  unanswered query intent, related-keyword expansions), and produces a dated,
-  prioritized content calendar — ready to hand to /content-writer. Use when the
-  user asks "plan my content", "what should I write next", "content calendar",
-  "content plan", "content roadmap", "editorial calendar", "what topics will
-  rank", "find quick-win SEO topics", "click-potential analysis", or "schedule
-  my SEO content".
+description: "Build a dated editorial calendar from connected or supplied Search Console data. Prioritize striking-distance queries, content gaps, CTR refreshes, and cannibalization issues. Return Markdown and optional JSON without a local viewer or automatic publishing. Use for content planning, editorial calendars, or choosing what to write next."
 ---
 
 # Canonical NotFair workflow

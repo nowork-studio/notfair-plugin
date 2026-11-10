@@ -1,7 +1,6 @@
 ---
 name: wordpress
 description: Operate connected WordPress sites through the NotFair MCP. Use for WordPress content, posts, pages, media, comments, terms, design, settings, plugins, themes, HTML files, or approved WordPress changes on a NotFair-connected site. Not the local Application-Password CMS setup used by SEO scripts.
-argument-hint: "<site, content, plugin, or WordPress change>"
 ---
 
 # Canonical NotFair workflow

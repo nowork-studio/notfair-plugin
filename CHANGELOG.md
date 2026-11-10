@@ -9,6 +9,16 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+## [0.27.21] — 2026-11-09
+
+### Changed
+
+- Use one shared, declarative plugin from `main` for all hosts and the Claude Directory.
+- Remove bundled Python/shell tools, their test runners and dependency files, and the separate Directory distribution builder.
+- Keep 45 skills and the OAuth MCP connection. Adapt site/page SEO audits, broken-link checks, and content planning to connected capabilities, public pages, or supplied reports, with explicit coverage limits.
+- Remove local CMS credential setup, Gemini CLI review, and the helper-based updater. Direct Strapi/Contentful/Ghost integrations, automated local crawling, the localhost calendar viewer, and shell reminders are no longer bundled; use native host plugin updates.
+- Restrict workflow frontmatter to descriptive fields, remove unsupported source file types, and synchronize all host plugin versions.
+
 ## [0.27.20] — 2026-11-09
 
 ### Fixed

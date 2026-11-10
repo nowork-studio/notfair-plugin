@@ -1,6 +1,5 @@
 ---
 name: seo-drift
-argument-hint: "<site URL — optionally 'baseline' to snapshot or 'compare' to diff>"
 description: >
   SEO drift monitoring — snapshot a site's SEO state and detect regressions over
   time. Captures a baseline (rankings/positions, indexed page count, titles & meta

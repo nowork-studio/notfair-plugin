@@ -4,7 +4,7 @@
     {
       "id": 1,
       "prompt": "Plan my next 90 days of content based on Search Console data. My site is example.com — a small B2B accounting SaaS for freelancers.",
-      "expected_output": "A GSC-driven content calendar with 8–12 prioritized topics, each tagged by opportunity bucket (striking-distance, gap, ctr-underperformer), scheduled across 12 weeks, with click-potential scores. The skill should write content-calendar.json to {data_dir} and tell the user how to launch the notfair-content-calendar viewer.",
+      "expected_output": "A GSC-driven content calendar with 8–12 prioritized topics, each tagged by opportunity bucket (striking-distance, gap, ctr-underperformer), scheduled across 12 weeks, with click-potential scores. The skill should return a Markdown calendar with optional JSON at the user’s chosen destination; it must not launch a local viewer or publish automatically.",
       "files": [],
       "expectations": [
         "Skill checks for GSC connection before doing anything else",
@@ -12,8 +12,8 @@
         "Classifies opportunities into the 5 buckets (striking-distance, gap, ctr-underperformer, related-expansion, cannibalization)",
         "Computes clickPotential per topic using the documented formula",
         "Every scheduled title uses a hook pattern (number, audience, contrarian, or outcome-promise) — no bare keyword titles",
-        "Writes content-calendar.json to {data_dir}/content-calendar.json with the documented schema",
-        "Tells the user the exact command to run the notfair-content-calendar viewer",
+        "Returns the documented calendar schema as optional JSON at the user’s requested destination",
+        "Returns a dated Markdown calendar and optional JSON without a local server or helper command",
         "Caps at 12 topics for a 90-day horizon unless user asks for more"
       ]
     },

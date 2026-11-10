@@ -1,6 +1,5 @@
 ---
 name: sitemap-audit
-argument-hint: "<website URL or sitemap URL, e.g. https://example.com or https://example.com/sitemap.xml>"
 description: >
   XML sitemap audit — find and fix the sitemap problems that quietly waste crawl
   budget and slow indexing. Discovers the sitemap (robots.txt, /sitemap.xml,

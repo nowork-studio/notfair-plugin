@@ -1,15 +1,6 @@
 ---
 name: content-planner
-argument-hint: "<site URL or 'plan from GSC'>"
-description: >
-  GSC-driven content calendar. Pulls real Search Console data, finds the highest
-  click-potential opportunities (striking-distance queries at positions 5-20,
-  unanswered query intent, related-keyword expansions), and produces a dated,
-  prioritized content calendar — ready to hand to /content-writer. Use when the
-  user asks "plan my content", "what should I write next", "content calendar",
-  "content plan", "content roadmap", "editorial calendar", "what topics will
-  rank", "find quick-win SEO topics", "click-potential analysis", or "schedule
-  my SEO content".
+description: "Build a dated editorial calendar from connected or supplied Search Console data. Prioritize striking-distance queries, content gaps, CTR refreshes, and cannibalization issues. Return Markdown and optional JSON without a local viewer or automatic publishing. Use for content planning, editorial calendars, or choosing what to write next."
 ---
 
 # Content Planner
@@ -24,9 +15,7 @@ mine the user's *actual* Search Console data, find the highest-click-potential
 opportunities for *this* site, and produce a dated calendar the user can publish
 against.
 
-The output is a structured `content-calendar.json` plus a Markdown summary. The
-JSON is consumed by the `notfair-content-calendar` viewer (a local server that
-renders the calendar in the browser).
+The output is a dated Markdown calendar and optional structured JSON at the user’s chosen destination. This release does not start a local viewer or publishing service.
 
 **Boundary with sibling skills:**
 - `keyword-research` — start from a seed, discover the keyword universe
@@ -37,13 +26,12 @@ renders the calendar in the browser).
 
 ## Step 1 — Setup (config + GSC)
 
-Read and follow `../seo-analysis/WORKFLOW.md` Step 1 for GSC connection. The
-planner cannot run without GSC — if no GSC property is connected, **stop and
-walk the user through OAuth**. Don't invent data.
-
-Resolve `{data_dir}` the same way the Google Ads preamble does (`.notfair/` in
-the repo if `.notfair.json` exists, else `~/.notfair/`). The calendar lives at
-`{data_dir}/content-calendar.json`.
+Use [`../../analytics/search-console/WORKFLOW.md`](../../analytics/search-console/WORKFLOW.md)
+to select the connected workspace and property. Follow the live connection's
+schemas and instructions. If access is absent, offer OAuth or use a supplied
+GSC export. A data-driven calendar needs actual data; do not invent it.
+Reuse an existing calendar the user supplies and preserve its manual edits,
+statuses, deadlines, ownership, and notes. Save only where the user requested.
 
 ---
 
@@ -61,8 +49,7 @@ For the chosen GSC property, fetch **last 90 days** of:
 3. **Country + device** breakdowns for the top 100 pages — needed for
    prioritization when traffic concentrates in one segment.
 
-Cache the raw pull at `{data_dir}/gsc-cache.json` with a `fetchedAt` timestamp.
-Re-use the cache for 7 days — opportunities don't shift hourly.
+Record the source, property, date range, filters, row limits, and retrieval time. A supplied export is usable only with known dates and coverage.
 
 ---
 
@@ -81,7 +68,7 @@ that don't fit any bucket — noise.
 - Query has search volume (use GSC impressions × position × 100 as a proxy if
   you don't have third-party volume)
 - The site sells/operates in the topic area — verify against business context
-  in `{data_dir}/business-context.json` if present
+  in the user’s supplied business context
 
 ### C. CTR underperformers (refresh, not new content)
 - Position **1-10**, impressions **≥ 500/90d**, CTR **< 50% of expected** for
@@ -166,18 +153,16 @@ Schedule one post per week, P0s first. Format every entry against this schema:
 | `planned` | scheduled, not yet written | `/content-planner` |
 | `in-progress` | `/content-writer` started | `/content-writer` |
 | `ready_to_publish` | written, reviewed, ok to push live | user (manual flip) |
-| `published` | publisher POSTed to the webhook with 2xx | `publish_pending.py` |
-| `failed` | publisher got 4xx; needs user fix | `publish_pending.py` |
+| `published` | live content verified after an approved write | connected CMS and read-back |
+| `failed` | an approved write failed | verified connector response |
 
-A publisher should only pick up entries with `status === "ready_to_publish"` AND a non-empty
-`bodyPath`. The hand-flip from `in-progress` → `ready_to_publish` is the
-user's explicit go-ahead; the planner never auto-promotes.
+A stored status is not permission to publish. Summarize the exact proposed write and obtain explicit approval before a connected CMS publishes anything. Verify the published URL before changing its status. The planner never auto-promotes content.
 
 Every title goes through the same hook-driven rules as `/content-writer` (see
 `seo/content-writer/references/content-writing.md` → "Title Hook Patterns").
 Don't ship a calendar with bare-keyword titles.
 
-Write the full calendar to `{data_dir}/content-calendar.json`:
+Return the calendar as Markdown, with optional JSON at the user’s chosen destination:
 
 ```json
 {
@@ -197,46 +182,20 @@ Merge with an existing calendar instead of overwriting:
 
 ---
 
-## Step 6 — Present + offer the viewer
+## Step 6 — Present the calendar
 
-Resolve `<plugin-root>` from the location of this workflow and substitute its
-absolute path in helper commands. Do not rely on `CLAUDE_PLUGIN_ROOT` being
-exported by the host; these instructions also run on other agents.
-
-Print:
-
-1. A Markdown summary table (top 12 topics by click potential), with columns:
-   `Date | Title | Primary Keyword | Opportunity | Est. Clicks Gained | P`
-2. The path to the JSON: `{data_dir}/content-calendar.json`
-3. The viewer command, with the exact invocation:
-
-```
-python3 "<plugin-root>/scripts/notfair-content-calendar.py" [--port 8323] [--calendar {data_dir}/content-calendar.json]
-```
-
-> Open the calendar in your browser:
->
-> ```bash
-> python3 "<plugin-root>/scripts/notfair-content-calendar.py"
-> ```
->
-> (or run it from a clone of the notfair repo: `python3 scripts/notfair-content-calendar.py`.)
-> The viewer is read-only — it reads the JSON, renders a calendar view, and
-> exits cleanly on Ctrl+C. Edit the JSON to change scheduling; reload to see
-> updates.
-
-4. Conditional handoffs:
-   - **Cannibalization flagged** → offer `/seo-analysis` for the canonical-page fix first
-   - **CTR-underperformer entries present** → offer `/meta-tags-optimizer` for the title/description rewrite
-   - **First P0 topic ready to write now** → offer `/content-writer` with the pre-built `writerPrompt`
-
----
+Return the top 12 topics as a table: date, title, primary keyword, opportunity,
+estimated clicks gained, and priority. Label projected click gains as estimates,
+not search volume or guaranteed results. Include source dates and coverage.
+Offer `seo-analysis` for cannibalization, `meta-tags-optimizer` for CTR refreshes,
+and `content-writer` for the first selected brief. Scheduling a topic does not
+schedule an automatic publication or enable a reminder.
 
 ## Step 7 — Quality gate
 
 Refuse to ship the calendar if any of these are true:
 
-- [ ] GSC didn't connect → stop, prompt OAuth
+- [ ] No live GSC data or usable export → explain the gap and request the missing evidence
 - [ ] < 50 (query, page) rows pulled → site has too little data, plan would be
       speculation; tell the user so and stop
 - [ ] Any topic has a bare-keyword title → rewrite with a hook before writing

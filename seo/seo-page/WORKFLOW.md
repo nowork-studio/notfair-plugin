@@ -1,19 +1,6 @@
 ---
 name: seo-page
-argument-hint: "<URL of the page to analyze, e.g. https://example.com/blog/my-post>"
-description: >
-  Single-page SEO audit: content quality under Google's E-E-A-T framework and
-  Helpful Content guidelines, on-page factors, search intent, technical signals and
-  readability. Pulls GSC data for the page, crawls the live HTML, checks metadata,
-  schema, internal linking and depth, and produces a scored report with fixes. Use
-  whenever the user wants to analyze a specific page or URL, not the whole site.
-  Trigger on: "analyze this page", "audit this URL", "how is this page doing",
-  "evaluate my blog post", "check this landing page", "page SEO", "content quality
-  check", "is this page good enough", "review this page's SEO", "what's wrong with
-  this page", "how can I improve this page", "page analysis", "single page audit",
-  "content audit for [URL]", or any request naming a specific URL/page for SEO
-  evaluation. If the user provides a specific URL (not just a domain), this is
-  likely the right skill; use /seo-analysis for full-site audits instead.
+description: "Audit one page for search intent, content quality, E-E-A-T, metadata, schema, links, and technical SEO. Use public page inspection and optional connected Search Console data or supplied reports. State missing evidence. Use for single-page SEO audits, URL reviews, landing-page content quality, or on-page fixes."
 ---
 
 # Single-Page SEO Analysis
@@ -40,96 +27,19 @@ only a domain, ask which page they want analyzed:
 > "Which specific page do you want me to analyze? (e.g., `https://example.com/blog/my-post`).
 > For a full-site audit, use `/seo-analysis` instead."
 
-Store the URL as `$PAGE_URL`. Derive the domain:
+Store the exact page URL and its origin. Read
+[`../shared/preamble.md`](../shared/preamble.md). Fetch the public page with an
+available browser or read-only fetch capability. Render it when the returned HTML
+is only a client-side shell. Fetch its public robots directives and compare the
+page with three to five actual search results for the likely primary intent.
 
-```bash
-DOMAIN=$(python3 -c "import sys; from urllib.parse import urlparse; print(urlparse(sys.argv[1]).netloc.lstrip('www.'))" "$PAGE_URL")
-PAGE_PATH=$(python3 -c "import sys; from urllib.parse import urlparse; print(urlparse(sys.argv[1]).path)" "$PAGE_URL")
-```
-
----
-
-## Phase 0 — Preflight & Data Gathering
-
-Read and follow `../shared/preamble.md` for script discovery and GSC auth.
-
-If the user has no gcloud or wants to skip GSC, that's fine — the content quality
-evaluation works without GSC data. GSC enriches the analysis but isn't required.
-
----
-
-## Phase 1 — Parallel Data Collection
-
-**Launch all of these in a single turn using parallel tool calls:**
-
-### 1a. Fetch the page (WebFetch)
-Fetch `$PAGE_URL` to get the full HTML. This is the primary input — everything
-else enriches it.
-
-**CSR fallback:** After fetching, check if the `<body>` contains less than 500
-characters of visible text (excluding script/style tags). If so, the page is
-likely client-side rendered (React, Next.js CSR, Vue SPA). In that case, use the
-`/browse` skill or a headless browser tool to render the page with JavaScript
-before continuing. Do not analyze an empty shell — you will produce garbage scores.
-
-### 1a-2. SERP reality check (WebSearch)
-Search for the page's likely primary keyword (infer from URL slug or title) to see
-what actually ranks. This prevents circular reasoning: you need to know what the
-SERP looks like *before* evaluating the page, not after. Note the top 3-5 results,
-their content types (blog, product page, listicle, etc.), and any SERP features
-(featured snippets, PAA, video carousels).
-
-### 1b. Fetch robots.txt (WebFetch)
-Fetch `{origin}/robots.txt` to check if the page is blocked.
-
-### 1c. GSC page-level data (Bash — skip if no GSC access)
-Pull performance data for this specific page:
-
-```bash
-python3 "$SKILL_SCRIPTS/analyze_gsc.py" \
-  --site "$GSC_PROPERTY" \
-  --days 90 \
-  --page-filter "$PAGE_PATH"
-```
-
-After `analyze_gsc.py` completes, run `show_gsc.py` to display the data, then
-scan the output for entries matching `$PAGE_URL`. Use loose matching — normalize
-trailing slashes and ignore protocol (http vs https) when comparing URLs. If the
-exact URL doesn't match, try the path portion only.
-
-### 1d. Match GSC property (Bash — skip if no GSC access)
-Before running URL Inspection or GSC queries, map the domain to the correct GSC
-property. Run `list_gsc_sites.py` and match against `$DOMAIN`:
-
-```bash
-python3 "$SKILL_SCRIPTS/list_gsc_sites.py"
-```
-
-GSC properties can be domain properties (`sc-domain:example.com`) or URL-prefix
-properties (`https://example.com/`). Prefer domain properties — they cover all
-subdomains and protocols. Store the matched property as `$GSC_PROPERTY`. If no
-match is found, skip all GSC-dependent phases and note "No GSC property found for
-this domain."
-
-### 1e. URL Inspection (Bash — skip if no GSC access)
-```bash
-python3 "$SKILL_SCRIPTS/url_inspection.py" \
-  --site "$GSC_PROPERTY" \
-  --urls "$PAGE_PATH"
-```
-
-This gives: indexing status, mobile usability, rich result status, last crawl time.
-
-### 1f. Load business context (Bash)
-```bash
-BC_FILE="$HOME/.toprank/business-context/$DOMAIN.json"
-[ -f "$BC_FILE" ] && cat "$BC_FILE" || echo "NOT_FOUND"
-```
-
-If not found, infer what you can from the page content. Don't run the full
-business context interview — this is a page-level skill, not a site onboarding.
-
----
+Use [`../../analytics/search-console/WORKFLOW.md`](../../analytics/search-console/WORKFLOW.md)
+for optional page-filtered performance over 90 days, query-by-page evidence,
+and URL Inspection when the current connection supports it. Confirm the property
+and exact URL before querying. Use a supplied export if live access is absent;
+report that gap if neither is available. Do not claim inspection or performance
+results from page content alone. Infer business context from the page and the
+user's supplied context, without starting an unrelated onboarding interview.
 
 ## Phase 2 — Page Content Extraction
 
@@ -179,14 +89,14 @@ criteria for each score level — follow them precisely.
 ### 3a. Search Intent Alignment (weight: 20%)
 
 Determine what search queries this page should rank for:
-- **From GSC** (if available): use actual ranking queries from Phase 1c
+- **From GSC** (if available): use actual ranking queries from the optional page-filtered Search Console query
 - **From content**: infer the primary target keyword from the title, H1, and
   content focus
 - **From URL**: the slug often reveals the target keyword
 
 **Critical: avoid circular reasoning.** Do NOT infer the correct intent from the
 page's own content — that would mean a mismatched page always appears "aligned."
-Instead, use the SERP reality check from Phase 1a-2: look at what actually ranks
+Instead, use the SERP reality check from the initial search results: look at what actually ranks
 for the primary keyword. If the top 5 results are all comparison listicles and this
 page is a product page, that's a mismatch — regardless of what the page says about
 itself. The SERP is the ground truth for intent, not the page.
@@ -303,7 +213,7 @@ Are other pages on the same site competing for the same queries? If so:
 
 ## Phase 5 — Competitive Quick-Check
 
-You already have SERP data from the Phase 1a-2 WebSearch. Now **WebFetch the top
+You already have SERP data from the the initial search results WebSearch. Now **WebFetch the top
 2-3 competitor URLs** from those results to get their actual content. Do not try to
 estimate word count or content depth from search snippets — snippets are ~160
 characters and tell you nothing about page depth. You need the real HTML.

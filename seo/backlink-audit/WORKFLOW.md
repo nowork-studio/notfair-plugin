@@ -1,6 +1,5 @@
 ---
 name: backlink-audit
-argument-hint: "<site URL — optionally attach a backlink export CSV from GSC/Ahrefs/Semrush>"
 description: >
   Backlink / off-page SEO audit. Works WITHOUT a paid tool by default — it uses the
   Google Search Console Links report (your top linking sites, most-linked pages,

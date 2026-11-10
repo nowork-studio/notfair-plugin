@@ -1,3 +1,0 @@
-google-auth>=2.62.0
-google-auth-httplib2>=0.4.4
-requests>=2.34.2

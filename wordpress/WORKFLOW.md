@@ -1,7 +1,6 @@
 ---
 name: wordpress
 description: Operate connected WordPress sites through the NotFair MCP. Use for WordPress content, posts, pages, media, comments, terms, design, settings, plugins, themes, HTML files, or approved WordPress changes on a NotFair-connected site. Not the local Application-Password CMS setup used by SEO scripts.
-argument-hint: "<site, content, plugin, or WordPress change>"
 ---
 
 # WordPress
@@ -12,7 +11,7 @@ Follow [`../docs/safety.md`](../docs/safety.md). Never create, edit, publish, de
 
 Follow [`../docs/mcp-connection.md`](../docs/mcp-connection.md). Resolve `~~wordpress` to the live connection. Use its current instructions and capability descriptions to choose tools, and verify the requested site from live data. Do not infer access from Search Console, a local `.env.local` CMS setup, or another connected platform.
 
-This skill is the first-party NotFair WordPress MCP operator (`wordpress_` tools on the universal server). `/notfair:setup-cms` remains the local Application-Password / `.env.local` path for SEO scripts against WordPress, Strapi, Contentful, or Ghost. Do not mix those credentials with this connector.
+This skill is the first-party NotFair WordPress MCP operator (`wordpress_` tools on the universal server). This plugin release uses the OAuth connector; it does not read local CMS credentials or bundle a CMS setup helper.
 
 ## Establish the live site
 

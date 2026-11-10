@@ -1,6 +1,5 @@
 ---
 name: geo-optimizer
-argument-hint: "<URL, file path, or topic to optimize for AI search>"
 description: >
   Generative Engine Optimization (GEO) — make content rank in AI search
   answers from ChatGPT, Claude, Perplexity, Gemini, and Google AI Overviews.

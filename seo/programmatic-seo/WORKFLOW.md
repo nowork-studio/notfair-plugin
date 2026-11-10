@@ -1,6 +1,5 @@
 ---
 name: programmatic-seo
-argument-hint: "<site URL + the templated page pattern, e.g. https://example.com/[city]-[service]>"
 description: >
   Programmatic SEO planning and audit: building or evaluating large sets of
   template-generated pages that target long-tail query patterns (e.g. "[service] in

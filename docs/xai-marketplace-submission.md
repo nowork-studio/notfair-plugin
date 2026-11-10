@@ -19,7 +19,7 @@ review; it does not establish approval or availability in any host.
   prepare changes for user approval.
 
 The repository contains `.cursor-plugin/plugin.json`, the portable root
-`plugin.json`, 48 discoverable skills, and their bundled workflows. The native
+`plugin.json`, 45 discoverable skills, and their bundled workflows. The native
 manifest explicitly loads `.mcp.json`; portable hosts use `mcp.json`. Both
 register the same NotFair endpoint, using the transport label each host expects.
 
@@ -30,7 +30,7 @@ register the same NotFair endpoint, using the transport label each host expects.
    reload Cursor, and confirm its components under **Customize**. An installed
    marketplace copy with the same name takes precedence over a local copy;
    verify which version is loaded before testing.
-2. Confirm 48 skills and one NotFair MCP connection at
+2. Confirm 45 skills and one NotFair MCP connection at
    `https://notfair.co/api/mcp/notfair`. A previously installed copy with multiple
    platform connectors must be refreshed before it can verify this release.
 3. Complete the host's OAuth flow with a NotFair account and select the intended
@@ -49,7 +49,7 @@ session exposes a verified connector. They do not imply live account access.
 
 | Prompt | Expected result |
 |---|---|
-| "What marketing workflows does NotFair provide? Do not access accounts or change anything." | Describe the bundled skills and distinguish local workflows from connected-account operations. |
+| "What marketing workflows does NotFair provide? Do not access accounts or change anything." | Describe the bundled skills and distinguish public/supplied-evidence reviews from connected-account operations. |
 | "Using NotFair, show which platforms and accounts are connected to this workspace. Read only." | Report only verified access, or explain the missing OAuth or platform setup. Do not infer account access from the skill catalog. |
 | "Review my connected Google Ads account for the last seven complete days. Show evidence and proposed improvements only; make no changes." | Use the connected account's data, name the period and account, and separate observations from proposals. If disconnected, give setup guidance without invented metrics. |
 | "List the Search Console properties I can access. Do not run a full audit." | List accessible properties within the narrow request, or explain the connection gap. |
@@ -62,18 +62,15 @@ Any separate mutation test requires an explicitly authorized target and effect.
 
 ## Validation and submission
 
-Run the local package, installer, and unauthenticated OAuth discovery checks:
+Follow the [shared release checklist](claude-directory-release.md). Validate the
+Claude plugin and marketplace manifests and inspect the committed package's
+registration, relative references, file types, and frontmatter. The release ships
+no local program or test runner. Declarative eval cases remain beside workflows.
 
-```bash
-python3 -m pytest -q test/unit test/test_mcp_skill_e2e.py
-bash test/install.test.sh
-LIVE_MCP_E2E=1 python3 -m pytest -q test/test_mcp_skill_e2e.py
-```
-
-Local checks establish package contracts and public OAuth discovery. They do not
-establish an authenticated in-app result. Record the exact loaded version and
-actual outcomes of the cases above before checking the form's local-and-in-app
-testing declaration. A stale team installation cannot verify the current release.
+Package validation does not establish authenticated in-app results. Record the
+exact loaded version and actual outcomes of the review cases before checking
+any local-and-in-app testing declaration. A stale installation cannot verify the
+current release.
 
 The xAI form also requires publisher contact details, listing destinations, a
 description, and testing instructions. Use the repository and setup/cases above
