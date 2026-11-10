@@ -1,4 +1,4 @@
-# Claude submission preparation — 0.27.22
+# Claude submission preparation — 0.27.23
 
 The full 0.27.18 plugin was refused by Directory policy because the community
 organization was not permitted to ship local programs or unsupported skill
@@ -24,3 +24,7 @@ must reflect the remote MCP connection and published privacy policy.
 Version 0.27.22 also removes obsolete publisher credential-variable setup from
 the historical changelog after the portal flagged that text for manual review.
 There is no corresponding publisher or credential reader in the shared release.
+
+Version 0.27.23 keeps older local-tool release history at its existing public Git
+revision rather than bundling retired credential/setup command examples. Current
+behavior and removed capabilities remain documented in the README.
