@@ -9,6 +9,12 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+## [0.27.22] — 2026-11-09
+
+### Fixed
+
+- Retire obsolete credential-variable setup text for the removed local publisher from the historical changelog. The shared plugin still ships no local programs or credential readers.
+
 ## [0.27.21] — 2026-11-09
 
 ### Changed
@@ -456,15 +462,11 @@ reflects that. CHANGELOG entries below this one are unchanged.
 
 ### Added — opt-in OpenClaw cron publisher
 
-- **`openclaw/bin/publish_pending.py`** — stdlib Python publisher. Reads
-  `content-calendar.json`, finds entries with `status: "ready_to_publish"`
-  and a `bodyPath`, POSTs each to `$NOTFAIR_PUBLISH_URL` (default:
-  `https://notfair.co/api/blog/publish`) with `Authorization: Bearer
-  $NOTFAIR_PUBLISH_TOKEN`. Dry-run by default — needs `--commit` (or
-  `OPENCLAW_PUBLISH_COMMIT=1`) to actually fire. Response handling:
-  2xx → `published` with stored URL; 4xx → `failed` (non-retryable);
-  5xx / network error → entry stays `ready_to_publish`, exits non-zero so
-  the next cron pass retries.
+- Added an opt-in content-calendar publisher that submitted approved entries
+  to a configured publishing webhook with explicit authentication. It defaulted
+  to dry-run, recorded successful publications, and distinguished permanent
+  failures from retryable server/network errors. This local publisher was later
+  removed from the plugin; its former environment and command setup is retired.
 - **`openclaw/install/install-openclaw-cron.sh --enable-publisher`** — new
   opt-in flag that registers a recurring `Toprank NotFair Publisher` cron
   job via `openclaw cron add`. Default interval: 15m (override with
