@@ -1,4 +1,4 @@
-# Claude submission preparation — 0.27.21
+# Claude submission preparation — 0.27.22
 
 The full 0.27.18 plugin was refused by Directory policy because the community
 organization was not permitted to ship local programs or unsupported skill
@@ -20,3 +20,7 @@ Local checks and portal validation do not establish security-scan acceptance or
 publication. Verify the exact `main` commit in the existing submission and report
 its actual state after resubmission. The portal's data-transmission declaration
 must reflect the remote MCP connection and published privacy policy.
+
+Version 0.27.22 also removes obsolete publisher credential-variable setup from
+the historical changelog after the portal flagged that text for manual review.
+There is no corresponding publisher or credential reader in the shared release.
