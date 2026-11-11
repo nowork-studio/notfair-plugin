@@ -6,13 +6,13 @@ Complete reference for validating, testing, and troubleshooting structured data.
 
 ### Google Rich Results Test
 - **URL**: https://search.google.com/test/rich-results
-- **Purpose**: Check if your schema is eligible for Google rich results
+- **Purpose**: Assess Google's supported rich result types. A passing check does not guarantee display.
 - **Tests**: Live URL or code snippet
 - **Output**: Errors, warnings, eligible rich result types
 
 ### Schema.org Validator
 - **URL**: https://validator.schema.org/
-- **Purpose**: Validate against official Schema.org specification
+- **Purpose**: Validate syntax and vocabulary against Schema.org, including types without a Google rich result
 - **Tests**: URL, code snippet, or microdata
 - **Output**: Technical validation errors
 
@@ -115,6 +115,9 @@ Complete reference for validating, testing, and troubleshooting structured data.
 
 ### FAQPage Schema
 
+Use this for semantic markup when requested. Map visible publisher-authored
+questions and answers to the fields below.
+
 | Property | Status | Notes |
 |----------|--------|-------|
 | @type | Required | Must be "FAQPage" |
@@ -122,9 +125,10 @@ Complete reference for validating, testing, and troubleshooting structured data.
 | Question.name | Required | The question text |
 | Answer.text | Required | The answer text |
 
-**Minimum**: 2 Q&A pairs
-
 ### HowTo Schema
+
+Use this for semantic markup when requested. Map the visible instructions in
+their displayed order.
 
 | Property | Status | Notes |
 |----------|--------|-------|
@@ -132,12 +136,10 @@ Complete reference for validating, testing, and troubleshooting structured data.
 | name | Required | Title of the how-to |
 | step | Required | Array of HowToStep objects |
 | step.text | Required | Step instructions |
-| image | Recommended | Improves visibility |
-| totalTime | Recommended | Shows duration in results |
+| image | Optional | Illustrates the process |
+| totalTime | Optional | Describes duration |
 | supply | Recommended | Lists materials needed |
 | tool | Recommended | Lists tools needed |
-
-**Minimum**: 2 steps with text
 
 ### Article Schema
 
@@ -203,37 +205,9 @@ Complete reference for validating, testing, and troubleshooting structured data.
 
 ## Google Rich Result Eligibility Requirements
 
-### FAQ Rich Results
-
-**Eligibility checklist**:
-- [ ] Minimum 2 Q&A pairs
-- [ ] Questions are actual questions (contain "?")
-- [ ] Answers are complete and comprehensive
-- [ ] Content matches visible page content exactly
-- [ ] Not a forum or Q&A page where users can submit answers
-- [ ] Not advertising or promotional in nature
-- [ ] Not for medical, legal, or financial advice without proper E-E-A-T
-
-**Ineligible content**:
-- Medical advice without credentials
-- Legal advice
-- Product/service comparisons that are promotional
-- User-generated Q&A (use QAPage instead)
-
-### How-To Rich Results
-
-**Eligibility checklist**:
-- [ ] Minimum 2 steps with clear instructions
-- [ ] Complete process from start to finish
-- [ ] Each step has meaningful text (not just a title)
-- [ ] Not advertising or promotional
-- [ ] Not harmful or dangerous content
-- [ ] Steps are actionable and practical
-
-**Ineligible content**:
-- Single-step processes
-- Recipes (use Recipe schema instead)
-- Promotional tutorials
+Use current Google documentation for supported features. See the
+[decision tree](schema-decision-tree.md) for retired FAQ, HowTo, and sitelinks
+search box features.
 
 ### Product Rich Results
 

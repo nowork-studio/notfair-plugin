@@ -146,8 +146,7 @@ read like AI filler and don't earn the click.
 - **Title tag:** < 60 chars, keyword front-loaded, includes value prop and hook
 - **Meta description:** 120-160 chars, keyword + reason to click
 - **URL slug:** short, readable, keyword-rich. `/blog/optimize-title-tags`
-- **Structured data:** `Article` or `BlogPosting` (with `image` populated); add
-  `HowTo` for tutorials, `FAQPage` for FAQ sections
+- **Structured data:** `Article` or `BlogPosting` with the article image where applicable.
 
 ---
 
@@ -309,7 +308,8 @@ CTA with local contact
 - **Title tag:** "[Service/Product] — [Benefit] | [Brand]" (< 60 chars)
 - **Meta description:** 120-160 chars, includes CTA ("Get started free", "See pricing")
 - **URL slug:** `/[service-name]`, `/products/[product-name]`, `/[service]-[city]`
-- **Structured data:** Service page → `Service` + `FAQPage`; Product → `Product` + `Offer` + `FAQPage`; Local → `LocalBusiness` + `FAQPage`
+- **Structured data:** `Service`, `Product` with `Offer`, or `LocalBusiness`
+  where it matches the page. Use the [schema decision tree](../../schema-markup-generator/references/schema-decision-tree.md).
 
 ---
 
@@ -347,7 +347,7 @@ that format — don't fight the SERP.
 - [ ] Compliance-sensitive claims are backed by official sources and scoped correctly
 
 ### Should-Have
-- [ ] Structured data (Article, Product, Service, HowTo, FAQPage)
+- [ ] Applicable structured data matches visible content
 - [ ] External links to authoritative sources
 - [ ] Author byline with credentials
 - [ ] Last-updated date for evergreen content

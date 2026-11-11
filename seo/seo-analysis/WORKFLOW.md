@@ -341,46 +341,53 @@ Based on the homepage and top pages content, classify as one of:
 - Professional services (agency, consultant, law firm)
 - Media / news (articles published frequently)
 
-**Step 2: Define expected schema for site type**
+**Step 2: Identify relevant schema for each page**
 
-| Site Type | Must Have | High Impact if Missing | Nice to Have |
-|-----------|-----------|------------------------|--------------|
-| E-commerce | Product, BreadcrumbList | AggregateRating, FAQPage, Offer | SiteLinksSearchBox |
-| Local business | LocalBusiness, GeoCoordinates | OpeningHoursSpecification, AggregateRating | FAQPage |
-| SaaS | Organization, SoftwareApplication | FAQPage, BreadcrumbList | HowTo, Review |
-| Content / blog | Article or BlogPosting | FAQPage, BreadcrumbList | HowTo, Video |
-| Professional services | Organization, Service | FAQPage, Review | ProfessionalService, Person |
-| Media / news | NewsArticle | BreadcrumbList | VideoObject, ImageObject |
+| Site type | Candidate types by page | Add when supported by visible content |
+|-----------|-------------------------|---------------------------------------|
+| E-commerce | `Product` on product pages, `BreadcrumbList` on navigable pages | `Offer` for real offers, `AggregateRating` for eligible product ratings |
+| Local business | `LocalBusiness` on business or location pages | Opening hours and location details when verified |
+| SaaS | `Organization` on the homepage, `SoftwareApplication` on relevant app pages | `Offer` for actual plans, `Review` where eligible |
+| Content / blog | `Article` or `BlogPosting` on articles | `BreadcrumbList`, `VideoObject` when applicable |
+| Professional services | `Organization` on the homepage, `Service` where it describes an actual offering | `Person` for visible profiles |
+| Media / news | `NewsArticle` on news articles | `BreadcrumbList`, `VideoObject` when applicable |
+
+Use the [schema decision tree](../schema-markup-generator/references/schema-decision-tree.md)
+to distinguish semantic markup from Google feature eligibility. Missing
+`FAQPage`, `HowTo`, or sitelinks search box markup is not a Google Search gap.
+Prioritize missing or invalid markup only where an active feature applies and
+the page has the supporting content. Do not assume site-wide eligibility.
 
 **Step 3: Audit each top page for actual schema present**
 
 For each audited page, extract any `<script type="application/ld+json">` blocks.
-List what `@type` values are present. Then compare against the expected set for
-this site type.
+List the observed `@type` values and assess them against the page's content and
+the applicable feature requirements.
 
 Report findings:
 
-| Page URL | Schema found | Missing high-impact schema | Errors in existing schema |
-|----------|-------------|---------------------------|---------------------------|
-| /        | Organization | FAQPage, SiteLinksSearchBox | None |
-| /pricing | SoftwareApplication | FAQPage, Offer | Missing `price` property |
+| Page URL | Schema found | Applicable opportunity | Errors in existing schema |
+|----------|-------------|------------------------|---------------------------|
+| / | `Organization` | None identified | None |
+| /shop/widget | `Product`, `Offer` | Product snippet | Offer lacks the price shown on the page |
 
 **Step 4: Flag errors in existing schema**
 
 Common issues to check:
-- Missing required fields for the `@type` (e.g., Product schema without `name`
-  or `offers`)
+- Missing properties required by the applicable feature. For example, Google's
+  product snippet requires `name` and at least one of `offers`, `review`, or
+  `aggregateRating`.
 - `url` properties using relative paths instead of absolute URLs
 - Dates not in ISO 8601 format
 - `AggregateRating` with `ratingCount` of 0 or missing
 - Duplicate schema blocks for the same type on one page
 - Schema that describes content not visible on the page (violates Google policy)
 
-Cross-reference with rich result status from the optional URL Inspection results URL Inspection — if a
-page showed rich result errors there, find the cause here.
+Cross-reference applicable rich result errors with supplied or connected URL
+Inspection results when available.
 
 After presenting the schema audit, offer:
-> "I found [N] pages missing high-impact schema and [N] pages with errors in
+> "I found [N] pages with applicable markup opportunities and [N] pages with errors in
 > existing schema. Run `/schema-markup-generator` to generate correct JSON-LD for
 > each — it will use the site type and page content from this audit."
 
@@ -612,7 +619,7 @@ If the metadata audit found [N] pages with issues:
 
 If the schema audit found gaps or errors:
 
-> "I found [N] pages missing high-impact schema and [N] pages with schema errors.
+> "I found [N] pages with applicable markup opportunities and [N] pages with schema errors.
 > Run `/schema-markup-generator` to generate correct JSON-LD. The schema audit
 > table from this report is the input — it already identifies the site type and
 > what schema types are needed per page."

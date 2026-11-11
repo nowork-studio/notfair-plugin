@@ -215,8 +215,8 @@ should be compressed to the displayed size before publishing.
    screenshot / illustrative / data viz), placement (which H2), descriptive alt
    text, a filename suggestion, and a detailed generation prompt (see "Image
    generation" below)
-5. JSON-LD structured data (`Article`/`BlogPosting` with `image` populated, plus
-   `FAQPage` if FAQ included)
+5. Applicable JSON-LD structured data, such as `Article` or `BlogPosting` with
+   the article image
 6. Internal linking plan (pages to link to and from)
 7. Publishing checklist
 
@@ -239,7 +239,8 @@ written.
 1. Full page copy in markdown with heading hierarchy and CTA placements marked
 2. SEO metadata: title tag, meta description, URL slug
 3. Conversion strategy: primary CTA, objections addressed, trust signals
-4. JSON-LD structured data (`Service`/`Product`/`LocalBusiness` + `FAQPage`)
+4. Applicable JSON-LD structured data for the visible offering, following the
+   [schema decision tree](../schema-markup-generator/references/schema-decision-tree.md)
 5. Internal linking plan + navigation placement suggestion
 6. Publishing checklist
 

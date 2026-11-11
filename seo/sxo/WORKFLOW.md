@@ -48,8 +48,9 @@ problem on the page.
 
 - **Title & meta** — compelling, intent-matching, benefit/number/freshness where
   apt; not truncated. Compare CTR vs. expected for the position.
-- **Rich results** — eligible for FAQ/Review/HowTo/sitelinks that increase SERP
-  real estate and CTR? Flag missing schema (hand to `/schema-markup-generator`).
+- **Rich results** — check eligibility for applicable supported features, such
+  as product or review snippets. Refer supported schema gaps to
+  [`schema-markup-generator`](../schema-markup-generator/WORKFLOW.md).
 - **URL & breadcrumb** display — clean and trustworthy.
 
 ## Phase 2 — Post-click experience (anti-pogo-stick)

@@ -167,7 +167,7 @@ Marketing work gets unreliable when every request goes through the same vague pr
 | [`meta-tags-optimizer`](seo/meta-tags-optimizer/) | Improves titles, meta descriptions, Open Graph tags, and SERP click-through potential. |
 | [`schema-markup-generator`](seo/schema-markup-generator/) | Creates and validates JSON-LD structured data. |
 | [`broken-link-checker`](seo/broken-link-checker/) | Finds broken internal and external links and reports site-health issues. |
-| [`geo-optimizer`](seo/geo-optimizer/) | Audits and rewrites content for citation in AI search and answer engines. |
+| [`geo-optimizer`](seo/geo-optimizer/) | Audits AI search crawler access, improves content, and measures citations, recommendations, and brand facts in AI answers. |
 | [`local-seo`](seo/local-seo/) | Reviews Google Business Profile, local pages, NAP consistency, reviews, and local schema. |
 | [`hreflang-international`](seo/hreflang-international/) | Diagnoses hreflang, canonical, language, and regional targeting problems. |
 | [`sitemap-audit`](seo/sitemap-audit/) | Checks XML sitemap structure, freshness, coverage, and URL validity. |

@@ -39,7 +39,7 @@
         "Keyword Cannibalization section addresses 'saas analytics' competing between homepage and /features",
         "Traffic Drops section addresses the blog/mrr-vs-arr page dropping 50% (-110 clicks)",
         "Metadata Issues section is present (checks real page metadata or notes it needs crawling)",
-        "Schema Gaps section is present with site type identified as SaaS and expected schema types listed",
+        "Schema Gaps section is present with site type identified as SaaS and page-specific opportunities listed, without flagging FAQPage, HowTo, or sitelinks search box markup as missing Google features",
         "The report offers to run /meta-tags-optimizer, /schema-markup-generator, or /keyword-research as follow-up",
         "30-Day Action Plan table is present with at least 3 prioritized actions"
       ]

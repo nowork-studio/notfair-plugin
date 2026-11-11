@@ -9,6 +9,17 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+## [0.27.24] — 2026-11-10
+
+### Fixed
+
+- Separate valid Schema.org markup from current Google rich result eligibility. Stop flagging missing FAQ, HowTo, and sitelinks search box markup as Google Search gaps.
+- Check AI search crawler access on live URLs and distinguish search crawlers, training controls, and user-triggered fetches.
+
+### Added
+
+- Add repeatable GEO measurement for buyer questions, brand mentions, recommendations, citations, and fact checks, with support for supplied Bing AI Performance and Search Console Generative AI reports.
+
 ## [0.27.23] — 2026-11-09
 
 ### Fixed

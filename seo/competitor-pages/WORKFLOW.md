@@ -64,8 +64,9 @@ date, and author/E-E-A-T signals.
 ## Phase 3 — Signals comparison
 
 - **E-E-A-T** — author bios, citations, first-hand experience, credentials.
-- **Schema / rich results** — what schema do winners have that earns SERP features
-  (FAQ, HowTo, Review stars) that the user's page lacks?
+- **Schema / rich results** — record the rich results actually observed, then
+  check whether the user's page meets the [applicable requirements](../schema-markup-generator/references/schema-decision-tree.md).
+  Competitor markup alone does not establish feature eligibility.
 - **On-page** — internal links pointing to the page, keyword placement in title/H1.
 
 ## Phase 4 — Brief

@@ -4,14 +4,37 @@
     {
       "id": 1,
       "prompt": "do a GEO audit of https://example.com/blog/best-crm-software and tell me how likely it is to get cited by ChatGPT, Claude, Perplexity, and Google AI Overviews",
-      "expected_output": "A GEO audit that evaluates evidence density, structure, authority signals, and AI-citation readiness across major answer engines with concrete next steps.",
+      "expected_output": "A GEO audit that evaluates observable readiness signals and suggests concrete next steps, with unverified checks and observed citation evidence clearly identified.",
       "files": [],
       "expectations": [
         "Recognizes this as a GEO audit request",
         "Assesses AI-search readiness rather than traditional SEO alone",
         "Discusses evidence density, structure, or authority signals",
         "Differentiates considerations across multiple AI engines",
-        "Provides concrete recommendations without fabricating evidence"
+        "Provides concrete recommendations without fabricating evidence or presenting the rubric as citation probability"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Audit AI crawler access for https://example.test/pricing using this supplied capture only. The live robots.txt has GPTBot and ClaudeBot set to Disallow: /, OAI-SearchBot set to Disallow: /pricing, and Claude-SearchBot set to Allow: /. We want both search surfaces and no training crawl. The raw HTML has the pricing table. A probe with a Claude-SearchBot user agent returned 200, and no CDN logs are available. What is actually blocked?",
+      "expected_output": "A crawler access audit identifying the unintended OAI-SearchBot robots block on /pricing and the allowed Claude-SearchBot robots policy, with actual edge access unverified.",
+      "files": [],
+      "expectations": [
+        "Treats the GPTBot and ClaudeBot blocks as intended training preferences and does not suggest removing them",
+        "Identifies the specific OAI-SearchBot block without claiming that access for every surface is blocked",
+        "Distinguishes Claude-SearchBot robots permission, raw HTML evidence, and unverified edge access despite the probe's HTTP 200"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Measure ExampleSoft AI visibility from these provided records only. Buyer question Q1: Which apps should a small team use to make product demos? Two independent ChatGPT Search answers on the same day: A names ExampleSoft, recommends another app and cites https://reviews.example.net/demo-tools; B recommends ExampleSoft and cites https://examplesoft.test/plans and https://reviews.example.net/old-pricing, claiming it costs $9. The cited old-pricing page says $9, but the official current plan page says $19 for the same market and plan. A planned third run failed. Claude with web search was unavailable. Bing AI Performance shows 21 citations and the dedicated Google Search Console Generative AI performance report shows 38 impressions in the supplied October window. Give me a baseline and the next fact check.",
+      "expected_output": "A ChatGPT Search baseline of 2/2 mentions, 1/2 recommendations and 1/2 first-party citations. One failed run and unavailable Claude coverage are explicit. Reports preserve 21 Bing citations and 38 Google impressions independently. The discrepancy traces to the verified older third-party source and is pending comparable follow-up samples.",
+      "files": [],
+      "expectations": [
+        "Reports the three correct counts and denominators without treating failed or unavailable runs as negative observations",
+        "Preserves first-party and third-party cited URLs and proposes a comparable rerun",
+        "Reports Bing citations and Google impressions with the supplied window and never combines them with prompt counts or claims conversions",
+        "Identifies the $9 versus $19 discrepancy, identifies the outdated source, and gives a verification plan without claiming it was fixed"
       ]
     }
   ]
