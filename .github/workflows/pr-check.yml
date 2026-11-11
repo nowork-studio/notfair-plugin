@@ -1,0 +1,520 @@
+# Fast PR integrity check for the shared declarative plugin.
+#
+# Directory packaging treats the repository root as the plugin. YAML is an
+# allowed file type; Python/shell programs are not (LOCAL_CODE_FILE_TYPE).
+# Keep this check inlined here rather than adding a .py/.sh file to the tree.
+name: PR check
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pr-check-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  plugin-integrity:
+    name: Plugin integrity
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Validate manifests, skills, and references
+        run: |
+          python3 - <<'PY'
+          """Minimal plugin integrity checks. Stdlib only. Intended to be inlined in CI."""
+          from __future__ import annotations
+
+          import json
+          import os
+          import re
+          import subprocess
+          import sys
+          from pathlib import Path
+
+          ROOT = Path(os.environ.get("GITHUB_WORKSPACE") or os.getcwd()).resolve()
+
+          ALLOWED_FRONTMATTER_KEYS = ("name", "description")
+          MAX_DESCRIPTION_CHARS = 1024
+          PATH_EXTENSIONS = (".md", ".json", ".png", ".yml", ".yaml", ".txt", ".py", ".sh")
+          REPO_ROOT_PREFIXES = (
+              ".claude-plugin/",
+              ".codex-plugin/",
+              ".cursor-plugin/",
+              ".github/",
+              "skills/",
+              "docs/",
+              "assets/",
+              "paid-ads/",
+              "google-ads/",
+              "meta-ads/",
+              "analytics/",
+              "wordpress/",
+              "gohighlevel/",
+              "seo/",
+              "install/",
+          )
+          REPO_ROOT_FILES = {
+              ".mcp.json",
+              "AGENTS.md",
+              "README.md",
+              "CHANGELOG.md",
+              "CONTRIBUTING.md",
+              "LICENSE",
+              "plugin.json",
+              "mcp.json",
+              "server.json",
+              "gemini-extension.json",
+              "INSTALL_FOR_AGENTS.md",
+              "SECURITY.md",
+          }
+          RELATIVE_DIR_NAMES = {
+              "references",
+              "shared",
+              "evals",
+              "agents",
+              "docs",
+              "assets",
+              "skills",
+          }
+          JSON_PATH_KEYS = {
+              "skills",
+              "icon",
+              "logo",
+              "composerIcon",
+              "mcpServers",
+              "contextFileName",
+              "source",
+          }
+          VERSIONED_MANIFESTS = (
+              ".claude-plugin/plugin.json",
+              ".codex-plugin/plugin.json",
+              ".cursor-plugin/plugin.json",
+              "plugin.json",
+              "gemini-extension.json",
+          )
+          JSON_FILES = VERSIONED_MANIFESTS + (
+              ".claude-plugin/marketplace.json",
+              "server.json",
+              "mcp.json",
+              ".mcp.json",
+          )
+
+          # Existing breakage that is not a real missing file. Add (source, target) pairs
+          # with a comment explaining why the check should pass. Leave empty when main is clean.
+          ALLOWLISTED_REFS: set[tuple[str, str]] = set()
+
+          MD_LINK = re.compile(r"\[[^\]]*\]\(([^)]+)\)")
+          MD_REFDEF = re.compile(r"^\[(?:[^\]]+)\]:\s+(\S+)", re.M)
+          BACKTICK = re.compile(r"`([^`]+)`")
+          FENCE = re.compile(r"```.*?```", re.S)
+          SKILL_PATH = re.compile(r"skills/[A-Za-z0-9._-]+/SKILL\.md")
+
+          errors: list[str] = []
+
+
+          def error(message: str) -> None:
+              errors.append(message)
+
+
+          def rel(path: Path) -> str:
+              return path.resolve().relative_to(ROOT).as_posix()
+
+
+          def tracked_files() -> list[Path]:
+              raw = subprocess.check_output(["git", "ls-files", "-z"], cwd=ROOT)
+              return [ROOT / name.decode() for name in raw.split(b"\0") if name]
+
+
+          def load_json(path: Path) -> object:
+              try:
+                  return json.loads(path.read_text(encoding="utf-8"))
+              except Exception as exc:  # noqa: BLE001 — report any parse failure
+                  error(f"{rel(path)}: invalid JSON ({exc})")
+                  return None
+
+
+          def nested(data: object, *keys: str | int) -> object:
+              current = data
+              for key in keys:
+                  if isinstance(key, int):
+                      if not isinstance(current, list) or key >= len(current):
+                          return None
+                      current = current[key]
+                  else:
+                      if not isinstance(current, dict) or key not in current:
+                          return None
+                      current = current[key]
+              return current
+
+
+          def require_fields(path: Path, data: object, fields: tuple[str, ...]) -> None:
+              if not isinstance(data, dict):
+                  error(f"{rel(path)}: expected a JSON object")
+                  return
+              for field in fields:
+                  value = data.get(field)
+                  if value is None or value == "" or value == []:
+                      error(f"{rel(path)}: missing required field {field!r}")
+
+
+          def parse_frontmatter(path: Path) -> dict[str, str] | None:
+              text = path.read_text(encoding="utf-8")
+              if not text.startswith("---") or text.splitlines()[0].strip() != "---":
+                  error(f"{rel(path)}: missing YAML frontmatter")
+                  return None
+              lines = text.splitlines()
+              end = next((i for i, line in enumerate(lines[1:], 1) if line.strip() == "---"), None)
+              if end is None:
+                  error(f"{rel(path)}: unclosed YAML frontmatter")
+                  return None
+
+              fields: dict[str, str] = {}
+              order: list[str] = []
+              key: str | None = None
+              chunks: list[str] = []
+
+              def flush() -> None:
+                  nonlocal key, chunks
+                  if key is None:
+                      return
+                  raw = "\n".join(chunks).strip()
+                  value = raw
+                  if value in {">", ">-", "|", "|-"}:
+                      value = ""
+                  elif value.startswith((">", "|")):
+                      marker, _, rest = value.partition("\n")
+                      joiner = "\n" if marker.startswith("|") else " "
+                      value = joiner.join(part.strip() for part in rest.splitlines() if part.strip())
+                  if len(value) >= 2 and value[0] == value[-1] and value[0] in {'"', "'"}:
+                      value = value[1:-1]
+                  fields[key] = value
+                  key = None
+                  chunks = []
+
+              for line in lines[1:end]:
+                  if line and not line[0].isspace() and ":" in line:
+                      flush()
+                      name, _, rest = line.partition(":")
+                      if not re.fullmatch(r"[\w-]+", name):
+                          error(f"{rel(path)}: invalid frontmatter key {name!r}")
+                          continue
+                      key = name
+                      order.append(name)
+                      chunks = [rest]
+                  elif key is not None:
+                      chunks.append(line)
+                  elif line.strip():
+                      error(f"{rel(path)}: unexpected frontmatter line {line!r}")
+              flush()
+
+              extra = [name for name in order if name not in ALLOWED_FRONTMATTER_KEYS]
+              if extra:
+                  error(
+                      f"{rel(path)}: unsupported frontmatter keys {extra} "
+                      f"(Directory allows only {list(ALLOWED_FRONTMATTER_KEYS)})"
+                  )
+              missing = [name for name in ALLOWED_FRONTMATTER_KEYS if not fields.get(name)]
+              if missing:
+                  error(f"{rel(path)}: frontmatter missing {missing}")
+                  return None
+              if len(fields["description"]) > MAX_DESCRIPTION_CHARS:
+                  error(
+                      f"{rel(path)}: description is {len(fields['description'])} chars "
+                      f"(limit {MAX_DESCRIPTION_CHARS})"
+                  )
+              return fields
+
+
+          def skip_target(target: str) -> bool:
+              stripped = target.strip().strip("<>").strip()
+              if not stripped or stripped in {"URL", "...", "…"}:
+                  return True
+              if stripped.startswith(("#", "/", "<", "$", "~")):
+                  return True
+              if any(token in stripped for token in ("<", ">", "{", "}", "*", "...")):
+                  return True
+              if re.match(r"^[a-zA-Z][a-zA-Z0-9+.-]*:", stripped):
+                  return True
+              return False
+
+
+          def normalize_target(raw: str) -> str:
+              target = raw.strip().strip("<>").split()[0]
+              target = target.split("#", 1)[0]
+              target = target.split("?", 1)[0]
+              return target
+
+
+          def looks_like_path(target: str) -> bool:
+              if skip_target(target):
+                  return False
+              lower = target.lower()
+              if target.startswith("./") or target.startswith("../"):
+                  return target.endswith("/") or lower.endswith(PATH_EXTENSIONS)
+              if target in REPO_ROOT_FILES:
+                  return True
+              if any(target.startswith(prefix) for prefix in REPO_ROOT_PREFIXES):
+                  return lower.endswith(PATH_EXTENSIONS)
+              first = target.split("/", 1)[0]
+              return (
+                  "/" in target
+                  and first in RELATIVE_DIR_NAMES
+                  and lower.endswith(PATH_EXTENSIONS)
+              )
+
+
+          def inside_repo(path: Path) -> bool:
+              try:
+                  path.resolve().relative_to(ROOT)
+                  return True
+              except ValueError:
+                  return False
+
+
+          def check_ref(source: Path, raw_target: str, from_root: bool = False) -> None:
+              if skip_target(raw_target):
+                  return
+              target = normalize_target(raw_target)
+              if not target or skip_target(target):
+                  return
+              source_rel = rel(source)
+              if (source_rel, raw_target) in ALLOWLISTED_REFS or (source_rel, target) in ALLOWLISTED_REFS:
+                  return
+
+              candidates = []
+              if from_root:
+                  candidates.append((ROOT / target).resolve())
+              else:
+                  candidates.append((source.parent / target).resolve())
+                  if not target.startswith("./") and not target.startswith("../"):
+                      candidates.append((ROOT / target).resolve())
+
+              for resolved in candidates:
+                  if not inside_repo(resolved):
+                      error(f"{source_rel}: reference leaves the plugin: {raw_target}")
+                      return
+                  if resolved.exists():
+                      return
+              error(f"{source_rel}: broken reference {raw_target}")
+
+
+          def markdown_targets(text: str) -> list[str]:
+              stripped = FENCE.sub("", text)
+              found = MD_LINK.findall(stripped)
+              found.extend(MD_REFDEF.findall(stripped))
+              for chunk in BACKTICK.findall(stripped):
+                  if looks_like_path(chunk):
+                      found.append(chunk)
+              return found
+
+
+          def collect_json_paths(value: object) -> list[str]:
+              found: list[str] = []
+              if isinstance(value, dict):
+                  for key, item in value.items():
+                      if key in JSON_PATH_KEYS and isinstance(item, str):
+                          found.append(item)
+                      elif key in JSON_PATH_KEYS and isinstance(item, list):
+                          found.extend(part for part in item if isinstance(part, str))
+                      else:
+                          found.extend(collect_json_paths(item))
+              elif isinstance(value, list):
+                  for item in value:
+                      found.extend(collect_json_paths(item))
+              return found
+
+
+          def check_manifests() -> str:
+              loaded: dict[str, object] = {}
+              for relative in JSON_FILES:
+                  path = ROOT / relative
+                  if not path.is_file():
+                      error(f"{relative}: missing JSON file")
+                      continue
+                  loaded[relative] = load_json(path)
+
+              plugin = loaded.get(".claude-plugin/plugin.json")
+              marketplace = loaded.get(".claude-plugin/marketplace.json")
+              plugin_path = ROOT / ".claude-plugin/plugin.json"
+              marketplace_path = ROOT / ".claude-plugin/marketplace.json"
+
+              if isinstance(plugin, dict):
+                  require_fields(
+                      plugin_path,
+                      plugin,
+                      ("name", "version", "description", "author", "skills", "license"),
+                  )
+                  if not isinstance(plugin.get("skills"), list) or not plugin["skills"]:
+                      error(f"{rel(plugin_path)}: skills must be a non-empty list")
+              if isinstance(marketplace, dict):
+                  require_fields(marketplace_path, marketplace, ("name", "owner", "plugins"))
+                  plugins = marketplace.get("plugins")
+                  if not isinstance(plugins, list) or not plugins:
+                      error(f"{rel(marketplace_path)}: plugins must be a non-empty list")
+                  else:
+                      require_fields(
+                          marketplace_path,
+                          plugins[0],
+                          ("name", "source", "version", "description"),
+                      )
+                  meta_version = nested(marketplace, "metadata", "version")
+                  plugin_version = nested(marketplace, "plugins", 0, "version")
+                  if (
+                      isinstance(meta_version, str)
+                      and isinstance(plugin_version, str)
+                      and meta_version != plugin_version
+                  ):
+                      error(
+                          f"{rel(marketplace_path)}: metadata.version {meta_version!r} != "
+                          f"plugins[0].version {plugin_version!r}"
+                      )
+
+              versions: dict[str, str] = {}
+              for relative in VERSIONED_MANIFESTS:
+                  data = loaded.get(relative)
+                  path = ROOT / relative
+                  if not isinstance(data, dict):
+                      continue
+                  if relative != ".claude-plugin/plugin.json":
+                      require_fields(path, data, ("name", "version", "description"))
+                  version = data.get("version")
+                  if isinstance(version, str):
+                      versions[relative] = version
+              if isinstance(nested(marketplace, "metadata", "version"), str):
+                  versions[".claude-plugin/marketplace.json#metadata"] = str(
+                      nested(marketplace, "metadata", "version")
+                  )
+              if isinstance(nested(marketplace, "plugins", 0, "version"), str):
+                  versions[".claude-plugin/marketplace.json#plugins[0]"] = str(
+                      nested(marketplace, "plugins", 0, "version")
+                  )
+              unique = set(versions.values())
+              if len(unique) > 1:
+                  error(
+                      "plugin version mismatch: "
+                      + ", ".join(f"{name}={version}" for name, version in versions.items())
+                  )
+
+              for relative, data in loaded.items():
+                  if data is None:
+                      continue
+                  path = ROOT / relative
+                  for target in collect_json_paths(data):
+                      if looks_like_path(target) or target in {"AGENTS.md", "./"}:
+                          check_ref(path, target, from_root=True)
+
+              plugin_version = ""
+              if isinstance(plugin, dict) and isinstance(plugin.get("version"), str):
+                  plugin_version = plugin["version"]
+              return plugin_version
+
+
+          def check_skills() -> None:
+              plugin = load_json(ROOT / ".claude-plugin/plugin.json")
+              registered: list[str] = []
+              if isinstance(plugin, dict) and isinstance(plugin.get("skills"), list):
+                  registered = [str(item) for item in plugin["skills"]]
+
+              skill_files = sorted(
+                  path
+                  for path in tracked_files()
+                  if path.name == "SKILL.md" and path.parent.parent == ROOT / "skills"
+              )
+              seen_names: set[str] = set()
+              for path in skill_files:
+                  fields = parse_frontmatter(path)
+                  if not fields:
+                      continue
+                  directory = path.parent.name
+                  if fields["name"] != directory:
+                      error(f"{rel(path)}: name {fields['name']!r} != directory {directory!r}")
+                  if fields["name"] in seen_names:
+                      error(f"duplicate skill name {fields['name']!r}")
+                  seen_names.add(fields["name"])
+
+              registered_names = [Path(item).name for item in registered]
+              disk_names = [path.parent.name for path in skill_files]
+              missing = sorted(set(disk_names) - set(registered_names))
+              extra = sorted(set(registered_names) - set(disk_names))
+              if missing:
+                  error(f".claude-plugin/plugin.json missing skills: {missing}")
+              if extra:
+                  error(f".claude-plugin/plugin.json extra skills: {extra}")
+              for item in registered:
+                  if not (ROOT / item / "SKILL.md").is_file():
+                      error(f"{item}: registered skill is missing SKILL.md")
+
+              for path in tracked_files():
+                  if path.name == "WORKFLOW.md":
+                      parse_frontmatter(path)
+
+              agents = ROOT / "AGENTS.md"
+              if agents.is_file():
+                  for match in SKILL_PATH.findall(agents.read_text(encoding="utf-8")):
+                      check_ref(agents, match, from_root=True)
+
+
+          def check_markdown_and_templates() -> None:
+              files = tracked_files()
+              for path in files:
+                  if path.suffix == ".md":
+                      for target in markdown_targets(path.read_text(encoding="utf-8")):
+                          check_ref(path, target, from_root=False)
+
+              templates = [
+                  path
+                  for path in files
+                  if path.suffix == ".in" and "distribution" in path.parts
+              ]
+              if not templates:
+                  print("distribution templates: none present; skipped")
+                  return
+              print(f"distribution templates: checking {len(templates)} file(s)")
+              for path in templates:
+                  for target in markdown_targets(path.read_text(encoding="utf-8")):
+                      check_ref(path, target, from_root=False)
+
+
+          def main() -> int:
+              os.chdir(ROOT)
+              check_manifests()
+              check_skills()
+              check_markdown_and_templates()
+              if errors:
+                  print(f"plugin check failed ({len(errors)}):")
+                  for message in errors:
+                      print(f"  - {message}")
+                  return 1
+              skill_count = len(list((ROOT / "skills").glob("*/SKILL.md")))
+              plugin = load_json(ROOT / ".claude-plugin/plugin.json")
+              version = plugin.get("version") if isinstance(plugin, dict) else "unknown"
+              print(
+                  f"plugin check passed: {skill_count} skills, "
+                  f"host version {version}, "
+                  f"{len(ALLOWLISTED_REFS)} allowlisted refs"
+              )
+              return 0
+
+
+          if __name__ == "__main__":
+              sys.exit(main())
+          PY
+
+      - name: Lint shell scripts
+        run: |
+          scripts="$(git ls-files '*.sh')"
+          if [ -z "$scripts" ]; then
+            echo "No shell scripts; skipping shellcheck."
+            exit 0
+          fi
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq shellcheck
+          echo "$scripts" | xargs --no-run-if-empty shellcheck
+
