@@ -222,7 +222,7 @@ For each fetched competitor page:
 - Count the actual word count in the main content
 - Note the page type and content format (blog, product, guide, listicle, etc.)
 - List the H2 headings to see what subtopics they cover
-- Note any SERP features they hold (featured snippet, FAQ, etc.)
+- Note any observed SERP features, such as featured snippets or product results
 - Identify what they cover that the analyzed page doesn't (content gaps)
 - Identify what the analyzed page has that they don't (competitive advantages)
 
@@ -299,7 +299,7 @@ a specific element on the page and explain exactly what to change.
 |---------|-----------|-----|
 | Featured Snippet | Yes/No | [what to add/change] |
 | People Also Ask | Yes/No | [FAQ section needed?] |
-| Rich Results | Yes/No | [schema needed?] |
+| Supported rich results | [Observed feature or none observed] | [Check page eligibility against current Google feature requirements] |
 
 ---
 
@@ -364,7 +364,7 @@ Found [N] images.
 |-------|--------|---------|
 | Indexability | Indexed / Not Indexed / Blocked | [details from URL Inspection or robots.txt] |
 | Mobile Ready | Yes / Issues | [viewport, responsive, touch targets] |
-| Schema Markup | [types found] / None | [appropriate? errors?] |
+| Schema Markup | [types found] / None | [semantic fit, errors, applicable Google eligibility] |
 | Page Speed Signals | [render-blocking count, image weight] | [recommendations] |
 | HTTPS | Yes / No | |
 
@@ -404,6 +404,7 @@ Based on findings, offer relevant next steps:
 
 - If metadata issues found: "Run `/meta-tags-optimizer [page URL]` for optimized
   title and meta description variants with A/B test suggestions."
+- Assess schema findings with the [schema decision tree](../schema-markup-generator/references/schema-decision-tree.md).
 - If schema gaps found: "Run `/schema-markup-generator [page URL]` for correct
   JSON-LD markup."
 - If content needs rewriting: "Run `/content-writer` with the target keyword and

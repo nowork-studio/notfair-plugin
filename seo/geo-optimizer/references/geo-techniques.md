@@ -114,7 +114,7 @@ Four pillars, weighted as in the audit scoring:
 | Sequential steps in numbered lists | Required if procedural |
 | FAQ section with question-format H2/H3 | Required for informational |
 | Average paragraph length | 2–4 sentences |
-| JSON-LD schema | `Article` minimum, `FAQPage` if FAQ, `HowTo` if procedural |
+| JSON-LD schema | Where applicable, valid markup that matches the page |
 
 ### Pillar 3 — Authority Signals (25%)
 
@@ -132,13 +132,10 @@ Four pillars, weighted as in the audit scoring:
 
 | Signal | Target |
 |--------|--------|
-| robots.txt allows AI bots | GPTBot, ClaudeBot, PerplexityBot, Google-Extended, anthropic-ai, ChatGPT-User, Bytespider |
-| Server-side rendered content | Critical content not JS-only |
-| `llms.txt` at site root | Optional but adopted by 784+ sites as of mid-2025 |
-| HTTPS + HSTS | Required |
-| Canonical URLs | Required |
-| `<time>` tags + `dateModified` | Required for freshness signal |
-| Schema validates | Use Rich Results Test |
+| Search crawler policy | Live robots rules allow intended target crawlers on the audited URL |
+| Page delivery | Final status, redirect destination, and any edge challenges are checked |
+| Raw response | Main content is accessible in raw HTML where the target crawler needs it |
+| Search eligibility | Canonical and applicable index or snippet controls match the intended public URL |
 
 ---
 
@@ -149,8 +146,14 @@ For each item in the signal stack, score:
 - **Pass (full points)** — meets target
 - **Partial (50%)** — partial implementation
 - **Fail (0)** — missing or wrong direction (e.g., keyword stuffing present)
+- **Unverified** — no adequate evidence. Leave it out of scored coverage.
+- **Not applicable** — the check does not apply to this page or target surface.
 
-Sum to a 0–100 GEO Score with the pillar weights.
+Show coverage with each pillar. Calculate a weighted editorial score only when
+all required checks have evidence. Within a pillar, use the mean of applicable
+pass/partial/fail scores, then apply the pillar weight. If an entire pillar is
+not applicable, show the individual findings without an overall score. The
+rubric describes readiness and has no calibrated link to citation probability.
 
 ### Veto items (auto-cap at 60)
 
@@ -159,16 +162,18 @@ These either kill citation or expose the user to liability:
 1. **Self-contradictory data** — internal inconsistency on the page
 2. **Title-content intent mismatch** — clickbait
 3. **No identifiable author** — anonymous content rarely gets cited as primary source
-4. **AI crawlers blocked** in robots.txt or CDN/WAF
+4. **Unintended target search crawler block** confirmed in live robots rules or
+   verified CDN/WAF events. Training opt-outs and intentional exclusions never
+   trigger this veto.
 5. **Fabricated citations or stats** detected — hard fail, not a cap
 6. **YMYL content without disclaimers** — health/finance/legal without appropriate warnings
 
 ### GEO Score interpretation
 
-- **80–100** — well-positioned for AI citation; iterate on per-engine playbooks
+- **80–100** — most applicable readiness checks pass
 - **60–79** — solid foundation, missing 1–3 high-leverage signals
 - **40–59** — structural fixes needed before per-engine work pays off
-- **0–39** — rewrite from outline; current content unlikely to be cited
+- **0–39** — many applicable readiness checks need work
 
 ---
 
@@ -286,8 +291,8 @@ Minimum for any article-style content:
 }
 ```
 
-Add `FAQPage` if FAQ section present. Add `HowTo` if procedural. Validate
-at `search.google.com/test/rich-results` before publishing.
+Follow the [schema decision tree](../../schema-markup-generator/references/schema-decision-tree.md)
+for optional semantic markup, applicable Google features, and validation.
 
 ---
 
@@ -395,17 +400,13 @@ explanatory content.
 
 ### Google AI Overviews
 
-**Citation pattern:** ~85% overlap with organic top 10 + featured snippets.
-
 **Optimization moves:**
-- Win the featured snippet for the query (definition box, list, table)
-- Schema markup (`Article`, `FAQPage`, `HowTo`)
-- Direct answer in 40–60 words near top of page
-- Page must already rank top 10 organically — GEO doesn't bypass SEO here
+- Provide a clear answer and original evidence where relevant.
+- Check Googlebot access, indexing, snippet eligibility, and any applicable
+  Search Console inclusion controls. Follow [Google's AI search guidance](https://developers.google.com/search/docs/fundamentals/ai-optimization-guide).
 
 ### Cross-engine moves (do these first)
 
-- llms.txt at site root with content map
 - Author entities with strong `sameAs` linkage
 - Original data publications quarterly
 - Wikipedia / Wikidata presence for the brand
@@ -415,50 +416,49 @@ explanatory content.
 
 ## AI Crawlability
 
-### robots.txt — must allow
+### Crawler roles and site policy
 
-```
-User-agent: GPTBot
-Allow: /
+| Target surface | Search crawler or control | Other roles to report separately |
+|----------------|---------------------------|----------------------------------|
+| ChatGPT Search | `OAI-SearchBot` | `GPTBot` is for model training. `ChatGPT-User` is a user-triggered fetcher. [OpenAI](https://developers.openai.com/api/docs/bots) |
+| Claude search | `Claude-SearchBot` | `ClaudeBot` is for model training. `Claude-User` is a user-triggered fetcher. [Anthropic](https://support.claude.com/en/articles/8896518-does-anthropic-crawl-data-from-the-web-and-how-can-site-owners-block-the-crawler) |
+| Perplexity search | `PerplexityBot` | `Perplexity-User` is a user-triggered fetcher. [Perplexity](https://docs.perplexity.ai/docs/resources/perplexity-crawlers) |
+| Bing and Copilot search visibility | `bingbot` and applicable Bing indexing and snippet controls | [Bing Webmaster Guidelines](https://www.bing.com/webmasters/help/bing-webmaster-guidelines-30fba23a) |
+| Google AI features in Search | `Googlebot`, snippet eligibility, and applicable Search Console controls | `Google-Extended` manages both Gemini training and grounding in specified Gemini products. It does not govern inclusion in AI Overviews or AI Mode in Google Search. [Crawler documentation](https://developers.google.com/crawling/docs/crawlers-fetchers/google-common-crawlers) · [Search generative AI controls](https://support.google.com/webmasters/answer/16908024) |
 
-User-agent: ChatGPT-User
-Allow: /
+Confirm the intended surfaces and preserve training preferences. Flag verified
+search crawler blocks only for pages meant to be accessible on that surface.
+Explain Gemini grounding implications separately if `Google-Extended` is blocked.
+User-triggered fetchers have provider-specific rules. Use the operator's current
+documentation when checking them.
 
-User-agent: ClaudeBot
-Allow: /
+### Live evidence
 
-User-agent: anthropic-ai
-Allow: /
+1. Fetch the page and live `/robots.txt` for the relevant origin, including the
+   final origin after redirects. Record time, response status, redirect chain,
+   and the crawler group and rule applicable to the exact path. Evaluate
+   specific and wildcard rules using the provider's documented behavior.
+   Record unavailable or ambiguous evidence and distinguish it from a confirmed
+   allow or block. Inspect any [CDN-managed robots rules](https://developers.cloudflare.com/bots/additional-configurations/managed-robots-txt/).
+2. Inspect the raw HTML for the main content and check canonical, meta robots,
+   and `X-Robots-Tag` values where relevant. Record a status, redirect, challenge,
+   or unexpected body separately from the robots policy. Treat a user-agent
+   probe as diagnostic only, even if it returns HTTP 200 or 403.
+3. If authorized logs or CDN/WAF events are available, verify actual requests
+   using the provider's published verification method where available or the
+   CDN's verified crawler identity. Record the URL, date, identity evidence,
+   and response or action. Without that evidence, mark actual edge access as
+   unverified. A successful crawl does not establish indexing or citation.
 
-User-agent: PerplexityBot
-Allow: /
-
-User-agent: Perplexity-User
-Allow: /
-
-User-agent: Google-Extended
-Allow: /
-
-User-agent: Bytespider
-Allow: /
-
-User-agent: Applebot-Extended
-Allow: /
-
-User-agent: cohere-ai
-Allow: /
-
-User-agent: meta-externalagent
-Allow: /
-```
-
-If the user is currently blocking these (often inherited from default
-"block all bots" templates), this is the single highest-leverage fix.
+Report each URL and target surface with its robots policy, HTTP evidence,
+verified edge outcome if available, and recommended action. Keep this check
+read-only and follow the shared safety guidance for any proposed policy edits.
 
 ### Optional: llms.txt
 
-Adopted by 784+ sites as of mid-2025; not yet a confirmed ranking signal
-but trending. Place at site root:
+Optional when an identified consumer uses it. Exclude it from GEO readiness
+scoring. Google Search ignores it for visibility and ranking. A file can follow
+this structure when relevant:
 
 ```
 # Site Name
@@ -479,18 +479,6 @@ but trending. Place at site root:
 
 - [Old content](URL): Archive
 ```
-
-### CDN / WAF
-
-Cloudflare, AWS WAF, and Akamai often block AI bots by default. Verify
-in the CDN dashboard separately from robots.txt — robots.txt being
-permissive doesn't help if the WAF returns 403.
-
-### Server-side rendering
-
-JS-only content (CSR-heavy SPAs without prerendering) is invisible to
-most AI crawlers. Use Next.js / Nuxt / Astro / Remix server rendering
-or static generation for any page that should be cited.
 
 ---
 
@@ -523,40 +511,70 @@ These either don't work or actively hurt:
 
 ## Measurement
 
-GEO without measurement is a vibe. Set up at minimum:
+### Build and repeat a buyer-question baseline
 
-### Citation tracking
+1. **Choose the questions.** Start with a manageable set of recurring buyer
+   questions from supplied sales, support, reviews, or search evidence. Cover
+   discovery, comparisons, and purchase decisions. Give each question a stable
+   ID and record its source and intent. Mark invented examples as proposed
+   questions. Keep branded fact checks separate from unbranded discovery and
+   comparison prompts so branded prompts do not inflate discovery rates.
+2. **Capture independent answers.** Use the actual named search surfaces where
+   available, such as ChatGPT Search, Claude with web search, Perplexity, or
+   Gemini. Target at least two independent runs per question and surface for a
+   repeatable baseline. Start a fresh session each time and use signed-out or
+   non-personalized settings where supported. Keep the exact wording, market,
+   locale, and surface or mode stable. Record date, settings and visible model
+   version, including any sign-in or personalization you could not control.
+   Use supplied answers or tracker exports with their recorded provenance.
+   A generic web search or the agent's own answer is not evidence from another
+   engine. Mark inaccessible surfaces and incomplete runs explicitly.
+3. **Keep one record per attempt.** Capture the answer or evidence reference,
+   and record each outcome independently. Use yes, no, or unknown for brand
+   mention, recommendation, and first-party citation. A recommendation requires
+   a suggestion that the buyer consider or choose the brand. A first-party
+   citation requires a visible source URL on a verified brand domain. Preserve
+   the exact cited URLs, including third-party sources where available.
 
-- **Existing measurement reports** — If the user already uses a citation
-  tracker, review a supplied export with prompt, engine, date, brand mention,
-  cited URL, and sampling method. Do not install a tracker or request its API
-  credentials as a prerequisite to this content audit.
-- **Manual baseline** — every 2 weeks, run 5 brand queries + 5 category
-  queries against ChatGPT, Claude, Perplexity, Gemini. Log: cited (Y/N),
-  position in answer, sentiment.
+4. **Compare like-for-like runs.** Report counts and evaluable denominators by
+   surface and question group for mentions, recommendations, and first-party
+   citations. Unknown and failed outcomes are excluded from the relevant
+   denominator and shown as missing coverage. Report counts for small samples.
+   Compare the same question IDs and conditions, and disclose any changes in
+   coverage. Keep an unobserved outcome distinct from an observed zero. Record
+   the sample dates and agree on a rerun interval appropriate to the use case.
 
-### Content KPIs (per page)
+| Question ID and exact text | Surface and mode | Run date and settings | Status and evidence | Brand mentioned | Brand recommended | First-party URL cited | All cited URLs | Fact discrepancy |
+|----------------------------|------------------|-----------------------|---------------------|-----------------|-------------------|----------------------|----------------|------------------|
+| [ID and prompt] | [surface] | [timestamp, locale, session and visible model] | [completed, failed, or unrun and evidence] | [yes/no/unknown] | [yes/no/unknown] | [yes/no/unknown] | [exact URLs or unknown] | [claim ID, none observed, or unknown] |
 
-- GEO Score (this skill's audit)
-- Citations per AI engine, per query
-- Position in AI answer (1st sentence, 1st paragraph, body, footer)
-- Click-through from AI answer (if engine surfaces source links)
-- Organic traffic to the page (control variable)
+### Check brand facts
 
-### Brand KPIs
+Build a dated list of facts from official pricing, plan, platform, and product
+pages or verified user-supplied material. Record the expected value, applicable
+market or plan, primary source, and date checked. For each discrepancy, quote
+the relevant claim, identify the answer and any citation that actually supports
+it, and label the origin unknown when the answer gives no traceable source.
+Recommend a correction at the verified outdated source or a clearer first-party
+reference. Rerun affected prompts in at least two comparable follow-up samples
+before calling a correction durable. Report unresolved claims and coverage gaps.
 
-- Share of Model — % of category-query AI answers mentioning brand
-- Cross-engine coverage — % of monitored engines citing brand
-- Sentiment in AI answers — positive / neutral / negative
-- Wikipedia presence + Wikidata edit recency
+### Read supplied provider reports
 
-### Monthly review
-
-- Which content is being cited? Why? (extract the pattern, replicate)
-- Which content was optimized but isn't cited? Why? (audit fail mode)
-- Which queries does the brand never appear in? (off-site authority gap?)
-- Which engines diverge most from the others? (engine-specific playbook
-  not yet running)
+- [Bing Webmaster Tools AI Performance](https://blogs.bing.com/webmaster/2026/2/Introducing-AI-Performance-in-Bing-Webmaster-Tools-Public-Preview/)
+  reports citation counts, cited pages, and sampled grounding queries across
+  supported Microsoft and partner surfaces. Preserve the supplied scope and date
+  range. Its counts do not identify recommendations or measure all engines.
+- [Search Console Generative AI performance (Search)](https://support.google.com/webmasters/answer/16984139)
+  reports impressions from covered Google Search generative AI features.
+  Preserve the property, report, date range, and dimensions. Keep Discover
+  reports distinct. Standard web search impressions cannot substitute for the
+  dedicated report. Do not infer click counts or brand recommendations from
+  impression-only evidence.
+- Accept supplied exports, screenshots, or tracker data and use a live
+  capability only if its current description verifies access to that specific
+  report. Keep provider figures, prompt samples, and any supplied referral or
+  conversion data in their own units. Do not sum them into a visibility rate.
 
 ---
 
@@ -568,17 +586,17 @@ GEO without measurement is a vibe. Set up at minimum:
 - Quote real named experts from named publications
 - Cite ≥1 external source per 500 words from ≥3 source types
 - Update content every 60 days for competitive queries, 90 days minimum for stable topics
-- Allow all major AI crawlers in robots.txt + CDN
-- Add Article + FAQPage + HowTo schema as appropriate
+- Verify intended search crawler access in live robots rules and at the edge
+- Use markup that fits the content and the applicable feature
 - Build Wikipedia / Wikidata / Reddit presence
-- Track citations across all four major engines
+- Compare citations and recommendations across the sampled surfaces
 - Publish original first-party data quarterly
 
 ### Don't
 - Fabricate stats, quotes, citations, or expert names
 - Keyword-stuff (−8% PAWC, actively hurts)
 - Use vague entities ("experts say", "studies show")
-- Block AI crawlers in robots.txt or WAF
+- Treat intentional training opt-outs as search crawl failures
 - Ship JS-only content without SSR/SSG
 - Treat GEO as identical to SEO (different signals, different weights)
 - Optimize for one engine and assume the others follow

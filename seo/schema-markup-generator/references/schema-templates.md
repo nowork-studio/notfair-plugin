@@ -4,7 +4,8 @@ Complete, copy-ready structured data templates for all major schema types. Custo
 
 ## FAQPage Schema
 
-For pages with frequently asked questions. Minimum 2 Q&A pairs required.
+For visible, publisher-authored questions and answers when semantic markup is
+requested. Google has retired the FAQ rich result.
 
 ```json
 {
@@ -45,7 +46,8 @@ For pages with frequently asked questions. Minimum 2 Q&A pairs required.
 
 ## HowTo Schema
 
-For step-by-step instructional content.
+For visible step-by-step instructions when semantic markup is requested. Google
+has retired the HowTo rich result.
 
 ```json
 {
@@ -575,7 +577,8 @@ For software, apps, and tools.
 
 ## Multiple Schema Types (Combined Array)
 
-To include multiple schema types on one page, wrap them in an array:
+To include multiple applicable schema types on one page, wrap them in an array.
+The `FAQPage` item below illustrates optional semantic markup.
 
 ```html
 <script type="application/ld+json">

@@ -11,7 +11,7 @@
         "Uses FAQPage schema type with mainEntity array",
         "All 3 questions and answers are included with correct Question/acceptedAnswer structure",
         "Includes implementation instructions (where to place in HTML)",
-        "Mentions Google's FAQ rich result eligibility requirements",
+        "Explains that Google retired FAQ rich results and recommends Schema.org validation for semantic markup",
         "JSON-LD is wrapped in a <script type='application/ld+json'> tag"
       ]
     },

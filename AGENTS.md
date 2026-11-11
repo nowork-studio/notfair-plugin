@@ -30,7 +30,7 @@ Skills under `skills/` are **host-agnostic**; each entry loads its full workflow
 | Title tags, meta descriptions, Open Graph, CTR | `meta-tags-optimizer` | `skills/meta-tags-optimizer/SKILL.md` |
 | JSON-LD / structured data (FAQ, Product, HowTo, etc.) | `schema-markup-generator` | `skills/schema-markup-generator/SKILL.md` |
 | Broken-link / 404 / site-health crawl | `broken-link-checker` | `skills/broken-link-checker/SKILL.md` |
-| Rank in ChatGPT / Perplexity / AI Overviews (GEO / AEO) | `geo-optimizer` | `skills/geo-optimizer/SKILL.md` |
+| AI search visibility (GEO / AEO), search crawler access, citation baselines, or brand facts in AI answers | `geo-optimizer` | `skills/geo-optimizer/SKILL.md` |
 | Local pack / Google Business Profile / Maps / NAP / "near me" | `local-seo` | `skills/local-seo/SKILL.md` |
 | Hreflang, international / multilingual, multi-region targeting | `hreflang-international` | `skills/hreflang-international/SKILL.md` |
 | XML sitemap audit, sitemap errors, crawl-coverage | `sitemap-audit` | `skills/sitemap-audit/SKILL.md` |

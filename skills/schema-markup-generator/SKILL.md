@@ -1,9 +1,9 @@
 ---
 name: schema-markup-generator
 description: >
-  Generate JSON-LD structured data markup for rich results in Google Search.
-  Supports FAQ, HowTo, Article, Product, LocalBusiness, and multi-type schemas.
-  Validates against Google requirements and provides implementation guidance.
+  Generate and validate Schema.org JSON-LD, and assess Google rich result
+  eligibility where applicable. Supports FAQ, HowTo, Article, Product,
+  LocalBusiness, and multi-type schemas.
   Use when asked to "add schema markup", "generate structured data", "JSON-LD",
   "rich snippets", "FAQ schema", "product markup", "add structured data to my
   page", "how to get rich snippets", or any structured data task.
