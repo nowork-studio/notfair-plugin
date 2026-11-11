@@ -18,6 +18,16 @@
       "prompt": "what's wrong with this blog post's SEO? https://notfair.co/blog/google-ads-ai-agent",
       "expected_output": "A detailed content quality audit for a blog post — informational intent alignment, E-E-A-T evaluation, helpful content signals, readability analysis, heading structure review, and prioritized fixes",
       "files": []
+    },
+    {
+      "id": 4,
+      "prompt": "Review https://example.test/retired-setup from this supplied sample. It permanently redirects to the intended current setup guide, which returns 200 with a self canonical. A month-old URL Inspection for the alias says not indexed. A separate new guide returns 200, is crawlable, is self-canonical, and Google says Crawled — currently not indexed. What is blocked?",
+      "expected_output": "The alias is intentional and the new guide is technically eligible based on the sample, with Google's separate not-indexed observation. No fabricated blocker or automatic critical fix.",
+      "files": [],
+      "expectations": [
+        "Separates index eligibility, alias behavior, and observed index state",
+        "Does not recommend reverting the intended redirect"
+      ]
     }
   ]
 }

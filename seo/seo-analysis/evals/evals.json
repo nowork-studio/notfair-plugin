@@ -43,6 +43,17 @@
         "The report offers to run /meta-tags-optimizer, /schema-markup-generator, or /keyword-research as follow-up",
         "30-Day Action Plan table is present with at least 3 prioritized actions"
       ]
+    },
+    {
+      "id": 4,
+      "prompt": "Audit this public evidence only. Example.test is listed in the MCP workspace, but its provider read returned RECONNECT_REQUIRED. /seo returns 200 with a homepage title and no canonical. /pricing sends a fresh browser through a temporary experiment redirect, but Googlebot gets 200 at /pricing and both responses declare /pricing as canonical. /search-help and /search-setup appear for one query and serve different needs. Give only verified fixes.",
+      "expected_output": "Prioritize the /seo metadata and canonical; stop retrying the expired grant, make no click forecast or index claim, and do not consolidate the two distinct pages or put the experiment URL in the sitemap.",
+      "files": [],
+      "expectations": [
+        "Lists the one verified remediation without padding or forecasting clicks",
+        "Does not confuse the selected property with a successful provider read",
+        "Preserves the pricing canonical and distinct page intents"
+      ]
     }
   ]
 }

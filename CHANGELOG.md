@@ -9,6 +9,15 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+## [0.27.25] — 2026-11-11
+
+- Reuse public evidence across SEO and GEO checks; continue when Search Console
+  access is unavailable without inventing traffic, indexing, or click forecasts.
+- Distinguish URL overlap from harmful duplication, temporary redirects from
+  canonical moves, and crawler eligibility from observed Google indexing.
+- Prioritize verifiable product and setup facts over numeric evidence quotas on
+  product pages.
+
 ## [0.27.24] — 2026-11-10
 
 ### Fixed

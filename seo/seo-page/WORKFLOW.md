@@ -27,7 +27,8 @@ only a domain, ask which page they want analyzed:
 > "Which specific page do you want me to analyze? (e.g., `https://example.com/blog/my-post`).
 > For a full-site audit, use `/seo-analysis` instead."
 
-Store the exact page URL and its origin. Read
+Store the exact page URL and its origin. Reuse evidence from the site or GEO
+audit for the same URL, representation, and run conditions. Read
 [`../shared/preamble.md`](../shared/preamble.md). Fetch the public page with an
 available browser or read-only fetch capability. Render it when the returned HTML
 is only a client-side shell. Fetch its public robots directives and compare the
@@ -66,19 +67,19 @@ From the fetched HTML, extract:
 
 Read `references/content-quality-framework.md` for the full scoring rubric.
 
-### Indexability Gate (check FIRST)
+### Separate eligibility, preferred URL and observed indexing
 
-Before scoring anything, check if the page is indexable:
-- Is there a `<meta name="robots" content="noindex">` tag?
-- Is robots.txt blocking the URL?
-- Does URL Inspection show `NOT_INDEXED` or `CRAWLED_CURRENTLY_NOT_INDEXED`?
-- Is the canonical pointing to a different URL?
+Check HTTP status and redirects, robots.txt, response and HTML noindex, and
+declared canonical. A robots block prevents crawling; it does not by itself
+prove exclusion. A different canonical can be intentional. URL Inspection is
+a separate observation about Google's index and selected canonical; without it,
+report indexing as unverified. “Crawled — currently not indexed” does not prove
+the page is technically ineligible.
 
-If the page is NOT indexable, **stop scoring and lead the report with this.** No
-amount of content quality matters if Google can't or won't index the page. Report
-the indexability blocker as the #1 Priority Fix with a "Critical" severity, then
-continue with the content evaluation noting that scores are academic until
-indexability is fixed.
+Lead with a confirmed unintended blocker and its fix. For an intentional alias,
+assess the destination or ask whether the alias is meant to be independent.
+Continue the content review when useful; omit scores for dimensions with missing
+required evidence rather than inventing an overall score.
 
 ### Content Quality Evaluation
 
@@ -103,7 +104,7 @@ itself. The SERP is the ground truth for intent, not the page.
 
 Classify the intent (informational, commercial, transactional, navigational) based
 on the SERP results and the keyword signals, then evaluate whether this page's
-format matches. A blog post for transactional intent is a mismatch. A thin product
+format matches. Search results are a sample, not proof of a single intent. A blog post for transactional intent is a mismatch. A thin product
 page for informational intent is a mismatch.
 
 Also check SERP feature alignment — is the content structured to win featured
@@ -171,27 +172,15 @@ Analyze the page's actual search performance:
 ### Ranking Queries
 For each query this page ranks for (from GSC):
 - Current position, clicks, impressions, CTR
-- Expected CTR for that position (use standard CTR curves)
-- Gap: is CTR above or below expected?
+- Compare with relevant first-party peers or the same query over time, if available
 - Intent classification of the query
 
-### CTR Benchmarks
-Use these position-based CTR benchmarks for the Gap column. Do NOT make up your own
-numbers — use this table or write "N/A" if the position is outside range:
+### CTR context
 
-| Position | Expected CTR (informational) | Expected CTR (transactional) | Expected CTR (branded) |
-|----------|------------------------------|------------------------------|------------------------|
-| 1 | 25-30% | 20-25% | 40-50% |
-| 2 | 13-17% | 12-15% | 15-20% |
-| 3 | 9-12% | 8-11% | 8-12% |
-| 4-5 | 5-8% | 5-7% | 4-6% |
-| 6-7 | 3-5% | 3-4% | 2-4% |
-| 8-10 | 1.5-3% | 1.5-3% | 1-2% |
-| 11-20 | 0.5-1.5% | 0.5-1% | <1% |
-
-SERP features (featured snippets, ads, knowledge panels) can suppress organic CTR
-by 30-50%. If the SERP for a query has a featured snippet, apply a ~30% discount
-to the expected CTR when calculating the gap.
+Compare like-for-like query, position, device and result features if available.
+A generic curve or an assumed snippet discount does not diagnose a title or
+predict lift. When comparable evidence is missing, report the observed CTR
+and label possible explanations.
 
 ### CTR Analysis
 If CTR is below expected for the position:
@@ -213,8 +202,8 @@ Are other pages on the same site competing for the same queries? If so:
 
 ## Phase 5 — Competitive Quick-Check
 
-You already have SERP data from the the initial search results WebSearch. Now **WebFetch the top
-2-3 competitor URLs** from those results to get their actual content. Do not try to
+Reuse the initial search sample. Fetch up to two or three relevant competing
+pages when their content would change a decision and has not been captured. Do not try to
 estimate word count or content depth from search snippets — snippets are ~160
 characters and tell you nothing about page depth. You need the real HTML.
 
@@ -234,7 +223,7 @@ average 800 words, or woefully thin if they average 3,000.
 
 ## Phase 6 — Report
 
-Output the report in this exact format:
+Adapt the report to the request. Omit unsupported scores, metrics and sections.
 
 ---
 
@@ -362,7 +351,8 @@ Found [N] images.
 
 | Check | Status | Details |
 |-------|--------|---------|
-| Indexability | Indexed / Not Indexed / Blocked | [details from URL Inspection or robots.txt] |
+| Crawl and index eligibility | [Observed HTTP, robots and noindex] | [Declared canonical and intended destination] |
+| Observed Google index state | [Inspection result or unverified] | [Google-selected canonical and observation date, if known] |
 | Mobile Ready | Yes / Issues | [viewport, responsive, touch targets] |
 | Schema Markup | [types found] / None | [semantic fit, errors, applicable Google eligibility] |
 | Page Speed Signals | [render-blocking count, image weight] | [recommendations] |
@@ -382,9 +372,9 @@ Found [N] images.
 | Trend | Growing / Stable / Declining |
 
 ### Top Ranking Queries
-| Query | Position | Clicks | Impressions | CTR | Expected CTR | Gap |
-|-------|----------|--------|-------------|-----|-------------|-----|
-| [query] | X | X | X | X% | X% | +/-X% |
+| Query | Position | Clicks | Impressions | CTR | Comparable evidence (if available) |
+|-------|----------|--------|-------------|-----|------------------------------------|
+| [query] | X | X | X | X% | [observed comparison] |
 
 ---
 
@@ -424,8 +414,7 @@ Based on findings, offer relevant next steps:
    title from 'Services' to 'Emergency Roof Repair in Portland — Same-Day
    Appointments | Example Roofing' (68 chars)" is actionable.
 3. **Use GSC data to ground recommendations.** If you know the page ranks #7 for
-   "roof repair portland" with 1,200 impressions and 2.1% CTR, say that — and
-   estimate the click gain from moving to #3.
+   "roof repair portland" with 1,200 impressions and 2.1% CTR, report those observations without assuming a rank or click gain.
 4. **Compare to competitors.** A "good" page can still be below the bar if every
    competitor is better. Context matters.
 5. **Flag the single biggest unlock.** If one change would have outsized impact
