@@ -36,6 +36,17 @@
         "Reports Bing citations and Google impressions with the supplied window and never combines them with prompt counts or claims conversions",
         "Identifies the $9 versus $19 discrepancy, identifies the outdated source, and gives a verification plan without claiming it was fixed"
       ]
+    },
+    {
+      "id": 4,
+      "prompt": "Optimize this short installation page using only these first-party facts. Hosted OAuth. Google Ads and Meta Ads can preview supported writes. Undo is available only for supported Google Ads changes. The public HTML and Markdown currently imply undo for both. The plan page says $99 billed monthly or $950 billed annually. Keep the page short.",
+      "expected_output": "Give a concise rewrite and parity fix for both HTML and Markdown. Explicitly scope undo and distinguish billing periods; no filler quotes, invented metrics, or claim of citation gain.",
+      "files": [],
+      "expectations": [
+        "Scopes undo to supported Google Ads changes",
+        "Uses both billing terms accurately",
+        "Does not ask for unnecessary statistics, quotes or sources"
+      ]
     }
   ]
 }

@@ -44,20 +44,21 @@ use it; otherwise discover it in Phase 1.
 
 ## Phase 0 — Preflight & data
 
-Read and follow `../shared/preamble.md` for script discovery and GSC auth.
+Read and follow `../shared/preamble.md` for available public fetch and Search Console access.
 
-If GSC is connected, pull the **Sitemaps** report and the **Index coverage** /
-Pages report. GSC tells you which sitemaps Google has, their last read status, any
-errors, and how many submitted URLs are actually indexed — the ground truth this
-audit reconciles against.
+When a successful Search Console read is available, record sitemap submission,
+last read, errors, and discovered counts if supplied. Discovered URLs are not
+indexed URLs. Use a separately available Pages report or selective URL Inspection
+for Google's indexing evidence; do not infer indexing from the sitemap report.
+If access fails, continue with public evidence and state the gap.
 
 ---
 
 ## Phase 1 — Discover all sitemaps
 
 1. Fetch `robots.txt` and read every `Sitemap:` directive.
-2. Fetch `/sitemap.xml`, `/sitemap_index.xml`, and any CMS-specific defaults
-   (WordPress/Rank Math: `/sitemap_index.xml`; Yoast similar).
+2. Fetch the declared or supplied sitemap URLs. Try common CMS defaults only
+   when discovery is incomplete. Reuse already captured XML.
 3. If it's a **sitemap index**, enumerate the child sitemaps and recurse.
 
 Record the full tree: index → child sitemaps → URL counts. Note whether the
@@ -73,9 +74,9 @@ Check each sitemap file:
 - **Limits**: ≤ 50,000 URLs and ≤ 50 MB uncompressed per file. Over either →
   must split into a sitemap index.
 - **Absolute URLs**, all on the same host/protocol as the sitemap, all HTTPS.
-- **`<lastmod>`** present and in valid W3C date format. Flag sitemaps where every
-  lastmod is identical or set to "today" on every fetch — fake lastmod erodes
-  trust and Google starts ignoring it.
+- **`<lastmod>`** is optional. When present, check the W3C date format and verify
+  that a sample reflects a significant content update. Omit unsupported dates;
+  do not treat missing dates or equal dates alone as an error.
 - `<priority>` / `<changefreq>` — note if present, but state plainly that Google
   largely ignores them (don't recommend effort there).
 
@@ -88,7 +89,10 @@ and fetch each. Every URL in a sitemap should be a **canonical, indexable, 200-O
 destination**. Flag and bucket:
 
 - **Non-200** — 404 / 410 / 5xx URLs listed (remove them).
-- **Redirects (3xx)** — sitemap should list the final URL, not the redirect.
+- **Redirects (3xx)** — list the canonical final URL for permanent redirects.
+  For conditional or temporary redirects, compare a clean fetch and relevant
+  crawler conditions before recommending a URL change; do not list an
+  experiment or tracking parameter just because a browser lands there.
 - **Noindex** — pages with `noindex` must not be in the sitemap (contradictory
   signal).
 - **Canonicalized-away** — pages whose `rel=canonical` points elsewhere shouldn't

@@ -97,11 +97,11 @@ Four pillars, weighted as in the audit scoring:
 
 | Signal | Target | Why |
 |--------|--------|-----|
-| Numbers with units | ≥5 per article | LLMs preferentially extract specific numerics |
-| External citations | ≥1 per 500 words, ≥3 source types | Authority + verifiability |
-| Direct expert quotes | ≥2 from named individuals | Quotation Addition is the +41% method |
-| Named entities | ≥3 with full names + roles | Specificity beats vagueness |
-| First-party data | ≥1 original stat or framework | Becomes the only-citable source |
+| Numbers with units | Include relevant figures with dates, units, and terms | Makes price, limits, and comparisons verifiable |
+| Sources | Match each material claim to the most authoritative available source | Lets readers check the claim |
+| Expert quotes | Include only when they clarify a claim | Helps readers judge the evidence |
+| Named entities | Use the actual product, organization, or person where relevant | Avoids ambiguity |
+| First-party facts or data | Use the current source of truth for product claims or original research | Establishes which source owns the fact |
 
 ### Pillar 2 — Structure & Position (25%)
 
@@ -112,7 +112,7 @@ Four pillars, weighted as in the audit scoring:
 | Heading hierarchy (H1→H2→H3) | No level skipping, single H1 |
 | Comparison/spec data in tables | Required if comparison content |
 | Sequential steps in numbered lists | Required if procedural |
-| FAQ section with question-format H2/H3 | Required for informational |
+| FAQ section with question-format H2/H3 | Optional when it answers real follow-up questions |
 | Average paragraph length | 2–4 sentences |
 | JSON-LD schema | Where applicable, valid markup that matches the page |
 
@@ -120,9 +120,9 @@ Four pillars, weighted as in the audit scoring:
 
 | Signal | Target |
 |--------|--------|
-| Author byline | Real name, role, ≥30-word bio |
+| Author or publisher identity | Named author where relevant; first-party publisher for product and support pages |
 | `author.sameAs` JSON-LD | Wikipedia, LinkedIn, ORCID, Google Scholar |
-| Last updated within 60 days | Recency (3× citation lift per Princeton + amplifying-ai data); 60–90 days is the boundary, target 60 |
+| Freshness | Recheck volatile facts; update the date only after substantive changes |
 | Methodology disclosed | Sample sizes, criteria, dates |
 | Limitations acknowledged | Counter-LLM-hallucination signal |
 | First-party experience markers | "We tested", "Our analysis of N…" — not vague "experts say" |
@@ -583,9 +583,8 @@ before calling a correction durable. Report unresolved claims and coverage gaps.
 ### Do
 - Front-load the answer in first 150 words
 - Add real stats with units, sources, dates
-- Quote real named experts from named publications
-- Cite ≥1 external source per 500 words from ≥3 source types
-- Update content every 60 days for competitive queries, 90 days minimum for stable topics
+- Use quotes and citations when they clarify or substantiate a claim
+- Recheck volatile facts when they can change; never change dates as a visibility tactic
 - Verify intended search crawler access in live robots rules and at the edge
 - Use markup that fits the content and the applicable feature
 - Build Wikipedia / Wikidata / Reddit presence
@@ -594,10 +593,10 @@ before calling a correction durable. Report unresolved claims and coverage gaps.
 
 ### Don't
 - Fabricate stats, quotes, citations, or expert names
-- Keyword-stuff (−8% PAWC, actively hurts)
+- Keyword-stuff
 - Use vague entities ("experts say", "studies show")
 - Treat intentional training opt-outs as search crawl failures
 - Ship JS-only content without SSR/SSG
 - Treat GEO as identical to SEO (different signals, different weights)
 - Optimize for one engine and assume the others follow
-- Skip the author byline + sameAs linkage
+- Invent an author, profile link, or verification date to satisfy the rubric

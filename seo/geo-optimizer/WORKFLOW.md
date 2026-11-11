@@ -60,7 +60,8 @@ procedure.
 ## Step 3 — Gather Context
 
 ### For Audit or Optimize:
-- **The content** — fetch URL via WebFetch, read file path, or ask for paste
+- **The content** — reuse existing public captures for the same URL and conditions;
+  fetch missing representations or use supplied content
 - **Target query/topic** — what AI question should this content answer?
 - **Target engines** — ChatGPT, Perplexity, Claude, Gemini, AI Overviews
   (use the surfaces relevant to the user's audience)
@@ -147,16 +148,14 @@ Rewrite the content applying the techniques in priority order:
 **Priority 1 — Front-load the answer.**
 Give a direct answer near the top so readers can find it quickly.
 
-**Priority 2 — Real evidence at density.**
-Targets (per `geo-techniques.md`):
-- ≥5 specific numbers with units (%, $, ms, days, kg, etc.)
-- ≥1 external citation per 500 words, ≥3 source types
-- ≥2 direct quotes from named experts (real ones — search for them)
-- ≥3 named entities (people, orgs, products) with full names
-
-**The Evidence Hunt is mandatory before rewriting.** If you have web access
-(WebSearch, WebFetch, browse), find real sources. If not, ask the user for
-their internal data or pause and request sources. Never invent.
+**Priority 2 — Evidence that answers the question.**
+For a product, installation, pricing or safety page, first verify product
+facts against current first-party sources. Check billing intervals, provider
+and plan limits, how to connect, and which operations support approval or undo.
+Compare the public page, docs, schema, and any advertised machine-readable twin.
+Cite the source closest to each fact. Use external sources, data and quotes
+where they help a reader verify a meaningful claim. Do not pad short functional
+pages to hit a quote, citation or statistic quota.
 
 **Priority 3 — Structure for extraction.**
 - TL;DR or Key Takeaways box near top
@@ -171,7 +170,7 @@ Use applicable markup that matches visible content, such as `Article`,
 for Google eligibility and optional semantic markup.
 
 **Priority 5 — Strip GEO anti-patterns.**
-- Remove keyword stuffing (−8% PAWC)
+- Remove keyword stuffing
 - Remove filler ("In today's digital landscape…")
 - Remove unsupported superlatives ("the best", "leading provider")
 - Remove vague entities ("a company", "experts say")
@@ -260,8 +259,8 @@ If any fail → don't deliver. Find real evidence or flag the gap to the user.
 - Could a reader who only saw the first 150 words walk away with the answer?
 
 ### Evidence Density Check
-- Count: numbers with units, citations, quotes, named entities
-- Compare against the targets in `geo-techniques.md`
+- Verify that material claims have evidence suitable to the page's purpose.
+- Do not infer citation lift from counts, markup, or edits.
 
 ### Anti-Pattern Check
 - No keyword stuffing (search for the target keyword — appears > 1% of word count?)

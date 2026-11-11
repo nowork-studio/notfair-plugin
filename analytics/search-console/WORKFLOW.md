@@ -15,7 +15,7 @@ Read `../shared/operating-contract.md`. Use the live connector's instructions an
 
 1. Resolve `~~search-console` to the actual Search Console connector and inspect its current tools. Use live property information to identify the intended site.
 2. Use the exact verified property form returned by the connector: `sc-domain:example.com` and `https://example.com/` are different properties.
-3. Define the search type, complete date window, comparison window, dimensions, and business question. If the platform is missing or unauthorized, direct the user to reconnect the universal NotFair plugin and stop before claiming live data.
+3. Define the search type, complete date window, comparison window, dimensions, and business question. If the provider grant needs reconnecting, use the returned NotFair platform settings URL. Reinstalling the plugin does not renew a provider grant. Stop retrying until the grant is restored; distinguish any authorized direct Search Console evidence from MCP results.
 
 ## Analyze organic performance
 
